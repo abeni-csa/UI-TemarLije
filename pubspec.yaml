@@ -48,6 +48,12 @@ dependencies:
   pluto_grid: ^8.1.0
   intl: ^0.20.2
   uuid: ^4.5.3
+  sqflite: ^2.4.2+1
+  path: ^1.9.1
+  sqflite_common_ffi: ^2.4.0+3
+  navigation_rail_flutter: ^1.0.3
+  data_table_2: ^2.7.2
+  window_manager: ^0.5.1
 
 dev_dependencies:
   flutter_test:
