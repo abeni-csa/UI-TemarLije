@@ -1,35 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:ui_temarlije/common/widgets/custom_shapes/containers/rounded_container.dart';
+import 'package:ui_temarlije/common/widgets/layouts/template/site_layout.dart';
+import 'package:ui_temarlije/common/widgets/responsive/screens/desktop_layout.dart';
 
 class ResponsiveDesignScreen extends StatelessWidget {
-  const ResponsiveDesignScreen({Key? key}) : super(key: key);
+  const ResponsiveDesignScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: LayoutBuilder(
-            builder: (_, constrains) {
-              if (constrains.maxWidth >= 1360) {
-                return const Desktop();
-              } else if (constrains.maxWidth < 1360 &&
-                  constrains.maxWidth >= 768) {
-                return const Tablet();
-              } else {
-                return const Mobile();
-              }
-            },
-          ),
-        ),
-      ),
+    return const TemarLijeSiteTemplate(
+      desktop: Desktop(),
+      tablet: Tablet(),
+      mobile: Mobile(),
     );
   }
 }
 
 class Desktop extends StatelessWidget {
-  const Desktop({Key? key}) : super(key: key);
+  const Desktop({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -68,7 +56,7 @@ class Desktop extends StatelessWidget {
 }
 
 class Tablet extends StatelessWidget {
-  const Tablet({Key? key}) : super(key: key);
+  const Tablet({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -123,7 +111,7 @@ class Tablet extends StatelessWidget {
 }
 
 class Mobile extends StatelessWidget {
-  const Mobile({Key? key}) : super(key: key);
+  const Mobile({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
