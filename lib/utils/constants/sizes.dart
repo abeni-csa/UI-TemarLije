@@ -67,4 +67,10 @@ class TemarLijeSizes {
 
   // Grid view spacing
   static const double gridViewSpacing = 16.0;
+
+  // Responsive Screen Sizes
+  static const int desktopScreenSize = 1200;
+  static const int tabletScreenSize = 800;
+  static const int mobileScreenSize = 400;
+  static const int customScreenSize = 1100;
 }
