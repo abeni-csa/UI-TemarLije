@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'dart:io';
 import 'package:go_router/go_router.dart';
 import 'package:ui_temarlije/app.dart';
+import 'package:ui_temarlije/utils/constants/text_string.dart';
+import 'package:ui_temarlije/utils/theme/theme.dart';
+import 'package:ui_temarlije/views/screens/gradebook_screen.dart';
 
 void main() {
   // 2. Initialize FFI for Windows
@@ -19,20 +23,6 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-/// The route configuration.
-final GoRouter _router = GoRouter(
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/',
-      builder: (BuildContext context, GoRouterState state) {
-        return const ResponsiveDesignScreen();
-      },
-    ),
-  ],
-  errorBuilder: (BuildContext context, GoRouterState state) =>
-      ErrorScreen(state.error!),
-);
-
 /// The main app.
 class MyApp extends StatelessWidget {
   /// Constructs a [MyApp]
@@ -40,7 +30,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: _router);
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: TemarLijeTexts.appName,
+      themeMode: ThemeMode.light,
+      theme: TemarLijeAppTheme.lightTheme,
+      darkTheme: TemarLijeAppTheme.darkTheme,
+      routes: {
+        '/': (context) => const ResponsiveDesignScreen(),
+        '/mark-list': (context) => const GradebookScreen(),
+      },
+    );
   }
 }
 

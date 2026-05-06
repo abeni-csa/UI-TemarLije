@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:get/utils.dart';
 import 'package:ui_temarlije/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:ui_temarlije/common/widgets/layouts/template/site_layout.dart';
-import 'package:ui_temarlije/common/widgets/responsive/screens/desktop_layout.dart';
 
 class ResponsiveDesignScreen extends StatelessWidget {
   const ResponsiveDesignScreen({super.key});
@@ -46,6 +47,15 @@ class Desktop extends StatelessWidget {
                 height: 450,
                 backgroundColor: Colors.blue.shade50,
                 child: const Center(child: Text("BOX 3")),
+              ),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  Get.toNamed('/mark-list');
+                },
+                child: const Center(child: Text("Go to MarkList")),
               ),
             ),
           ],

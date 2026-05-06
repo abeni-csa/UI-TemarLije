@@ -18,4 +18,6 @@ class TemarLijeStaticPageRoutes {
   static const notification = '/notification';
   static const notificationDetails = '/notification-details';
   static const responsivePage = '/responsive-page';
+  static const siteRoot = '/';
+  static const markListPage = '/mark-list';
 }
