@@ -11,7 +11,7 @@ class TemarLijeElevatedButtonTheme {
     style: ElevatedButton.styleFrom(
       elevation: 0,
       foregroundColor: TemarLijeColors.white,
-      backgroundColor: TemarLijeColors.dark,
+      backgroundColor: TemarLijeColors.accent,
       side: const BorderSide(color: TemarLijeColors.dark),
       padding: const EdgeInsets.symmetric(
         vertical: TemarLijeSizes.buttonHeight,

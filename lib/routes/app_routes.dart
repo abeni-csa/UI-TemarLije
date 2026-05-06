@@ -1,29 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:ui_temarlije/app.dart';
+import 'package:get/get.dart';
+import 'package:ui_temarlije/features/authentication/screens/login/login_screen.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 
-class AppRoutes {
-  static final pages = [
-    GoRoute(
-      name: "Resposnive Desin",
-      path: TemarLijeStaticPageRoutes.responsivePage,
-      pageBuilder: (context, state) {
-        return CustomTransitionPage(
-          key: state.pageKey,
-          child: ResponsiveDesignScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            // Change the opacity of the screen using a Curve based on the the animation's
-            // value
-            return FadeTransition(
-              opacity: CurveTween(
-                curve: Curves.easeInOutCirc,
-              ).animate(animation),
-              child: child,
-            );
-          },
-        );
-      },
+import 'package:ui_temarlije/views/screens/gradebook_screen.dart';
+
+class TemarLijeAppRoutes {
+  static final List<GetPage> pages = [
+    GetPage(
+      name: TemarLijeStaticPageRoutes.siteRoot,
+      page: () => GradebookScreen(),
     ),
+    GetPage(
+      name: TemarLijeStaticPageRoutes.markListPage,
+      page: () => GradebookScreen(),
+    ),
+    GetPage(name: TemarLijeStaticPageRoutes.logIn, page: () => LoginScreen()),
   ];
 }

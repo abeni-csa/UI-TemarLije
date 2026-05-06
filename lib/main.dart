@@ -3,11 +3,10 @@ import 'package:get/get.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'dart:io';
-import 'package:go_router/go_router.dart';
-import 'package:ui_temarlije/app.dart';
+import 'package:ui_temarlije/routes/app_routes.dart';
+import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/utils/constants/text_string.dart';
 import 'package:ui_temarlije/utils/theme/theme.dart';
-import 'package:ui_temarlije/views/screens/gradebook_screen.dart';
 
 void main() {
   // 2. Initialize FFI for Windows
@@ -36,10 +35,12 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.light,
       theme: TemarLijeAppTheme.lightTheme,
       darkTheme: TemarLijeAppTheme.darkTheme,
-      routes: {
-        '/': (context) => const ResponsiveDesignScreen(),
-        '/mark-list': (context) => const GradebookScreen(),
-      },
+      getPages: TemarLijeAppRoutes.pages,
+      initialRoute: TemarLijeStaticPageRoutes.logIn,
+      unknownRoute: GetPage(
+        name: "/page-not-found",
+        page: () => const ErrorScreen(),
+      ),
     );
   }
 }
@@ -47,25 +48,13 @@ class MyApp extends StatelessWidget {
 /// The screen of the error page.
 class ErrorScreen extends StatelessWidget {
   /// Creates an [ErrorScreen].
-  const ErrorScreen(this.error, {super.key});
+  const ErrorScreen({super.key});
 
   /// The error to display.
-  final Exception error;
 
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: const Text('My "Page Not Found" Screen')),
-    body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SelectableText(error.toString()),
-          TextButton(
-            onPressed: () => context.go('/'),
-            child: const Text('Home'),
-          ),
-        ],
-      ),
-    ),
+    body: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center)),
   );
 }
