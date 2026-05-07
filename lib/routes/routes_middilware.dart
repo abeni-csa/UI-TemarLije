@@ -7,6 +7,6 @@ class TemarLijeMiddlware extends GetMiddleware {
     final isAuteticated = false;
     return isAuteticated
         ? null
-        : const RouteSettings(name: TemarLijeStaticPageRoutes.logIn);
+        : const RouteSettings(name: TemarLijeRoutes.logIn);
   }
 }
