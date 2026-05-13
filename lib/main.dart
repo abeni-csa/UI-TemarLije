@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:ui_temarlije/bindings/auth_bindings.dart';
 import 'dart:io';
 import 'package:ui_temarlije/routes/app_routes.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/utils/constants/text_string.dart';
 import 'package:ui_temarlije/utils/theme/theme.dart';
 
-void main() {
+Future<void> main() async {
   // 2. Initialize FFI for Windows
-
+  await GetStorage.init();
   // Ensure Flutter binding is initialized (for any platform-specific setup)
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows) {
@@ -35,8 +37,9 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.light,
       theme: TemarLijeAppTheme.lightTheme,
       darkTheme: TemarLijeAppTheme.darkTheme,
+      initialBinding: AuthBindings(),
       getPages: TemarLijeAppRoutes.pages,
-      initialRoute: TemarLijeStaticPageRoutes.logIn,
+      initialRoute: TemarLijeRoutes.logIn,
       unknownRoute: GetPage(
         name: "/page-not-found",
         page: () => const ErrorScreen(),

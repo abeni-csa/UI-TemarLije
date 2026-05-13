@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:get/utils.dart';
 import 'package:ui_temarlije/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:ui_temarlije/common/widgets/layouts/template/site_layout.dart';
 
