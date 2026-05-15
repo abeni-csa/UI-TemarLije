@@ -69,6 +69,9 @@ class TemarLijePaginatedDataTable extends StatelessWidget {
           rowsPerPage: rowsPerPage,
           showFirstLastButtons: true,
           showCheckboxColumn: true,
+          // Paginations
+          sortArrowAlwaysVisible: true,
+          sortArrowIcon: Icons.line_axis,
           sortAscending: sortAscending,
           onPageChanged: onPageChanged,
           dataRowHeight: dataRowHeight,

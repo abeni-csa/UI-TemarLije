@@ -1,4 +1,3 @@
-/// This class contains all the App Text in String formats.
 class TemarLijeTexts {
   // -- Admin Default Credentials
   static const String adminEmail = "support@codingwitht.com";
@@ -139,7 +138,7 @@ class TemarLijeTexts {
   static const String tLoginSubTitle =
       "Make it work, make it right, make it fast.";
   static const String tRememberMe = "Remember Me?";
-  static const String tDontHaveAnAccount = "Don't have an Account";
+  static const String tDontHaveAnAccount = "Don't have an Account ?";
   static const String tEnterYour = "Enter your";
   static const String tResetPassword = "Reset Password";
   static const String tOR = "OR";
@@ -237,5 +236,5 @@ class TemarLijeTexts {
   static const String tJoinedAt = " 31 October 2022";
 
   // -- Validation
-  static const String dateOfBirthError = "You must be at least 18 years old.";
+  static const String dateOfBirthError = "You must be at least 4 years old.";
 }
