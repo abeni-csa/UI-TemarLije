@@ -1,10 +1,14 @@
+import 'dart:async';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ui_temarlije/common/widgets/images/t_rounded_image.dart';
+import 'package:ui_temarlije/features/users/controllers/principal_controller.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/utils/constants/enums.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
 import 'package:ui_temarlije/utils/constants/image_strings.dart';
+import 'package:ui_temarlije/utils/constants/text_string.dart';
 import 'package:ui_temarlije/utils/device/device_utility.dart';
 
 class TemarLijeHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -16,6 +20,10 @@ class TemarLijeHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.isRegistered<PrincipalController>()
+        ? Get.find<PrincipalController>()
+        : Get.put(PrincipalController());
+
     return Container(
       decoration: const BoxDecoration(
         color: TemarLijeColors.textWhite,
@@ -39,7 +47,7 @@ class TemarLijeHeader extends StatelessWidget implements PreferredSizeWidget {
         // Search Field
         title: TemarLijeDeviceUtils.isDesktopScreen(context)
             ? SizedBox(
-                width: 300,
+                width: double.infinity,
                 child: TextFormField(
                   // maxLength: 300,
                   decoration: const InputDecoration(
@@ -71,22 +79,32 @@ class TemarLijeHeader extends StatelessWidget implements PreferredSizeWidget {
               ),
               const SizedBox(width: TemarLijeSizes.spaceBtwItems / 2),
 
-              // Name And Email
+              // Name And Email (dynamic)
               if (!TemarLijeDeviceUtils.isMobileScreen(context))
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Abenezer Hay.",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Text(
-                      "abenezerhaymanot@gmail.com",
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                  ],
-                ),
+                Obx(() {
+                  final p = controller.currentPrincipal.value;
+                  final title = p != null && p.firstName.isNotEmpty
+                      ? p.fullNameformated
+                      : TemarLijeTexts.firstName;
+                  final subtitle = p != null && p.staffId.isNotEmpty
+                      ? p.staffId
+                      : TemarLijeTexts.adminEmail;
+
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Text(
+                        subtitle,
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                    ],
+                  );
+                }),
             ],
           ),
         ],
