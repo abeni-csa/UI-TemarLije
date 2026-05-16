@@ -36,7 +36,7 @@ class DashboardController extends GetxController {
   void fetchDummyData() {
     dataList.addAll(
       List.generate(
-        1000,
+        300,
         (index) => {
           'Column1': 'Data ${index + 1} - 1',
           'Column2': 'Data ${index + 1} - 1',
