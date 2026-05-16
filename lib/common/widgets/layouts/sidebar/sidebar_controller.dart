@@ -3,7 +3,7 @@ import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/utils/device/device_utility.dart';
 
 class SidebarController extends GetxController {
-  final activeItem = TemarLijeStaticPageRoutes.responsivePage.obs;
+  final activeItem = TemarLijeRoutes.dashbord.obs;
   final hoverItem = ''.obs;
 
   void changeActiveItems(String route) => activeItem.value = route;

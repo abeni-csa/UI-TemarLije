@@ -3,8 +3,8 @@ import 'package:ui_temarlije/features/authentication/screens/dashboard/dashboard
 import 'package:ui_temarlije/features/authentication/screens/forget_password/forget_password_screen.dart';
 import 'package:ui_temarlije/features/authentication/screens/login/login_screen.dart';
 import 'package:ui_temarlije/features/authentication/screens/reset_password/reset_password_screen.dart';
-import 'package:ui_temarlije/features/authentication/screens/signup/signup_screen.dart';
-import 'package:ui_temarlije/features/principal/screens/principal_detail_screen.dart';
+// import 'package:ui_temarlije/features/authentication/screens/signup/signup_screen.dart';
+// import 'package:ui_temarlije/features/principal/screens/principal_detail_screen.dart';
 import 'package:ui_temarlije/features/principal/screens/principal_list_screen.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/routes/routes_middilware.dart';
@@ -15,7 +15,7 @@ class TemarLijeAppRoutes {
   static final List<GetPage> pages = [
     GetPage(
       name: TemarLijeRoutes.signUp,
-      page: () => SignupScreen(),
+      page: () => LoginScreen(),
       binding: AuthBindings(),
     ),
     GetPage(name: TemarLijeRoutes.markListPage, page: () => GradebookScreen()),

@@ -177,6 +177,8 @@ class AuthRepository extends GetxService {
     return token != null && token.isNotEmpty;
   }
 
+  bool get isAuthteicated => true;
+
   /// Retrieves current access token from storage
   /// Returns token string or null if not found
   String? getAccessToken() {

@@ -39,22 +39,22 @@ class TemarLijeSidebar extends StatelessWidget {
                   children: [
                     // Memu Items
                     TemarLijeMenuItem(
-                      route: TemarLijeStaticPageRoutes.siteRoot,
+                      route: TemarLijeRoutes.siteRoot,
                       icon: Iconsax.music_dashboard,
                       itemName: "Desktop",
                     ),
                     TemarLijeMenuItem(
-                      route: TemarLijeStaticPageRoutes.siteRoot,
+                      route: TemarLijeRoutes.siteRoot,
                       icon: Iconsax.cloud_connection,
                       itemName: "NetWorking",
                     ),
                     TemarLijeMenuItem(
-                      route: TemarLijeStaticPageRoutes.markListPage,
+                      route: TemarLijeRoutes.markListPage,
                       icon: Iconsax.data,
                       itemName: "Marklist",
                     ),
                     TemarLijeMenuItem(
-                      route: TemarLijeStaticPageRoutes.markListPage,
+                      route: TemarLijeRoutes.markListPage,
                       icon: Iconsax.menu_board,
                       itemName: "Fee",
                     ),
