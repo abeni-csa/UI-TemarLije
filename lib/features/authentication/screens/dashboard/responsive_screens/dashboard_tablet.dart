@@ -1,87 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:ui_temarlije/common/widgets/layouts/template/loging_template.dart';
+import 'package:get/get.dart';
+import 'package:data_table_2/data_table_2.dart';
+import 'package:ui_temarlije/common/widgets/data_table/paginated_data_table.dart';
 
 class DashboardTabletScreen extends StatelessWidget {
   const DashboardTabletScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const TemarLijeLoginScreenTemplate(
-      child: Column(children: [Text("Dashbord View of Tablet")]),
+    return Column(
+      children: [
+        Text("Dashbord View of Tablet"),
+        TemarLijePaginatedDataTable(
+          columns: const [
+            DataColumn2(label: Text("Column1")),
+            DataColumn2(label: Text("Column2")),
+            DataColumn2(label: Text("Column3")),
+            DataColumn2(label: Text("Column4")),
+          ],
+          source: MyDataTable(),
+        ),
+      ],
     );
   }
 }
-// class DashboardController extends GetxController {
-//   var dataList = <Map<String, String>>[].obs;
-//   @override
-//   void onInit() {
-//     super.onInit();
-//     fetchDummyData();
-//   }
 
-//   void fetchDummyData() {
-//     dataList.addAll(
-//       List.generate(
-//         36,
-//         (index) => {
-//           'Column1': 'Data ${index + 1} - 1',
-//           'Column2': 'Data ${index + 1} - 1',
-//           'Column3': 'Data ${index + 1} - 1',
-//           'Column4': 'Data ${index + 1} - 1',
-//         },
-//       ),
-//     );
-//   }
-// }
+class DashboardController extends GetxController {
+  var dataList = <Map<String, String>>[].obs;
+  @override
+  void onInit() {
+    super.onInit();
+    fetchDummyData();
+  }
 
-// class MyDataTable extends DataTableSource {
-//   final DashboardController controller = Get.put(DashboardController());
-//   @override
-//   DataRow? getRow(int index) {
-//     final data = controller.dataList[index];
-//     return DataRow2(
-//       cells: [
-//         DataCell(Text(data['Column1'] ?? '')),
-//         DataCell(Text(data['Column2'] ?? '')),
-//         DataCell(Text(data['Column3'] ?? '')),
-//         DataCell(Text(data['Column4'] ?? '')),
-//       ],
-//     );
-//   }
+  void fetchDummyData() {
+    dataList.addAll(
+      List.generate(
+        1000,
+        (index) => {
+          'Column1': 'Data ${index + 1} - 1',
+          'Column2': 'Data ${index + 1} - 1',
+          'Column3': 'Data ${index + 1} - 1',
+          'Column4': 'Data ${index + 1} - 1',
+        },
+      ),
+    );
+  }
+}
 
-//   @override
-//   // TODO: implement rowCount
-//   int get rowCount => controller.dataList.length;
-//   @override
-//   // TODO: implement isRowCountApproximate
-//   bool get isRowCountApproximate => false;
-//   @override
-//   // TODO: implement selectedRowCount
-//   int get selectedRowCount => 0;
-// }
-// // PaginatedDataTable2(
-// //   checkboxHorizontalMargin: 12,
-// //   wrapInCard: false,
-// //   renderEmptyRowsInTheEnd: false,
+class MyDataTable extends DataTableSource {
+  final DashboardController controller = Get.put(DashboardController());
+  @override
+  DataRow? getRow(int index) {
+    final data = controller.dataList[index];
+    return DataRow2(
+      cells: [
+        DataCell(Text(data['Column1'] ?? '')),
+        DataCell(Text(data['Column2'] ?? '')),
+        DataCell(Text(data['Column3'] ?? '')),
+        DataCell(Text(data['Column4'] ?? '')),
+      ],
+    );
+  }
 
-// //   minWidth: 500,
-// //   columnSpacing: 12,
-// //   dividerThickness: 0,
-// //   horizontalMargin: 12,
-// //   dataRowHeight: 56,
-// //   headingTextStyle: Theme.of(context).textTheme.titleSmall,
-// //   headingRowDecoration: const BoxDecoration(
-// //     borderRadius: BorderRadius.only(
-// //       topLeft: Radius.circular(TemarLijeSizes.borderRadiusMd),
-// //       topRight: Radius.circular(TemarLijeSizes.borderRadiusMd),
-// //     ),
-// //   ),
-// //   showCheckboxColumn: true,
-// //   columns: const [
-// //     DataColumn2(label: Text("Column 1")),
-// //     DataColumn2(label: Text("Column 2")),
-// //     DataColumn2(label: Text("Column 3")),
-// //     DataColumn2(label: Text("Column 4")),
-// //   ],
-// //   source: MyDataTable(),
-// // ),
+  @override
+  int get rowCount => controller.dataList.length;
+  @override
+  bool get isRowCountApproximate => false;
+  @override
+  int get selectedRowCount => 0;
+}

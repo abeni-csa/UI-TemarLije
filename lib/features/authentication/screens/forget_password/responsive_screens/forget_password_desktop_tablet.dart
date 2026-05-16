@@ -7,6 +7,6 @@ class ForgetPasswordScreenDesktopTablet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TemarLijeLoginScreenTemplate(child: HeaderAndForm());
+    return TemarLijeLoginScreenTemplate(child: const HeaderAndForm());
   }
 }
