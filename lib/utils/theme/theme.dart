@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'widget_themes/appbar_theme.dart';
 import 'widget_themes/elevated_button_theme.dart';
 import 'widget_themes/outlined_button_theme.dart';
@@ -9,8 +10,8 @@ class TemarLijeAppTheme {
   TemarLijeAppTheme._();
 
   static ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.white,
-    brightness: Brightness.light,
+    scaffoldBackgroundColor: TemarLijeColors.softGrey,
+    brightness: Brightness.dark,
     textTheme: TemarLijeTextTheme.lightTextTheme,
     appBarTheme: TemarLijeAppBarTheme.lightAppBarTheme,
     elevatedButtonTheme: TemarLijeElevatedButtonTheme.lightElevatedButtonTheme,

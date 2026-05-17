@@ -4,6 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TemarLijeHelperFunctions {
+  static DateTime getStartOfWeek(DateTime date) {
+    final int daysUntilMonday = date.weekday - 1;
+    final DateTime startOfWeek = date.subtract(Duration(days: daysUntilMonday));
+    return DateTime(
+      startOfWeek.year,
+      startOfWeek.month,
+      startOfWeek.day,
+      0,
+      0,
+      0,
+      0,
+      0,
+    );
+  }
+
   static Color? getColor(String value) {
     /// Define your product specific colors here and it will match the attribute colors and show specific 🟠🟡🟢🔵🟣🟤
 

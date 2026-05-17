@@ -26,6 +26,7 @@ class TemarLijeDashboardCard extends StatelessWidget {
     return SizedBox(
       width: 280, // Fixed width for desktop cards
       child: TemarLijeRoundedContainer(
+        showBorder: true,
         padding: const EdgeInsets.all(TemarLijeSizes.spaceBtwSections),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
