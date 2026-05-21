@@ -38,7 +38,7 @@ class TableNotifier extends AsyncNotifier<TableState> {
 
   Future<TableState> _loadInitialData() async {
     try {
-      final db = DatabaseService();
+      final db = LocalDatabaseService();
       final columns = await db.getColumns();
       final students = await db.getAllStudentsWithMarks();
       return TableState(students: students, columns: columns);
@@ -77,7 +77,7 @@ class TableNotifier extends AsyncNotifier<TableState> {
 
     // Persist to DB (fire-and-forget, but you could handle errors)
     try {
-      final db = DatabaseService();
+      final db = LocalDatabaseService();
       await db.updateMark(studentId, columnName, value);
       developer.log('Mark updated: $studentId, $columnName = $value');
     } catch (e) {
@@ -90,7 +90,7 @@ class TableNotifier extends AsyncNotifier<TableState> {
   Future<void> addColumn(String columnName) async {
     if (columnName.trim().isEmpty) return;
     try {
-      final db = DatabaseService();
+      final db = LocalDatabaseService();
       await db.addColumn(
         ColumnConfig(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -100,6 +100,7 @@ class TableNotifier extends AsyncNotifier<TableState> {
       );
       await refresh();
       developer.log('Column added: $columnName');
+      print('Column added: $columnName');
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
@@ -107,7 +108,7 @@ class TableNotifier extends AsyncNotifier<TableState> {
 
   Future<void> removeColumn(String columnName) async {
     try {
-      final db = DatabaseService();
+      final db = LocalDatabaseService();
       await db.removeColumn(columnName);
       await refresh();
       developer.log('Column removed: $columnName');
@@ -142,7 +143,7 @@ class TableNotifier extends AsyncNotifier<TableState> {
 
     // Persist to DB
     try {
-      final db = DatabaseService();
+      final db = LocalDatabaseService();
       await db.bulkUpdateColumn(columnName, studentMarks);
       developer.log('Bulk updated column: $columnName');
     } catch (e) {
@@ -175,7 +176,7 @@ class TableNotifier extends AsyncNotifier<TableState> {
     state = AsyncValue.data(currentState.copyWith(students: updatedStudents));
 
     try {
-      final db = DatabaseService();
+      final db = LocalDatabaseService();
       await db.bulkUpdateStudent(studentId, columnMarks);
       developer.log('Bulk updated student: $studentId');
     } catch (e) {

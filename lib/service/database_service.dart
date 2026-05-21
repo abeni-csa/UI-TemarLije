@@ -1,17 +1,23 @@
 import 'dart:convert';
 
-import 'package:sqflite/sqflite.dart';
+import 'dart:async';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:ui_temarlije/data/abstract/data_error.dart';
 import 'package:ui_temarlije/model/student.dart';
 import 'package:ui_temarlije/model/column_config.dart';
 
-class DatabaseService {
-  static final DatabaseService _instance = DatabaseService._internal();
+class LocalDatabaseService {
+  static final LocalDatabaseService _instance =
+      LocalDatabaseService._internal();
   static Database? _database;
+  static const String _databaseName = 'temar_lije_offline.db';
+  static const int _databaseVersion = 1;
 
-  DatabaseService._internal();
+  LocalDatabaseService._internal();
 
-  factory DatabaseService() => _instance;
+  factory LocalDatabaseService() => _instance;
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -20,8 +26,20 @@ class DatabaseService {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'gradebook.db');
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    try {
+      final documentsDirectory = await getApplicationDocumentsDirectory();
+      final path = join(documentsDirectory.path, _databaseName);
+
+      return await openDatabase(
+        path,
+        version: _databaseVersion,
+        onCreate: _onCreate,
+        onUpgrade: _onUpgrade,
+        onConfigure: _onConfigure,
+      );
+    } catch (e) {
+      throw InternalServerError;
+    }
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -37,16 +55,40 @@ class DatabaseService {
     // Create table for student data
     await db.execute('''
       CREATE TABLE student_marks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        student_id TEXT NOT NULL,
-        student_name TEXT NOT NULL,
-        column_name TEXT NOT NULL,
-        mark_value TEXT,
-        updated_at INTEGER,
+        id                    INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id            TEXT NOT NULL,
+        student_name          TEXT NOT NULL,
+        column_name           TEXT NOT NULL,
+        mark_value            TEXT,
+        updated_at            INTEGER,
+
         UNIQUE(student_id, column_name)
       )
     ''');
 
+    await db.execute('''
+      CREATE TABLE lesson_plan (
+        id                     TEXT PRIMARY KEY,
+        title                  TEXT NOT NULL,
+        subject                TEXT NOT NULL,
+        grade_level            TEXT NOT NULL,
+        duration_minutes       INTEGER NOT NULL,
+        created_at             TEXT NOT NULL,
+        updated_at             TEXT NOT NULL,
+        last_synced_at         TEXT,
+        is_deleted             INTEGER NOT NULL DEFAULT 0,
+        version                INTEGER NOT NULL DEFAULT 1
+      )
+    ''');
+
+    // Create index for better query performance
+    await db.execute('''
+      CREATE INDEX idx_notes_updated_at ON lesson_plan(updated_at)
+    ''');
+
+    await db.execute('''
+      CREATE INDEX idx_notes_is_deleted ON lesson_plan(is_deleted)
+    ''');
     // Initialize A Section students
     await _initializeStudents(db);
   }
@@ -261,5 +303,34 @@ class DatabaseService {
     } catch (e) {
       throw Exception('Bulk update failed for student $studentId: $e');
     }
+  }
+
+  // Enable foreign keys and other constraints
+  Future<void> _onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // Handle database migrations here
+    // For now, we only have version 1
+    if (oldVersion < newVersion) {
+      // Add migration logic for future versions
+      print('Upgrading database from version $oldVersion to $newVersion');
+    }
+  }
+
+  // Close database connection
+  Future<void> close() async {
+    final db = await database;
+    await db.close();
+    _database = null;
+  }
+
+  // Reset database (useful for testing)
+  Future<void> deleteDatabase() async {
+    final documentsDirectory = await getApplicationDocumentsDirectory();
+    final path = join(documentsDirectory.path, _databaseName);
+    await databaseFactory.deleteDatabase(path);
+    _database = null;
   }
 }

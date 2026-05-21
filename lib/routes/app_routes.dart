@@ -6,6 +6,7 @@ import 'package:ui_temarlije/features/authentication/screens/reset_password/rese
 // import 'package:ui_temarlije/features/authentication/screens/signup/signup_screen.dart';
 // import 'package:ui_temarlije/features/principal/screens/principal_detail_screen.dart';
 import 'package:ui_temarlije/features/principal/screens/principal_list_screen.dart';
+import 'package:ui_temarlije/features/teachers/screens/lesson_planning/lesson_planning_screen.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/routes/routes_middilware.dart';
 import 'package:ui_temarlije/views/screens/gradebook_screen.dart';
@@ -46,6 +47,10 @@ class TemarLijeAppRoutes {
     GetPage(
       name: TemarLijeRoutes.forgetPassword,
       page: () => ForgetPasswordScreen(),
+    ),
+    GetPage(
+      name: TemarLijeRoutes.toolLessonPlaner,
+      page: () => const LessonPlanningScreen(),
     ),
   ];
 }

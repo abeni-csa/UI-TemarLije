@@ -217,47 +217,11 @@ class LessoPlanerList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Lesson Planner",
+              'My Lesson Plans',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-
-            const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-            ElevatedButton.icon(
-              onPressed: () => print("Buton Pressed"),
-              icon: const Icon(Icons.add),
-              label: const Text('Create New Lesson Plan'),
-            ),
             const SizedBox(height: TemarLijeSizes.spaceBtwItems * 2),
-
-            Row(
-              children: [
-                TemarLijeDashboardCard(
-                  title: "Students",
-                  value: "2,500",
-                  percentage: "+0.5%",
-                  isPositive: true,
-                  icon: Iconsax.people,
-                ),
-                TemarLijeDashboardCard(
-                  title: "Teachers",
-                  value: "46",
-                  percentage: "-10%",
-                  isPositive: false,
-                  icon: Iconsax.unlimited,
-                ),
-                TemarLijeDashboardCard(
-                  title: "Staff",
-                  value: "9",
-                  percentage: "+10%",
-                  isPositive: true,
-                  icon: Iconsax.shopping_cart,
-                ),
-              ],
-            ),
-
-            const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-
             const NoteListScreen(),
           ],
         ),
@@ -336,14 +300,6 @@ class _NoteListScreenState extends State<NoteListScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'My Notes',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
             IconButton(
               icon: const Icon(Icons.refresh, color: Colors.black),
               onPressed: _loadNotes,
@@ -361,7 +317,7 @@ class _NoteListScreenState extends State<NoteListScreen> {
                 child: Padding(
                   padding: EdgeInsets.all(32.0),
                   child: Text(
-                    'No notes yet.\nTap + to create your first one!',
+                    'No Lesson Plan yet.\nTap + to create your first one!',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black54, fontSize: 16),
                   ),
@@ -370,7 +326,7 @@ class _NoteListScreenState extends State<NoteListScreen> {
             : ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
+                padding: EdgeInsets.all(TemarLijeSizes.spaceBtwItems),
                 itemCount: _notes.length,
                 separatorBuilder: (_, __) =>
                     const Divider(color: Colors.black12),
@@ -394,7 +350,7 @@ class _NoteListScreenState extends State<NoteListScreen> {
                     trailing: IconButton(
                       icon: const Icon(
                         Icons.delete_outline,
-                        color: Colors.black54,
+                        color: Colors.redAccent,
                       ),
                       onPressed: () => _deleteNote(note),
                     ),

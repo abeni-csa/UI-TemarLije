@@ -53,6 +53,13 @@ class TemarLijeSidebar extends StatelessWidget {
                       icon: Iconsax.data,
                       itemName: "Marklist",
                     ),
+
+                    /// TODO add Lesson Planare If eelx to Show THis path based on User Type
+                    TemarLijeMenuItem(
+                      route: TemarLijeRoutes.toolLessonPlaner,
+                      icon: Iconsax.add_circle,
+                      itemName: "Lesson Planner",
+                    ),
                     TemarLijeMenuItem(
                       route: TemarLijeRoutes.markListPage,
                       icon: Iconsax.menu_board,
