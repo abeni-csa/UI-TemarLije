@@ -6,8 +6,11 @@ class TemarLijeRoutes {
   static const markListPage = '/mark-list';
   static const forgetPassword = '/forget-password';
   static const resetPassword = '/reset-password/:email';
+
   // teacher Route
   static const toolLessonPlaner = '/tools/lesson-planer';
+  static const String lessonPlanDetail = '/tools/lesson-plan-detail';
+
   static const myProfile = '/me';
   static const String principals = '/principals';
   static const String principalDetail = '/principal-detail';

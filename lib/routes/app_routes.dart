@@ -6,6 +6,7 @@ import 'package:ui_temarlije/features/authentication/screens/reset_password/rese
 // import 'package:ui_temarlije/features/authentication/screens/signup/signup_screen.dart';
 // import 'package:ui_temarlije/features/principal/screens/principal_detail_screen.dart';
 import 'package:ui_temarlije/features/principal/screens/principal_list_screen.dart';
+import 'package:ui_temarlije/features/teachers/screens/lesson_planning/lesson_plan_detail_screen.dart';
 import 'package:ui_temarlije/features/teachers/screens/lesson_planning/lesson_planning_screen.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/routes/routes_middilware.dart';
@@ -18,6 +19,11 @@ class TemarLijeAppRoutes {
       name: TemarLijeRoutes.signUp,
       page: () => LoginScreen(),
       binding: AuthBindings(),
+    ),
+    GetPage(
+      name: TemarLijeRoutes.lessonPlanDetail,
+      page: () => const LessonPlanDetailScreen(),
+      binding: LessonPlanDetailBinding(),
     ),
     GetPage(name: TemarLijeRoutes.markListPage, page: () => GradebookScreen()),
     GetPage(

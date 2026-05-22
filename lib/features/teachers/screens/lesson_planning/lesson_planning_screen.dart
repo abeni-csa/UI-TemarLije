@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:ui_temarlije/common/widgets/layouts/template/site_layout.dart';
-import 'package:ui_temarlije/features/teachers/screens/lesson_planning/widgets/lesson_planer_list.dart';
+import 'package:ui_temarlije/features/teachers/screens/lesson_planning/responsive_screens/lesson_planning_desktop_tablet.dart';
+import 'package:ui_temarlije/features/teachers/screens/lesson_planning/responsive_screens/lesson_planning_mobile.dart';
 
 class LessonPlanningScreen extends StatelessWidget {
   const LessonPlanningScreen({super.key});
@@ -8,9 +10,9 @@ class LessonPlanningScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const TemarLijeSiteTemplate(
-      mobile: Placeholder(color: Colors.black, fallbackHeight: 1000),
-      desktop: LessoPlanerList(),
-      tablet: Placeholder(color: Colors.blue),
+      mobile: LessonPlanningMobile(),
+      desktop: LessonPlanningDesktopTablet(),
+      tablet: LessonPlanningDesktopTablet(),
     );
   }
 }
