@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:ui_temarlije/data/models/lesson_plans.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/routes/routes.dart';
+import 'package:ui_temarlije/utils/constants/sizes.dart';
 
 class LessonPlanningCard extends StatelessWidget {
   final LessonPlan lessonPlan;
@@ -21,13 +22,16 @@ class LessonPlanningCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       elevation: 2,
+      color: Colors.white,
+      shadowColor: Colors.grey,
+
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: () => Get.toNamed(
           TemarLijeRoutes.lessonPlanDetail,
           arguments: lessonPlan,
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(TemarLijeSizes.borderRadiusMd),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
@@ -38,7 +42,7 @@ class LessonPlanningCard extends StatelessWidget {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: TemarLijeColors.primary.withOpacity(0.1),
+                  color: TemarLijeColors.primary,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(

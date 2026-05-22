@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:ui_temarlije/data/models/lesson_plans.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
@@ -54,9 +56,10 @@ class _LessonPlanningFormDialogState extends State<LessonPlanningFormDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      backgroundColor: TemarLijeColors.cardBackgroundColor,
       child: Container(
         padding: const EdgeInsets.all(24),
-        constraints: const BoxConstraints(maxWidth: 500),
+        constraints: const BoxConstraints(maxWidth: double.infinity),
         child: Form(
           key: _formKey,
           child: Column(
@@ -69,12 +72,12 @@ class _LessonPlanningFormDialogState extends State<LessonPlanningFormDialog> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: TemarLijeColors.primary.withOpacity(0.1),
+                      color: TemarLijeColors.accent,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
                       widget.lessonPlan == null ? Icons.add : Icons.edit,
-                      color: TemarLijeColors.primary,
+                      color: TemarLijeColors.white,
                       size: 24,
                     ),
                   ),
@@ -91,6 +94,7 @@ class _LessonPlanningFormDialogState extends State<LessonPlanningFormDialog> {
                     ),
                   ),
                   IconButton(
+                    color: TemarLijeColors.warning,
                     icon: const Icon(Icons.close),
                     onPressed: () => Navigator.pop(context),
                   ),

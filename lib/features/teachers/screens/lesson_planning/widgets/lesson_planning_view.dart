@@ -66,6 +66,7 @@ class _LessonPlanningViewState extends State<LessonPlanningView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: TemarLijeColors.cardBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         title: const Text('Delete Lesson Plan'),
         content: Text('Are you sure you want to delete "${lessonPlan.title}"?'),
@@ -120,7 +121,7 @@ class _LessonPlanningViewState extends State<LessonPlanningView> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.green,
+        backgroundColor: TemarLijeColors.success,
         duration: const Duration(seconds: 2),
       ),
     );

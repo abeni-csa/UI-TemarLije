@@ -10,57 +10,46 @@ class LessonPlanDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final lessonPlan = Get.arguments as LessonPlan;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(lessonPlan.title),
-        backgroundColor: TemarLijeColors.primary,
-        foregroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildDetailRow(
-                      Icons.subject,
-                      'Subject',
-                      lessonPlan.subject,
-                    ),
-                    const Divider(),
-                    _buildDetailRow(
-                      Icons.school,
-                      'Grade Level',
-                      lessonPlan.gradeLevel,
-                    ),
-                    const Divider(),
-                    _buildDetailRow(
-                      Icons.timer,
-                      'Duration',
-                      '${lessonPlan.durationMinutes} minutes',
-                    ),
-                    const Divider(),
-                    _buildDetailRow(
-                      Icons.calendar_today,
-                      'Created',
-                      _formatDate(lessonPlan.createdAt),
-                    ),
-                    const Divider(),
-                    _buildDetailRow(
-                      Icons.update,
-                      'Last Updated',
-                      _formatDate(lessonPlan.updatedAt),
-                    ),
-                  ],
-                ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  _buildDetailRow(Icons.subject, 'Subject', lessonPlan.subject),
+                  const Divider(),
+                  _buildDetailRow(
+                    Icons.school,
+                    'Grade Level',
+                    lessonPlan.gradeLevel,
+                  ),
+                  const Divider(),
+                  _buildDetailRow(
+                    Icons.timer,
+                    'Duration',
+                    '${lessonPlan.durationMinutes} minutes',
+                  ),
+                  const Divider(),
+                  _buildDetailRow(
+                    Icons.calendar_today,
+                    'Created',
+                    _formatDate(lessonPlan.createdAt),
+                  ),
+                  const Divider(),
+                  _buildDetailRow(
+                    Icons.update,
+                    'Last Updated',
+                    _formatDate(lessonPlan.updatedAt),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

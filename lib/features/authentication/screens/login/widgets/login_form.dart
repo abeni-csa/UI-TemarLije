@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ui_temarlije/common/widgets/loaders/circular_loader.dart';
 import 'package:ui_temarlije/features/authentication/controllers/login_controller.dart';
-import 'package:ui_temarlije/routes/routes.dart';
-import 'package:ui_temarlije/utils/constants/sizes.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/utils/constants/text_string.dart';
 import 'package:iconsax/iconsax.dart';

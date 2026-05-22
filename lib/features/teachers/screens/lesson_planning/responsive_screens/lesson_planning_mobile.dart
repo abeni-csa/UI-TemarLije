@@ -7,12 +7,10 @@ class LessonPlanningMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsetsGeometry.all(TemarLijeSizes.defaultSpace),
-          child: Column(children: [LessonPlanningView()]),
-        ),
+    return const SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsetsGeometry.all(TemarLijeSizes.defaultSpace),
+        child: Column(children: [LessonPlanningView()]),
       ),
     );
   }

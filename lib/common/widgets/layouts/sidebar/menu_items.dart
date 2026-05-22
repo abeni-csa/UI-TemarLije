@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:navigation_rail_flutter/navigation_rail_flutter.dart';
 import 'package:ui_temarlije/common/widgets/layouts/sidebar/sidebar_controller.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
