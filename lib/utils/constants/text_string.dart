@@ -11,7 +11,7 @@ class TemarLijeTexts {
   static const String usersStoragePath = "/Users";
 
   // -- GLOBAL Texts
-  static const String appName = "TemarLije";
+  static const String appName = "Temar Lije";
   static const String and = "and";
   static const String skip = "Skip";
   static const String done = "Done";

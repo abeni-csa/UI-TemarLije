@@ -59,7 +59,7 @@ class TemarLijeRoundedContainer extends StatelessWidget {
           boxShadow: [
             if (showShadow)
               BoxShadow(
-                color: TemarLijeColors.grey.withOpacity(0.1),
+                color: TemarLijeColors.grey.withAlpha(1),
                 spreadRadius: 5,
                 blurRadius: 8,
                 offset: const Offset(0, 3),

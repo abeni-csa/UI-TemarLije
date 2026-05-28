@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:ui_temarlije/bindings/auth_bindings.dart';
+import 'package:ui_temarlije/common/widgets/layouts/template/site_layout.dart';
 import 'dart:io';
 import 'package:ui_temarlije/routes/app_routes.dart';
 import 'package:ui_temarlije/routes/routes.dart';
@@ -56,8 +57,24 @@ class ErrorScreen extends StatelessWidget {
   /// The error to display.
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('My "Page Not Found" Screen')),
-    body: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center)),
+  Widget build(BuildContext context) => TemarLijeSiteTemplate(
+    tablet: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Text("NotFOund")],
+      ),
+    ),
+    desktop: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Text("NotFOund")],
+      ),
+    ),
+    mobile: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Text("NotFOund")],
+      ),
+    ),
   );
 }
