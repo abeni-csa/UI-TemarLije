@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ui_temarlije/common/styles/spacing_styles.dart';
 import 'package:ui_temarlije/common/widgets/layouts/template/loging_template.dart';
 import 'package:ui_temarlije/features/authentication/screens/login/widgets/login_form.dart';
-import 'package:ui_temarlije/features/authentication/screens/login/widgets/login_header.dart';
-import 'package:ui_temarlije/utils/constants/colors.dart';
-import 'package:ui_temarlije/utils/constants/sizes.dart';
+import 'package:ui_temarlije/common/widgets/form/form_header.dart';
+import 'package:ui_temarlije/utils/constants/text_string.dart';
 
 class LoginScreenDesktopTablet extends StatelessWidget {
   const LoginScreenDesktopTablet({super.key});
@@ -14,8 +12,10 @@ class LoginScreenDesktopTablet extends StatelessWidget {
     return const TemarLijeLoginScreenTemplate(
       child: Column(
         children: [
-          // Login Header
-          TemarLijeLoginHeader(),
+          TemarLijeFormHeader(
+            title: TemarLijeTexts.signIn,
+            subTitle: TemarLijeTexts.signInSubTitle,
+          ),
           // Login IN Form
           TemarLijeLoginForm(),
         ],

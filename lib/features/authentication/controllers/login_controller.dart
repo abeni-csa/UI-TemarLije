@@ -100,41 +100,9 @@ class LoginController extends GetxController {
     }
   }
 
-  // /// Verifies 2FA code and completes authentication
-  // Future<void> verifyTwoFactor() async {
-  //   // Validate 2FA form
-  //   if (!twoFactorFormKey.currentState!.validate()) return;
-
-  //   isTwoFactorLoading.value = true;
-  //   errorMessage.value = null;
-
-  //   try {
-  //     await _authRepository.verifyTwoFactor(
-  //       twoFactorController.text.trim(),
-  //       userId: twoFactorUserId.value,
-  //     );
-
-  //     // Save credentials if "Remember Me" is checked
-  //     if (rememberMe.value) {
-  //       await _storage.write('REMEMBER_ME_EMAIL', emailController.text.trim());
-  //       await _storage.write(
-  //         'REMEMBER_ME_PASSWORD',
-  //         passwordController.text.trim(),
-  //       );
-  //     }
-
-  //     // Navigate to main app on successful verification
-  //     Get.offAllNamed('/home');
-  //   } catch (e) {
-  //     errorMessage.value = e.toString();
-  //   } finally {
-  //     isTwoFactorLoading.value = false;
-  //   }
-  // }
-
   /// Resends 2FA code (if backend supports this feature)
   void resendTwoFactorCode() async {
-    // TODO: Implement actual resend logic based on backend API
+    //  Implement actual resend logic based on backend API
     Get.snackbar(
       'Info',
       'Please check your authenticator app for the code',
@@ -159,7 +127,19 @@ class LoginController extends GetxController {
 
   /// Navigates to signup/registration screen
   void goToSignup() {
-    Get.offAllNamed(TemarLijeRoutes.signUp);
+    try {
+      // Check if route exists before navigating
+      if (Get.currentRoute != TemarLijeRoutes.signUp) {
+        Get.toNamed(TemarLijeRoutes.signUp);
+      } else {
+        // Already on signup page
+        debugPrint('Already on signup page');
+      }
+    } catch (e) {
+      debugPrint('Navigation error: $e');
+      // Fallback to alternative navigation
+      Get.offAllNamed(TemarLijeRoutes.signUp);
+    }
   }
 
   /// Resets 2FA state to return to login form

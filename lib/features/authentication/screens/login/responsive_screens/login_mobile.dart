@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ui_temarlije/features/authentication/screens/login/widgets/login_form.dart';
-import 'package:ui_temarlije/features/authentication/screens/login/widgets/login_header.dart';
+import 'package:ui_temarlije/common/widgets/form/form_header.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
+import 'package:ui_temarlije/utils/constants/text_string.dart';
 
 class LoginScreenMobile extends StatelessWidget {
   const LoginScreenMobile({super.key});
@@ -15,7 +16,10 @@ class LoginScreenMobile extends StatelessWidget {
           child: Column(
             children: [
               // Header
-              TemarLijeLoginHeader(),
+              TemarLijeFormHeader(
+                title: TemarLijeTexts.loginTitle,
+                subTitle: TemarLijeTexts.loginSubTitle,
+              ),
               // Login Form
               TemarLijeLoginForm(),
             ],

@@ -1,154 +1,125 @@
+// lib/features/authentication/controllers/signup_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ui_temarlije/data/repositories/authentication_repository.dart';
-import 'package:ui_temarlije/utils/helpers/network_manager.dart';
+import 'package:ui_temarlije/routes/routes.dart';
 
-/// Manages user registration flow including form validation,
-/// terms acceptance, and post-signup navigation
+enum UserType {
+  student('Student', '/api/v1/user/student'),
+  teacher('Teacher', '/api/v1/user/teacher'),
+  parent('Parent', '/api/v1/user/parent'),
+  staff('Staff', '/api/v1/user/staff'),
+  schoolAdmin('School Admin', '/api/v1/user/school-admin');
+
+  final String displayName;
+  final String apiEndpoint;
+
+  const UserType(this.displayName, this.apiEndpoint);
+}
+
 class SignupController extends GetxController {
-  static SignupController get instance => Get.find();
+  static SignupController get instance => Get.find<SignupController>();
 
   final AuthRepository _authRepository = Get.find<AuthRepository>();
-  final NetworkManager _networkManager = Get.find<NetworkManager>();
+  final GetStorage _storage = GetStorage();
 
-  // Form controllers for user input
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-
-  // Form key for validation
+  // Form keys
   final signupFormKey = GlobalKey<FormState>();
+  // Observable state
+  final rememberMe = false.obs; // Remember me checkbox state
+  final isLoading = false.obs;
+  final hidePassword = true.obs;
+  final hideConfirmPassword = true.obs;
+  final errorMessage = Rxn<String>();
+  final currentStep = 0.obs;
+  final availableGenders = ['Male', 'Female', 'Other'].obs;
 
-  // Observable state variables
-  final isLoading = false.obs; // Registration loading state
-  final hidePassword = true.obs; // Password visibility toggle
-  final hideConfirmPassword = true.obs; // Confirm password visibility toggle
-  final acceptedTerms = false.obs; // Terms acceptance state
-  final errorMessage = Rxn<String>(); // Error message display
+  @override
+  void onClose() {
+    // Clean up controllers
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.onClose();
+  }
 
-  /// Registers a new user account
-  /// Validates all inputs before making API request
-  Future<void> signup() async {
-    // Validate form inputs
-    if (!signupFormKey.currentState!.validate()) return;
+  void togglePasswordVisibility() {
+    hidePassword.value = !hidePassword.value;
+  }
 
-    // Check terms acceptance
-    if (!acceptedTerms.value) {
-      errorMessage.value = 'Please accept the terms and conditions';
-      return;
+  void toggleConfirmPasswordVisibility() {
+    hideConfirmPassword.value = !hideConfirmPassword.value;
+  }
+
+  void previousStep() {
+    if (currentStep.value > 0) {
+      currentStep.value--;
     }
+  }
 
-    // Verify internet connectivity
-    if (!await _networkManager.checkConnectivity()) {
-      errorMessage.value = 'No internet connection';
-      return;
+  /// Navigates to forgot password recovery screen
+  void goToForgotPassword() {
+    Get.offAllNamed(TemarLijeRoutes.forgetPassword);
+  }
+
+  /// Toggles "Remember Me" checkbox state
+  void toggleRememberMe(bool? value) {
+    rememberMe.value = value ?? false;
+  }
+
+  /// Navigates to signup/registration screen
+  void goToLogin() {
+    try {
+      // Check if route exists before navigating
+      if (Get.currentRoute != TemarLijeRoutes.logIn) {
+        Get.toNamed(TemarLijeRoutes.logIn);
+      } else {
+        // Already on signup page
+        debugPrint('Already on signup page');
+      }
+    } catch (e) {
+      debugPrint('Navigation error: $e');
+      // Fallback to alternative navigation
+      Get.offAllNamed(TemarLijeRoutes.signUp);
     }
+  }
 
+  Future<void> performSignup() async {
     isLoading.value = true;
     errorMessage.value = null;
 
     try {
-      final response = await _authRepository.signup(
-        usernameController.text.trim(),
-        passwordController.text.trim(),
+      // First, register the user to get JWT
+      final authResponse = await _authRepository.signup(
+        emailController.text.trim(),
+        passwordController.text,
       );
-
-      if (response.requiresTwoFactor) {
-        // Navigate to 2FA setup screen with recovery codes
-        Get.toNamed(
-          '/setup-2fa',
-          arguments: {
-            'userId': response.userId,
-            'recoveryCodes': response.recoveryCodes,
-          },
+      if (rememberMe.value) {
+        await _storage.write('REMEMBER_ME_EMAIL', emailController.text.trim());
+        await _storage.write(
+          'REMEMBER_ME_PASSWORD',
+          passwordController.text.trim(),
         );
-      } else {
-        // Registration successful
-        Get.snackbar(
-          'Success',
-          'Account created successfully!',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
-        );
-
-        // Navigate to main app
-        Get.offAllNamed('/home');
       }
+      // Store the JWT token
+      await _storage.write('refresh_token', authResponse.refreshToken);
+      debugPrint(authResponse.refreshToken);
+      await _storage.write('access_token', authResponse.accessToken);
+      debugPrint(authResponse.accessToken);
+      await _storage.write('recovery_codes', authResponse.recoveryCodes);
+
+      await _storage.write('user_email', emailController.text.trim());
+      debugPrint(emailController.text);
+      // Navigate to dashboard on success
+      Get.offNamed(TemarLijeRoutes.userType);
     } catch (e) {
       errorMessage.value = e.toString();
     } finally {
       isLoading.value = false;
     }
-  }
-
-  /// Toggles password field visibility
-  void togglePasswordVisibility() {
-    hidePassword.value = !hidePassword.value;
-  }
-
-  /// Toggles confirm password field visibility
-  void toggleConfirmPasswordVisibility() {
-    hideConfirmPassword.value = !hideConfirmPassword.value;
-  }
-
-  /// Toggles terms and conditions acceptance
-  void toggleTermsAcceptance(bool? value) {
-    acceptedTerms.value = value ?? false;
-  }
-
-  /// Navigates back to login screen
-  void goToLogin() {
-    Get.back();
-  }
-
-  /// Validates username format and constraints
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Email is required';
-    }
-    if (value.length < 3) {
-      return 'Email must be at least 3 characters';
-    }
-    if (value.length > 50) {
-      return 'Email must be less than 50 characters';
-    }
-    if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
-      return 'Email can only contain letters, numbers, and underscores';
-    }
-    return null;
-  }
-
-  /// Validates password strength and complexity
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Password is required';
-    }
-    if (value.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-    if (!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)').hasMatch(value)) {
-      return 'Password must contain uppercase, lowercase, and numbers';
-    }
-    return null;
-  }
-
-  /// Validates that confirm password matches original password
-  String? validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please confirm your password';
-    }
-    if (value != passwordController.text) {
-      return 'Passwords do not match';
-    }
-    return null;
-  }
-
-  @override
-  void onClose() {
-    // Clean up controllers to prevent memory leaks
-    usernameController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    super.onClose();
   }
 }

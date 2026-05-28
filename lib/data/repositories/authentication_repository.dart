@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
 import 'package:ui_temarlije/data/models/auth_models.dart';
-import 'package:ui_temarlije/utils/helpers/network_manager.dart';
+// import 'package:ui_temarlije/utils/helpers/network_manager.dart';
 
 /// Repository handling all authentication-related API operations
 /// Manages token storage, network requests, and error handling
@@ -13,6 +13,33 @@ class AuthRepository extends GetxService {
   final DioClient _dioClient = Get.find<DioClient>();
   // final NetworkManager _networkManager = Get.find<NetworkManager>();
   final GetStorage _storage = GetStorage();
+
+  Future<void> createUserProfile(
+    String jwtToken,
+    String endpoint,
+    Map<String, dynamic> userData,
+  ) async {
+    try {
+      // Create a new Dio instance with the JWT token for this request
+      final dio = Dio();
+      dio.options.headers['Authorization'] = 'Bearer $jwtToken';
+      dio.options.headers['Content-Type'] = 'application/json';
+
+      await dio.post('${DioClient.baseUrl}$endpoint', data: userData);
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  String _handleError(dynamic error) {
+    if (error is DioException) {
+      if (error.response?.data != null) {
+        return error.response?.data['message'] ?? 'An error occurred';
+      }
+      return error.message ?? 'Network error occurred';
+    }
+    return error.toString();
+  }
 
   /// Authenticates user with username/email and password
   /// Returns AuthResponse containing tokens and 2FA status
@@ -157,6 +184,8 @@ class AuthRepository extends GetxService {
     try {
       // Notify server about logout (optional)
       await _dioClient.post('/auth/logout');
+    } catch (e) {
+      throw _handleError(e);
     } finally {
       // Clear local storage regardless of server response
       await _clearStorage();

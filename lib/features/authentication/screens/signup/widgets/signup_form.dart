@@ -1,79 +1,142 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:ui_temarlije/features/authentication/controllers/signup_controller.dart';
-import 'package:ui_temarlije/utils/constants/sizes.dart';
-import 'package:ui_temarlije/utils/validators/validation.dart';
-import 'package:ui_temarlije/common/widgets/buttons/primary_button.dart';
-
+import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/utils/constants/text_string.dart';
+import 'package:iconsax/iconsax.dart';
 
-class SignUpFormWidget extends StatelessWidget {
-  const SignUpFormWidget({super.key});
+class TemarLijeSignupForm extends StatelessWidget {
+  const TemarLijeSignupForm({super.key});
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<SignupController>();
-    return Container(
-      padding: const EdgeInsets.only(
-        top: TemarLijeSizes.xl - 15,
-        bottom: TemarLijeSizes.xl,
-      ),
-      child: Form(
-        key: controller.signupFormKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-            TextFormField(
-              controller: controller.emailController,
-              validator: (value) => TemarLijeValidator.validateEmail(value),
-              decoration: const InputDecoration(
-                label: Text(TemarLijeTexts.tEmail),
-                prefixIcon: Icon(Iconsax.emoji_normal5),
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Form(
+          key: controller.signupFormKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Email/Username field
+              TextFormField(
+                controller: controller.emailController,
+                maxLength: 255,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Iconsax.direct_right),
+                  labelText: TemarLijeTexts.email,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email or username';
+                  }
+                  return null;
+                },
               ),
-            ),
-            const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-            Obx(
-              () => TextFormField(
-                obscureText: controller.hidePassword.value,
-                controller: controller.passwordController,
-                validator: (value) =>
-                    TemarLijeValidator.validatePassword(value),
-                decoration: InputDecoration(
-                  label: const Text(TemarLijeTexts.tPassword),
-                  prefixIcon: const Icon(Icons.fingerprint),
-                  suffixIcon: IconButton(
-                    onPressed: () => controller.hidePassword.value =
-                        !controller.hidePassword.value,
-                    icon: const Icon(Iconsax.eye_slash),
+              const SizedBox(height: 16),
+              // Password field
+              Obx(
+                () => TextFormField(
+                  controller: controller.passwordController,
+                  obscureText: controller.hidePassword.value,
+
+                  maxLength: 255,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Iconsax.password_check),
+                    labelText: TemarLijeTexts.password,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        controller.hidePassword.value
+                            ? Iconsax.eye_slash
+                            : Icons.visibility,
+                      ),
+                      onPressed: controller.togglePasswordVisibility,
+                    ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
                 ),
               ),
-            ),
-            const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-            Obx(
-              () => TemarLijePrimaryButton(
-                isLoading: controller.isLoading.value ? true : false,
-                text: TemarLijeTexts.tSignup.tr,
-                onPressed: controller.isLoading.value
-                    ? () => controller.signup
-                    : () => controller.signup,
+              const SizedBox(height: 8),
+
+              // Remember me & Forgot password
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(
+                    () => Row(
+                      children: [
+                        Checkbox(
+                          value: controller.rememberMe.value,
+                          onChanged: controller.toggleRememberMe,
+                        ),
+                        const Text(TemarLijeTexts.rememberMe),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: controller.goToForgotPassword,
+                    child: const Text(TemarLijeTexts.forgetPassword),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-            // Signup link
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(TemarLijeTexts.tAlreadyHaveAnAccount),
-                TextButton(
-                  onPressed: () => controller.goToLogin,
-                  child: const Text(TemarLijeTexts.tLogin),
+              const SizedBox(height: 24),
+
+              // Error message
+              Obx(() {
+                if (controller.errorMessage.value != null) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      controller.errorMessage.value!,
+                      style: const TextStyle(color: TemarLijeColors.error),
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
+
+              // Login button
+              Obx(
+                () => ElevatedButton(
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : controller.performSignup,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: controller.isLoading.value
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text(TemarLijeTexts.signIn),
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 16),
+
+              // Signup link
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(TemarLijeTexts.tAlreadyHaveAnAccount),
+                  TextButton(
+                    onPressed: controller.goToLogin,
+                    child: const Text(TemarLijeTexts.tLogin),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
