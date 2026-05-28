@@ -1,3 +1,6 @@
+import 'package:ui_temarlije/data/models/fileds.dart';
+import 'package:ui_temarlije/data/models/users_models.dart';
+
 class PrincipalUser {
   final String id;
   final String authUserId;
@@ -89,39 +92,6 @@ class PrincipalUser {
       updatedAt: DateTime.parse(json['updated_at']),
     );
   }
-}
-
-class AddressInfo {
-  final String region;
-  final String zone;
-  final String city;
-  final String kebeleNo;
-
-  AddressInfo({
-    required this.region,
-    required this.zone,
-    required this.city,
-    required this.kebeleNo,
-  });
-
-  factory AddressInfo.fromJson(Map<String, dynamic> json) {
-    return AddressInfo(
-      region: json['region'],
-      zone: json['zone'],
-      city: json['city'],
-      kebeleNo: json['kebele_no'],
-    );
-  }
-  Map<String, dynamic> toJson() {
-    return {
-      'region': region,
-      'zone': zone,
-      'city': city,
-      'kebele_no': kebeleNo,
-    };
-  }
-
-  String get fullAddress => '$kebeleNo, $city, $zone, $region';
 }
 
 /// Request model for creating a principal

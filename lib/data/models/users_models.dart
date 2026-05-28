@@ -1,3 +1,5 @@
+import 'package:ui_temarlije/data/models/fileds.dart';
+
 class PrincipalUser {
   final String id;
   final String authUserId;
@@ -59,29 +61,6 @@ class PrincipalUser {
       canManageAcademics: json['can_manage_academics'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
-    );
-  }
-}
-
-class AddressInfo {
-  final String region;
-  final String zone;
-  final String city;
-  final String kebeleNo;
-
-  AddressInfo({
-    required this.region,
-    required this.zone,
-    required this.city,
-    required this.kebeleNo,
-  });
-
-  factory AddressInfo.fromJson(Map<String, dynamic> json) {
-    return AddressInfo(
-      region: json['region'],
-      zone: json['zone'],
-      city: json['city'],
-      kebeleNo: json['kebele_no'],
     );
   }
 }
