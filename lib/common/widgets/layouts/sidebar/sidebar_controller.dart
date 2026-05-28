@@ -5,6 +5,7 @@ import 'package:ui_temarlije/utils/device/device_utility.dart';
 class SidebarController extends GetxController {
   final activeItem = TemarLijeRoutes.dashbord.obs;
   final hoverItem = ''.obs;
+  final expandedMenus = <String>{}.obs; // Track expanded submenus
 
   void changeActiveItems(String route) => activeItem.value = route;
   void changeHoverItems(String route) {
@@ -21,4 +22,14 @@ class SidebarController extends GetxController {
       Get.toNamed(route);
     }
   }
+
+  void toggleExpanded(String parentRoute) {
+    if (expandedMenus.contains(parentRoute)) {
+      expandedMenus.remove(parentRoute);
+    } else {
+      expandedMenus.add(parentRoute);
+    }
+  }
+
+  bool isExpanded(String parentRoute) => expandedMenus.contains(parentRoute);
 }
