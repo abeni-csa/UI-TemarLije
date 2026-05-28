@@ -102,6 +102,8 @@ class TemarLijeColors {
   static const Color warning = Color(0xFFF57C00);
   static const Color info = Color(0xFF1976D2);
 
+  static const Color present = Color(0xFF06D6A0);
+  static const Color absent = Color(0xFFEF476F);
   // Neutral Shades
   static const Color black = Color(0xFF232323);
   static const Color teal90 = Color(0xFF004D40);

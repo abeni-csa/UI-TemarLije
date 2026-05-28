@@ -52,6 +52,19 @@ class LocalDatabaseService {
       )
     ''');
 
+    await db.execute('''
+  CREATE TABLE attendance_records (
+    id TEXT PRIMARY KEY,
+    student_id TEXT NOT NULL,
+    student_name TEXT NOT NULL,
+    date TEXT NOT NULL,
+    status TEXT NOT NULL,
+    class_name TEXT NOT NULL,
+    remarks TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  )
+''');
     // Create table for student data
     await db.execute('''
       CREATE TABLE student_marks (
