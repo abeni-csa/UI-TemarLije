@@ -1,6 +1,7 @@
-// File: school_organzation_service.dart (Complete Remote Service)
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
+import 'package:ui_temarlije/data/models/membeship.dart';
 import 'package:ui_temarlije/data/models/school_organzation.dart';
 import 'package:ui_temarlije/data/repositories/school_organzation_repository.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
@@ -153,5 +154,208 @@ class SchoolOrganizationService extends GetxService {
     } catch (e) {
       rethrow;
     }
+  }
+
+  /// Fetches all school organizations from remote server
+  Future<List<SchoolOrganzationModel>> getAllSchools() async {
+    try {
+      final response = await _dioClient.get('/school-organizations');
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        return data
+            .map((json) => SchoolOrganzationModel.fromJson(json))
+            .toList();
+      } else {
+        throw Exception('Failed to fetch school organizations');
+      }
+    } catch (e) {
+      print('Error fetching schools: $e');
+      rethrow;
+    }
+  }
+
+  // School endpoints
+  Future<List<SchoolOrganzationModel>> getSchools() async {
+    try {
+      final response = await _dioClient.get('/school/list');
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data is List
+            ? response.data
+            : (response.data['schools'] ?? response.data['data'] ?? []);
+        return data
+            .map((json) => SchoolOrganzationModel.fromJson(json))
+            .toList();
+      }
+      return [];
+    } on DioException catch (e) {
+      if (kDebugMode) print('Error getting schools: ${_handleError(e)}');
+      return [];
+    }
+  }
+
+  Future<SchoolOrganzationModel?> getSchool(String schoolId) async {
+    try {
+      final response = await _dioClient.get('/school/$schoolId');
+
+      if (response.statusCode == 200) {
+        return SchoolOrganzationModel.fromJson(response.data);
+      }
+      return null;
+    } on DioException catch (e) {
+      if (kDebugMode) print('Error getting school: ${_handleError(e)}');
+      return null;
+    }
+  }
+
+  // Membership endpoints
+  Future<Membership> joinSchool({
+    required String schoolId,
+    required String userId,
+    required UserType membershipType,
+  }) async {
+    try {
+      String endpoint;
+      switch (membershipType) {
+        case UserType.student:
+          endpoint = '/school/$schoolId/members/join/student';
+          break;
+        case UserType.staff:
+          endpoint = '/school/$schoolId/members/join/staff';
+          break;
+        case UserType.teacher:
+          endpoint = '/school/$schoolId/members/join/teacher';
+          break;
+        default:
+          endpoint = '/school/$schoolId/members/join/student';
+      }
+
+      final request = MembershipRequest(
+        userId: userId,
+        membershipType: membershipType,
+      );
+
+      final response = await _dioClient.post(endpoint, data: request.toJson());
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        final membershipData = data['created'] ?? data['membership'] ?? data;
+        return Membership.fromJson(membershipData);
+      }
+      throw Exception('Failed to join school');
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<List<Membership>> getUserMemberships(String userId) async {
+    try {
+      final response = await _dioClient.get('/members/my-memberships');
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data is List
+            ? response.data
+            : (response.data['memberships'] ?? response.data['data'] ?? []);
+        return data.map((json) => Membership.fromJson(json)).toList();
+      }
+      return [];
+    } on DioException catch (e) {
+      if (kDebugMode)
+        print('Error getting user memberships: ${_handleError(e)}');
+      return [];
+    }
+  }
+
+  Future<List<Membership>> getSchoolMembers(String schoolId) async {
+    try {
+      final response = await _dioClient.get(
+        '/school/$schoolId/members/list-members',
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data is List
+            ? response.data
+            : (response.data['members'] ?? response.data['data'] ?? []);
+        return data.map((json) => Membership.fromJson(json)).toList();
+      }
+      return [];
+    } on DioException catch (e) {
+      if (kDebugMode) print('Error getting school members: ${_handleError(e)}');
+      return [];
+    }
+  }
+
+  Future<List<Membership>> getPendingRequests(String schoolId) async {
+    try {
+      final response = await _dioClient.get(
+        '/school/$schoolId/members/pending-requests',
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data is List
+            ? response.data
+            : (response.data['requests'] ?? response.data['data'] ?? []);
+        return data.map((json) => Membership.fromJson(json)).toList();
+      }
+      return [];
+    } on DioException catch (e) {
+      if (kDebugMode)
+        print('Error getting pending requests: ${_handleError(e)}');
+      return [];
+    }
+  }
+
+  Future<List<Membership>> updateMembershipStatus({
+    required String schoolId,
+    required MembershipStatus status,
+    required List<String> userIds,
+  }) async {
+    try {
+      final bulkUpdate = BulkStatusUpdate(status: status, userIds: userIds);
+      final response = await _dioClient.post(
+        '/school/$schoolId/members/update-status',
+        data: bulkUpdate.toJson(),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data is List
+            ? response.data
+            : (response.data['updated'] ?? response.data['data'] ?? []);
+        return data.map((json) => Membership.fromJson(json)).toList();
+      }
+      throw Exception('Failed to update status');
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<void> bulkUpdateStatus({
+    required String schoolId,
+    required MembershipStatus status,
+    required List<String> userIds,
+  }) async {
+    await updateMembershipStatus(
+      schoolId: schoolId,
+      status: status,
+      userIds: userIds,
+    );
+  }
+
+  String _handleError(DioException error) {
+    if (error.response != null) {
+      final data = error.response!.data;
+      if (data is Map) {
+        return data['error'] ?? data['message'] ?? 'An error occurred';
+      }
+      return 'Server error: ${error.response!.statusCode}';
+    } else if (error.type == DioExceptionType.connectionTimeout) {
+      return 'Connection timeout';
+    } else if (error.type == DioExceptionType.receiveTimeout) {
+      return 'Receive timeout';
+    } else if (error.type == DioExceptionType.connectionError) {
+      return 'No internet connection';
+    }
+    return error.message ?? 'An unexpected error occurred';
   }
 }

@@ -38,7 +38,7 @@ class DioClient extends GetxService {
       d.InterceptorsWrapper(
         onRequest: _onRequest,
         onResponse: _onResponse,
-        onError: _onError,
+        // onError: _onError,
       ),
     );
 

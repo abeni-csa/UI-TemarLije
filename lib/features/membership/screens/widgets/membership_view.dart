@@ -7,16 +7,17 @@ import 'package:ui_temarlije/service/school_orginzation_service.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
 
-/// View model for school organization management
-/// Handles offline-first CRUD operations with sync support
-class SchoolOrgView extends StatefulWidget {
-  const SchoolOrgView({super.key});
+class SchoolMembershipView extends StatefulWidget {
+  const SchoolMembershipView({super.key});
 
   @override
-  State<SchoolOrgView> createState() => _SchoolOrgViewState();
+  State<SchoolMembershipView> createState() => _MembershipViewState();
 }
 
-class _SchoolOrgViewState extends State<SchoolOrgView> {
+/// View model for school organization management
+/// Handles offline-first CRUD operations with sync support
+
+class _MembershipViewState extends State<SchoolMembershipView> {
   final SchoolOrganzationRepository _repository = SchoolOrganzationRepository();
   final SchoolOrganizationService _schoolService = SchoolOrganizationService();
   List<SchoolOrganzationModel> _schoolOrganizations = [];
@@ -44,25 +45,6 @@ class _SchoolOrgViewState extends State<SchoolOrgView> {
     } catch (e) {
       setState(() => _isLoading = false);
       _showError('Failed to load schools: $e');
-    }
-  }
-
-  /// Performs background sync with remote server
-  Future<void> _syncInBackground() async {
-    if (_isSyncing) return;
-
-    setState(() => _isSyncing = true);
-    try {
-      // Pull latest changes from remote first
-      await _repository.fetchAndSyncFromRemote();
-      // Reload local data
-      await _loadSchools();
-    } catch (e) {
-      debugPrint('Background sync failed: $e');
-    } finally {
-      if (mounted) {
-        setState(() => _isSyncing = false);
-      }
     }
   }
 
@@ -96,7 +78,8 @@ class _SchoolOrgViewState extends State<SchoolOrgView> {
       final updatedSchool = await _schoolService.updateSchoolOrg(id, request);
 
       // Step 2: Update local database with server response
-      if (updatedSchool != null) {
+      // if (updatedSchool != null) {
+      if (1 == 1) {
         await _repository.updateSchoolOrgFromRemote(updatedSchool);
         await _loadSchools();
         if (mounted) {
@@ -202,7 +185,10 @@ class _SchoolOrgViewState extends State<SchoolOrgView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (_isSyncing) const LinearProgressIndicator(),
+        if (_isSyncing)
+          const LinearProgressIndicator(
+            backgroundColor: TemarLijeColors.accent,
+          ),
         SchoolOrgList(
           schoolOrg: _schoolOrganizations,
           isLoading: _isLoading,

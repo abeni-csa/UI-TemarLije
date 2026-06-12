@@ -52,7 +52,7 @@ class LoginController extends GetxController {
   /// Handles both successful login and 2FA redirection
   Future<void> login() async {
     // Validate form inputs before proceeding
-    // if (!loginFormKey.currentState!.validate()) return;
+    if (!loginFormKey.currentState!.validate()) return;
 
     // Verify internet connectivity
     // if (!await _networkManager.checkConnectivity()) {

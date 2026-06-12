@@ -1,4 +1,5 @@
 // File: school_organzation_repository.dart (Complete Local Repository)
+import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:ui_temarlije/data/models/fileds.dart';
 import 'package:ui_temarlije/data/models/school_organzation.dart';
@@ -318,25 +319,83 @@ class SchoolOrganzationRepository {
     }
   }
 
-  /// Fetches latest data from remote and updates local database
-  Future<void> fetchAndSyncFromRemote() async {
-    try {
-      final remoteSchools = await _remoteService.listSchools();
-      final db = await _database;
-      await _ensureTableExists(db);
+  /// Saves school organization from remote server response to local database
+  Future<void> saveSchoolOrgFromRemote(SchoolOrganzationModel school) async {
+    final db = await _database;
+    await _ensureTableExists(db);
 
-      for (final school in remoteSchools) {
-        await db.insert(
-          _tableName,
-          _toMap(school),
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
-      }
+    try {
+      // Insert or replace the school from remote response
+      await db.insert(
+        _tableName,
+        _toMap(school),
+        // school.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     } catch (e) {
-      // Silently fail - we'll retry on next sync
-      print('Failed to sync from remote: $e');
+      debugPrint('Error saving school from remote: $e');
+      rethrow;
     }
   }
+
+  /// Updates school organization from remote server response in local db
+  Future<void> updateSchoolOrgFromRemote(SchoolOrganzationModel school) async {
+    final db = await _database;
+    await _ensureTableExists(db);
+
+    try {
+      await db.update(
+        _tableName,
+        school.toJson(),
+        where: 'id = ?',
+        whereArgs: [school.id],
+      );
+    } catch (e) {
+      debugPrint('Error updating school from remote: $e');
+      rethrow;
+    }
+  }
+
+  /// Fetches from remote and syncs with local db
+  Future<void> fetchAndSyncFromRemote() async {
+    final db = await _database;
+    await _ensureTableExists(db);
+
+    try {
+      // Fetch latest data from remote
+      final remoteSchools = await _remoteService.listSchools();
+
+      // Clear local db and insert fresh data from remote
+      await db.delete(_tableName);
+
+      for (final school in remoteSchools) {
+        await db.insert(_tableName, school.toJson());
+      }
+    } catch (e) {
+      debugPrint('Error syncing from remote: $e');
+      rethrow;
+    }
+  }
+
+  // /// Fetches latest data from remote and updates local db
+  // Future<void> fetchAndSyncFromRemote() async {
+  //   try {
+  //     final remoteSchools = await _remoteService.listSchools();
+  //     final db = await _database;
+  //     await _ensureTableExists(db);
+
+  //     for (final school in remoteSchools) {
+  //       await db.insert(
+  //         _tableName,
+  //         _toMap(school),
+  //         conflictAlgorithm: ConflictAlgorithm.replace,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     // Silently fail - we'll retry on next sync
+  //     print('Failed to sync from remote: $e');
+  //   }
+  // }
 }
 
 /// Extension to parse UuidValue

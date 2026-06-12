@@ -19,6 +19,8 @@ class TemarLijeRoutes {
   static const joinTeacher = '/schoolJoin/teacer';
   static const school = '/school';
 
+  static const schoolJoin = '/school/j';
+
   static const myProfile = '/me';
   static const principals = '/principals';
   static const principalDetail = '/principal-detail';

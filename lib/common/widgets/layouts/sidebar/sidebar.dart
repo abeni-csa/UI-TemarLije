@@ -245,7 +245,7 @@ class TemarLijeSidebar extends StatelessWidget {
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: TemarLijeRoutes.joinTeacher,
+                          route: TemarLijeRoutes.schoolJoin,
                           icon: Iconsax.add_circle,
                           itemName: "Join School",
                           isSubmenu: true,
