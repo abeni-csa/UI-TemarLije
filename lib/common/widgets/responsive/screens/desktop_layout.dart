@@ -3,7 +3,7 @@ import 'package:ui_temarlije/common/widgets/layouts/header/header.dart';
 import 'package:ui_temarlije/common/widgets/layouts/sidebar/sidebar.dart';
 
 class DesktopLayout extends StatelessWidget {
-  DesktopLayout({super.key, this.body});
+  const DesktopLayout({super.key, this.body});
 
   final Widget? body;
 

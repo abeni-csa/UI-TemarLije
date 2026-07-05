@@ -97,13 +97,13 @@ class TemarLijeColors {
   static const Color borderDark = Color(0xFF9CA3AF); // Gray 40
 
   // Error and validation colors
-  static const Color error = Color(0xFFD32F2F);
-  static const Color success = Color(0xFF388E3C);
-  static const Color warning = Color(0xFFF57C00);
-  static const Color info = Color(0xFF1976D2);
+  static const Color error = Color.fromARGB(255, 230, 8, 8);
+  static const Color success = Color.fromARGB(255, 0, 255, 13);
+  static const Color warning = Color.fromARGB(255, 245, 180, 0);
+  static const Color info = Color.fromARGB(255, 7, 65, 224);
 
   static const Color present = Color(0xFF06D6A0);
-  static const Color absent = Color(0xFFEF476F);
+  static const Color absent = Color.fromARGB(255, 206, 42, 151);
   // Neutral Shades
   static const Color black = Color(0xFF232323);
   static const Color teal90 = Color(0xFF004D40);

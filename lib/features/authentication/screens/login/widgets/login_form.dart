@@ -4,13 +4,14 @@ import 'package:ui_temarlije/features/authentication/controllers/login_controlle
 import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/utils/constants/text_string.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:ui_temarlije/utils/validators/validation.dart';
 
 class TemarLijeLoginForm extends StatelessWidget {
   const TemarLijeLoginForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<LoginController>();
+    final controller = Get.put(LoginController());
 
     return SafeArea(
       child: Padding(
@@ -29,12 +30,7 @@ class TemarLijeLoginForm extends StatelessWidget {
                   prefixIcon: Icon(Iconsax.direct_right),
                   labelText: TemarLijeTexts.email,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email or username';
-                  }
-                  return null;
-                },
+                validator: (value) => TemarLijeValidator.validateEmail(value),
               ),
               const SizedBox(height: 16),
               // Password field

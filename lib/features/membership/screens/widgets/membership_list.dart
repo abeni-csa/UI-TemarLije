@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:ui_temarlije/data/models/school_organzation.dart';
-import 'package:ui_temarlije/features/administrator/school_org/screens/widgets/school_org_card.dart';
+import 'package:get/get.dart';
+import 'package:ui_temarlije/features/membership/membership_controllers.dart';
+import 'package:ui_temarlije/features/membership/screens/widgets/membership_card.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
 
 class SchoolMembershipList extends StatelessWidget {
-  final List<SchoolOrganzationModel> schoolOrg;
+  // final List<SchoolOrganzationModel> schoolOrg;
   final bool isLoading;
   final VoidCallback onRefresh;
-  final Function(SchoolOrganzationModel) onDelete;
-  final Function(SchoolOrganzationModel) onEdit;
 
   const SchoolMembershipList({
     super.key,
-    required this.schoolOrg,
+    // required this.schoolOrg,
     required this.isLoading,
     required this.onRefresh,
-    required this.onDelete,
-    required this.onEdit,
   });
 
   @override
   Widget build(BuildContext context) {
+    final membershipController = Get.find<MembershipControllers>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -28,7 +27,7 @@ class SchoolMembershipList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'My School\'s',
+              'List of School\'s to Join',
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -38,7 +37,7 @@ class SchoolMembershipList extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.refresh, color: Colors.black),
-              onPressed: onRefresh,
+              onPressed: () => membershipController.loadSchools(),
               tooltip: 'Refresh',
             ),
           ],
@@ -51,12 +50,11 @@ class SchoolMembershipList extends StatelessWidget {
               child: CircularProgressIndicator(color: Colors.black),
             ),
           )
-        else if (schoolOrg.isEmpty)
+        else if (membershipController.schools.isEmpty)
           Center(
             child: Padding(
               padding: const EdgeInsets.all(32.0),
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     Icons.menu_book_outlined,
@@ -65,7 +63,7 @@ class SchoolMembershipList extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'No School yet',
+                    'No School Available',
                     style: TextStyle(
                       color: Colors.grey.shade600,
                       fontSize: 16,
@@ -74,7 +72,7 @@ class SchoolMembershipList extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Tap + to create your school\'s',
+                    'No schools are available to join at the moment',
                     style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
                   ),
                 ],
@@ -82,18 +80,16 @@ class SchoolMembershipList extends StatelessWidget {
             ),
           )
         else
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: schoolOrg.length,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              final school = schoolOrg[index];
-              return SchoolOrgCard(
-                schoolOrganzation: school,
-                onDelete: () => onDelete(school),
-                onEdit: () => onEdit(school),
-              );
-            },
+          Obx(
+            () => ListView.builder(
+              shrinkWrap: true,
+              itemCount: membershipController.schools.length,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                final school = membershipController.schools[index];
+                return SchoolMembershipCard(schoolOrganzation: school);
+              },
+            ),
           ),
       ],
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui_temarlije/common/widgets/buttons/primary_button.dart';
 import 'package:ui_temarlije/features/authentication/controllers/principal_controller.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
@@ -34,9 +35,9 @@ class DashboardMobile extends StatelessWidget {
                 return Column(
                   children: [
                     Text('No School Data  available'),
-                    ElevatedButton(
+                    TemarLijePrimaryButton(
+                      text: "Create New School",
                       onPressed: () => Get.offNamed(TemarLijeRoutes.school),
-                      child: Text("Create New School"),
                     ),
                   ],
                 );

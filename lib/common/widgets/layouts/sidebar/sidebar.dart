@@ -44,23 +44,14 @@ class TemarLijeSidebar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Desktop / Dashboard
-                    const TemarLijeMenuItem(
-                      route: TemarLijeRoutes.dashbord,
-                      icon: Iconsax.music_dashboard,
-                      itemName: "Desktop",
-                    ),
-
-                    const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-
-                    // Networking with Submenu
+                    // Dashboard
                     TemarLijeMenuItem(
-                      route: '/networking',
-                      icon: Iconsax.cloud_connection,
-                      itemName: "NetWorking",
+                      route: "dashbord",
+                      icon: Iconsax.activity,
+                      itemName: "Dashboard",
                       children: [
                         TemarLijeMenuItem(
-                          route: '/networking/overview',
+                          route: TemarLijeRoutes.dashbord,
                           icon: Iconsax.chart,
                           itemName: "Overview",
                           isSubmenu: true,
@@ -86,168 +77,322 @@ class TemarLijeSidebar extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-
-                    // Marklist with Submenu
+                    // Student Management
                     TemarLijeMenuItem(
-                      route: '/marklist',
-                      icon: Iconsax.data,
-                      itemName: "Marklist",
+                      route: '/student-management',
+                      icon: Iconsax.people,
+                      itemName: "Student Management",
                       children: [
                         TemarLijeMenuItem(
-                          route: '/marklist/students',
+                          route: '/student-management/all-students',
                           icon: Iconsax.profile_circle,
-                          itemName: "Student Marks",
+                          itemName: "All Students",
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: '/marklist/subjects',
-                          icon: Iconsax.book,
-                          itemName: "Subject Marks",
+                          route: '/student-management/enrollments',
+                          icon: Iconsax.add_circle,
+                          itemName: "Enrollments",
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: '/marklist/semesters',
-                          icon: Iconsax.calendar,
-                          itemName: "Semester Results",
+                          route: '/student-management/classes',
+                          icon: Iconsax.building,
+                          itemName: "Classes",
+                          isSubmenu: true,
+                        ),
+                      ],
+                    ),
+                    // Teachers  Management
+                    TemarLijeMenuItem(
+                      route: '/teachers-management',
+                      icon: Iconsax.teacher,
+                      itemName: "Teachers Management",
+                      children: [
+                        TemarLijeMenuItem(
+                          route: TemarLijeRoutes.schoolTeachers,
+                          icon: Iconsax.profile_circle,
+                          itemName: "All Teachers",
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: '/marklist/reports',
+                          route: TemarLijeRoutes.teachersEnrollments,
+                          icon: Iconsax.add_circle,
+                          itemName: "Join Request",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/teacher-management/attendance',
+                          icon: Iconsax.timer,
+                          itemName: "Attendance",
+                          isSubmenu: true,
+                        ),
+                      ],
+                    ),
+                    // Staff Management
+                    TemarLijeMenuItem(
+                      route: '/staff-management',
+                      icon: Iconsax.user_cirlce_add,
+                      itemName: "Staff Management",
+                      children: [
+                        TemarLijeMenuItem(
+                          route: '/staff-management/all-staff',
+                          icon: Iconsax.profile_circle,
+                          itemName: "All Staff",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/staff-management/departments',
+                          icon: Iconsax.building_4,
+                          itemName: "Departments",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/staff-management/attendance',
+                          icon: Iconsax.timer,
+                          itemName: "Attendance",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/staff-management/leave',
+                          icon: Iconsax.calendar_edit,
+                          itemName: "Leave Management",
+                          isSubmenu: true,
+                        ),
+                      ],
+                    ),
+
+                    // Users
+                    TemarLijeMenuItem(
+                      route: '/users',
+                      icon: Iconsax.user,
+                      itemName: "Users",
+                      children: [
+                        TemarLijeMenuItem(
+                          route: TemarLijeRoutes.schoolUserJoin,
+
+                          icon: Iconsax.profile_circle,
+                          itemName: "All Users",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: TemarLijeRoutes.allMembers,
+
+                          icon: Iconsax.box_add,
+                          itemName: "Join Request's",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: TemarLijeRoutes.schoolTeachers,
+                          icon: Iconsax.security_user,
+                          itemName: "Roles & Permissions",
+                          isSubmenu: true,
+                        ),
+                      ],
+                    ),
+
+                    // Academics
+                    TemarLijeMenuItem(
+                      route: '',
+                      icon: Iconsax.book,
+                      itemName: "Academics",
+                      children: [
+                        TemarLijeMenuItem(
+                          route: '/academics/subjects',
+                          icon: Iconsax.book_1,
+                          itemName: "Subjects",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/academics/grades',
+                          icon: Iconsax.chart,
+                          itemName: "Grades",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/academics/exams',
                           icon: Iconsax.document_text,
-                          itemName: "Reports",
+                          itemName: "Exams",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/academics/timetable',
+                          icon: Iconsax.calendar,
+                          itemName: "Timetable",
                           isSubmenu: true,
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-
-                    // Lesson Planner with Submenu
+                    // Communication
                     TemarLijeMenuItem(
-                      route: '/lesson-planner',
-                      icon: Iconsax.add_circle,
-                      itemName: "Lesson Planner",
+                      route: '/communication',
+                      icon: Iconsax.message,
+                      itemName: "Communication",
                       children: [
                         TemarLijeMenuItem(
-                          route: TemarLijeRoutes.toolLessonPlaner,
-                          icon: Iconsax.add,
-                          itemName: "Create Lesson",
+                          route: '/communication/announcements',
+                          icon: Iconsax.message,
+                          itemName: "Announcements",
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: TemarLijeRoutes.toolAttendaceTrack,
-                          icon: Iconsax.attach_circle,
-                          itemName: "Attendace Track",
+                          route: '/communication/messages',
+                          icon: Iconsax.sms,
+                          itemName: "Messages",
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: '/lesson-planner/view',
-                          icon: Iconsax.eye,
-                          itemName: "View Lessons",
+                          route: '/communication/notifications',
+                          icon: Iconsax.notification,
+                          itemName: "Notifications",
                           isSubmenu: true,
-                        ),
-                        TemarLijeMenuItem(
-                          route: '/lesson-planner/schedule',
-                          icon: Iconsax.calendar_1,
-                          itemName: "Schedule",
-                          isSubmenu: true,
-                        ),
-                        TemarLijeMenuItem(
-                          route: '/lesson-planner/resources',
-                          icon: Iconsax.folder,
-                          itemName: "Resources",
-                          isSubmenu: true,
-                        ),
-                        // Nested submenu example
-                        TemarLijeMenuItem(
-                          route: '/lesson-planner/templates',
-                          icon: Iconsax.document,
-                          itemName: "Templates",
-                          isSubmenu: true,
-                          children: [
-                            TemarLijeMenuItem(
-                              route: '/lesson-planner/templates/daily',
-                              icon: Iconsax.sun_1,
-                              itemName: "Daily Templates",
-                              isSubmenu: true,
-                            ),
-                            TemarLijeMenuItem(
-                              route: '/lesson-planner/templates/weekly',
-                              icon: Iconsax.calendar,
-                              itemName: "Weekly Templates",
-                              isSubmenu: true,
-                            ),
-                            TemarLijeMenuItem(
-                              route: '/lesson-planner/templates/monthly',
-                              icon: Iconsax.calendar_2,
-                              itemName: "Monthly Templates",
-                              isSubmenu: true,
-                            ),
-                          ],
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-
-                    // Fee Management with Submenu
+                    // Finance
                     TemarLijeMenuItem(
-                      route: '/fee',
-                      icon: Iconsax.menu_board,
-                      itemName: "Fee Management",
+                      route: '/finance',
+                      icon: Iconsax.money,
+                      itemName: "Finance",
                       children: [
                         TemarLijeMenuItem(
-                          route: '/fee/collections',
-                          icon: Iconsax.money,
-                          itemName: "Fee Collections",
+                          route: '/finance/fees',
+                          icon: Iconsax.money_recive,
+                          itemName: "Fees Management",
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: '/fee/structures',
-                          icon: Iconsax.buildings,
-                          itemName: "Fee Structures",
+                          route: '/finance/expenses',
+                          icon: Iconsax.money_send,
+                          itemName: "Expenses",
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: '/fee/reports',
+                          route: '/finance/payroll',
+                          icon: Iconsax.wallet,
+                          itemName: "Payroll",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/finance/reports',
                           icon: Iconsax.chart_square,
-                          itemName: "Fee Reports",
-                          isSubmenu: true,
-                        ),
-                        TemarLijeMenuItem(
-                          route: '/fee/dues',
-                          icon: Iconsax.warning_2,
-                          itemName: "Pending Dues",
-                          isSubmenu: true,
-                        ),
-                        TemarLijeMenuItem(
-                          route: '/fee/scholarships',
-                          icon: Iconsax.heart,
-                          itemName: "Scholarships",
+                          itemName: "Financial Reports",
                           isSubmenu: true,
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: TemarLijeSizes.spaceBtwItems),
+                    // Transport
+                    TemarLijeMenuItem(
+                      route: '/transport',
+                      icon: Iconsax.truck,
+                      itemName: "Transport",
+                      children: [
+                        TemarLijeMenuItem(
+                          route: '/transport/routes',
+                          icon: Iconsax.map,
+                          itemName: "Routes",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/transport/vehicles',
+                          icon: Iconsax.car,
+                          itemName: "Vehicles",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/transport/tracking',
+                          icon: Iconsax.location,
+                          itemName: "Tracking",
+                          isSubmenu: true,
+                        ),
+                      ],
+                    ),
 
-                    // Settings with Submenu
+                    // Resources
+                    TemarLijeMenuItem(
+                      route: '/resources',
+                      icon: Iconsax.folder,
+                      itemName: "Resources",
+                      children: [
+                        TemarLijeMenuItem(
+                          route: '/resources/library',
+                          icon: Iconsax.book_1,
+                          itemName: "Library",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/resources/documents',
+                          icon: Iconsax.document,
+                          itemName: "Documents",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/resources/assets',
+                          icon: Iconsax.box,
+                          itemName: "Assets",
+                          isSubmenu: true,
+                        ),
+                      ],
+                    ),
+
+                    // Reports & Analytics
+                    TemarLijeMenuItem(
+                      route: '/reports',
+                      icon: Iconsax.chart_square,
+                      itemName: "Reports & Analytics",
+                      children: [
+                        TemarLijeMenuItem(
+                          route: '/reports/academic',
+                          icon: Iconsax.chart,
+                          itemName: "Academic Reports",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/reports/financial',
+                          icon: Iconsax.chart_2,
+                          itemName: "Financial Reports",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/reports/attendance',
+                          icon: Iconsax.chart_3,
+                          itemName: "Attendance Reports",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/reports/custom',
+                          icon: Iconsax.setting,
+                          itemName: "Custom Reports",
+                          isSubmenu: true,
+                        ),
+                      ],
+                    ),
+
+                    // Settings
                     TemarLijeMenuItem(
                       route: '/settings',
                       icon: Iconsax.setting_2,
                       itemName: "Settings",
                       children: [
                         TemarLijeMenuItem(
-                          route: '/settings/profile',
-                          icon: Iconsax.profile_circle,
-                          itemName: "Profile Settings",
+                          route: TemarLijeRoutes.school,
+                          icon: Iconsax.home_11,
+                          itemName: "My School",
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: TemarLijeRoutes.schoolJoin,
-                          icon: Iconsax.add_circle,
-                          itemName: "Join School",
+                          route: '/settings/general',
+                          icon: Iconsax.building,
+                          itemName: "General Settings",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/settings/profile',
+                          icon: Iconsax.profile_circle,
+                          itemName: "Profile Settings",
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
@@ -257,56 +402,39 @@ class TemarLijeSidebar extends StatelessWidget {
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: TemarLijeRoutes.school,
-                          icon: Iconsax.shield_tick,
-                          itemName: "School",
-                          isSubmenu: true,
-                        ),
-                        TemarLijeMenuItem(
                           route: '/settings/notifications',
                           icon: Iconsax.notification,
                           itemName: "Notifications",
-                          isSubmenu: true,
-                          children: [
-                            TemarLijeMenuItem(
-                              route: '/settings/notifications/email',
-                              icon: Iconsax.sms,
-                              itemName: "Email Settings",
-                              isSubmenu: true,
-                            ),
-                            TemarLijeMenuItem(
-                              route: '/settings/notifications/push',
-                              icon: Iconsax.mobile,
-                              itemName: "Push Notifications",
-                              isSubmenu: true,
-                            ),
-                          ],
-                        ),
-                        TemarLijeMenuItem(
-                          route: '/settings/preferences',
-                          icon: Iconsax.color_swatch,
-                          itemName: "Preferences",
                           isSubmenu: true,
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-
-                    // Help & Support
-                    const TemarLijeMenuItem(
-                      route: '/help',
-                      icon: Iconsax.message_question,
-                      itemName: "Help & Support",
-                    ),
-
-                    const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-
-                    // Logout
-                    const TemarLijeMenuItem(
-                      route: '/logout',
-                      icon: Iconsax.logout,
-                      itemName: "Logout",
+                    // Admin Only
+                    TemarLijeMenuItem(
+                      route: '/admin',
+                      icon: Iconsax.security_user,
+                      itemName: "Admin Only",
+                      children: [
+                        TemarLijeMenuItem(
+                          route: '/admin/dashboard',
+                          icon: Iconsax.activity,
+                          itemName: "Admin Dashboard",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/admin/logs',
+                          icon: Iconsax.document,
+                          itemName: "System Logs",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: '/admin/backup',
+                          icon: Iconsax.cloud,
+                          itemName: "Backup",
+                          isSubmenu: true,
+                        ),
+                      ],
                     ),
                   ],
                 ),

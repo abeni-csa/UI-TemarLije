@@ -30,7 +30,7 @@ class AccountTypeScreenMobile extends StatelessWidget {
     ),
     AccountTypeModel(
       title: "Teacher",
-      route: null,
+      route: TemarLijeRoutes.teacherProfile,
       icon: Iconsax.teacher,
       imagePath: TemarLijeImagesStrings.banner1,
       description: "Create courses, grade assignments, and manage your classes",

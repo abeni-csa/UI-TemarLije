@@ -38,13 +38,6 @@ class DashboardDesktopScreen extends StatelessWidget {
                     runSpacing: TemarLijeSizes.spaceBtwItems,
                     children: const [
                       TemarLijeDashboardCard(
-                        title: "Students",
-                        value: "2,500",
-                        percentage: "+0.5%",
-                        isPositive: true,
-                        icon: Iconsax.people,
-                      ),
-                      TemarLijeDashboardCard(
                         title: "Teachers",
                         value: "46",
                         percentage: "-10%",
@@ -57,13 +50,6 @@ class DashboardDesktopScreen extends StatelessWidget {
                         percentage: "+0.5%",
                         isPositive: true,
                         icon: Iconsax.people,
-                      ),
-                      TemarLijeDashboardCard(
-                        title: "Teachers",
-                        value: "46",
-                        percentage: "-10%",
-                        isPositive: false,
-                        icon: Iconsax.unlimited,
                       ),
                       TemarLijeDashboardCard(
                         title: "Staff",
@@ -162,7 +148,10 @@ class DashboardDesktopScreen extends StatelessWidget {
                       const SizedBox(height: TemarLijeSizes.spaceBtwItems),
 
                       /// Order
-                      TemarLijeRoundedContainer(),
+                      TemarLijeRoundedContainer(
+
+                        
+                      ),
                     ],
                   ),
                 ),

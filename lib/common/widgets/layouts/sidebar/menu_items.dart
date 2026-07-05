@@ -152,7 +152,11 @@ class TemarLijeMenuItem extends StatelessWidget {
                     bottom: TemarLijeSizes.xs,
                   ),
                   child: menuController.isActive(route)
-                      ? Icon(icon, size: 22, color: TemarLijeColors.white)
+                      ? Icon(
+                          icon,
+                          size: 22,
+                          color: const Color.fromARGB(255, 0, 255, 13),
+                        )
                       : Icon(
                           icon,
                           color: menuController.isHovering(route)

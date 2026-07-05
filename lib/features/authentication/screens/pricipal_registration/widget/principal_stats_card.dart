@@ -21,7 +21,7 @@ class PrincipalStatsCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withAlpha(1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

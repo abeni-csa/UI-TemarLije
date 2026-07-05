@@ -50,6 +50,22 @@ class LoginController extends GetxController {
 
   /// Authenticates user with email/username and password
   /// Handles both successful login and 2FA redirection
+  Future<void> logout() async {
+    isLoading.value = true;
+    errorMessage.value = null;
+
+    try {
+      _authRepository.logout();
+      Get.offNamed(TemarLijeRoutes.logIn);
+    } catch (e) {
+      errorMessage.value = e.toString();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Authenticates user with email/username and password
+  /// Handles both successful login and 2FA redirection
   Future<void> login() async {
     // Validate form inputs before proceeding
     if (!loginFormKey.currentState!.validate()) return;

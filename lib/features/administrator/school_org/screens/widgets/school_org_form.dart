@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ui_temarlije/data/models/fileds.dart';
+import 'package:get/get.dart';
 import 'package:ui_temarlije/data/models/school_organzation.dart';
-import 'package:ui_temarlije/features/administrator/school_org/model/school.dart';
+import 'package:ui_temarlije/features/administrator/school_org/school_org_controller.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
+import 'package:ui_temarlije/utils/validators/validation.dart';
 
-class SchoolOrgFormDialog extends StatefulWidget {
+class SchoolOrgFormDialog extends StatelessWidget {
   final SchoolOrganzationModel? schoolOrganization;
   final Function(CreateSchoolOrganzationRequest)? onSubmit;
   final Function(String, UpdateSchoolOrganzationRequest)? onSubmitUpdate;
@@ -17,77 +18,16 @@ class SchoolOrgFormDialog extends StatefulWidget {
   });
 
   @override
-  State<SchoolOrgFormDialog> createState() => _SchoolOrgFormDialogState();
-}
-
-class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
-  final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _nameController;
-  late final TextEditingController _establishedYearController;
-  late final TextEditingController _regionController;
-  late final TextEditingController _zoneController;
-  late final TextEditingController _cityController;
-  late final TextEditingController _kebeleController;
-
-  late final TextEditingController _phoneController;
-  late final TextEditingController _emailController;
-  late final TextEditingController _websiteController;
-
-  late SchoolType _selectedSchoolType;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(
-      text: widget.schoolOrganization?.name ?? '',
-    );
-    _establishedYearController = TextEditingController(
-      text: widget.schoolOrganization?.establishedYear.toString() ?? '',
-    );
-    _regionController = TextEditingController(
-      text: widget.schoolOrganization?.address.region ?? '',
-    );
-    _zoneController = TextEditingController(
-      text: widget.schoolOrganization?.address.zone ?? '',
-    );
-    _cityController = TextEditingController(
-      text: widget.schoolOrganization?.address.city ?? '',
-    );
-    _kebeleController = TextEditingController(
-      text: widget.schoolOrganization?.address.kebeleNo ?? '',
-    );
-
-    _phoneController = TextEditingController(
-      text: widget.schoolOrganization?.contact.phone ?? '',
-    );
-    _websiteController = TextEditingController(
-      text: widget.schoolOrganization?.contact.website ?? '',
-    );
-
-    _emailController = TextEditingController(
-      text: widget.schoolOrganization?.contact.email ?? '',
-    );
-    _selectedSchoolType =
-        widget.schoolOrganization?.schoolType ?? SchoolType.Public;
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _establishedYearController.dispose();
-    _regionController.dispose();
-    _zoneController.dispose();
-    _cityController.dispose();
-    _kebeleController.dispose();
-
-    _phoneController.dispose();
-    _emailController.dispose();
-    _websiteController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final SchoolOrgController controller = Get.find<SchoolOrgController>();
+
+    // Set form data if editing
+    if (schoolOrganization != null) {
+      controller.setEditingSchool(schoolOrganization);
+    } else {
+      controller.setEditingSchool(null);
+    }
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       backgroundColor: TemarLijeColors.cardBackgroundColor,
@@ -95,7 +35,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
         padding: const EdgeInsets.all(24),
         constraints: const BoxConstraints(maxWidth: 600, maxHeight: 700),
         child: Form(
-          key: _formKey,
+          key: controller.formKey,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -111,7 +51,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
-                        widget.schoolOrganization == null
+                        schoolOrganization == null
                             ? Icons.add_business
                             : Icons.edit_attributes,
                         color: TemarLijeColors.white,
@@ -121,7 +61,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        widget.schoolOrganization == null
+                        controller.editingSchool == null
                             ? 'Create New School Organization'
                             : 'Edit School Organization',
                         style: const TextStyle(
@@ -140,7 +80,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
 
                 // School Name
                 TextFormField(
-                  controller: _nameController,
+                  controller: controller.nameController,
                   decoration: InputDecoration(
                     labelText: 'School Name',
                     hintText: 'Enter school name',
@@ -160,7 +100,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
 
                 // Established Year
                 TextFormField(
-                  controller: _establishedYearController,
+                  controller: controller.establishedYearController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: 'Established Year',
@@ -171,10 +111,11 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                     ),
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter established year';
-                    }
-                    final year = int.tryParse(value);
+                    TemarLijeValidator.validateEmptyText(
+                      "Established Year",
+                      value,
+                    );
+                    final year = int.tryParse(value!);
                     if (year == null ||
                         year < 1000 ||
                         year > DateTime.now().year) {
@@ -186,26 +127,28 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                 const SizedBox(height: 16),
 
                 // School Type
-                DropdownButtonFormField<SchoolType>(
-                  initialValue: _selectedSchoolType,
-                  decoration: InputDecoration(
-                    labelText: 'School Type',
-                    prefixIcon: const Icon(Icons.school),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                Obx(
+                  () => DropdownButtonFormField<SchoolType>(
+                    initialValue: controller.selectedSchoolType.value,
+                    decoration: InputDecoration(
+                      labelText: 'School Type',
+                      prefixIcon: const Icon(Icons.school),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
+                    items: SchoolType.values.map((type) {
+                      return DropdownMenuItem(
+                        value: type,
+                        child: Text(type.toString().split('.').last),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.selectedSchoolType.value = value;
+                      }
+                    },
                   ),
-                  items: SchoolType.values.map((type) {
-                    return DropdownMenuItem(
-                      value: type,
-                      child: Text(type.toString().split('.').last),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(() => _selectedSchoolType = value);
-                    }
-                  },
                 ),
                 const SizedBox(height: 16),
 
@@ -216,7 +159,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
-                  controller: _regionController,
+                  controller: controller.regionController,
                   decoration: InputDecoration(
                     labelText: 'Region Name',
                     hintText: 'Enter region address',
@@ -231,7 +174,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: _cityController,
+                        controller: controller.cityController,
                         decoration: InputDecoration(
                           labelText: 'City',
                           border: OutlineInputBorder(
@@ -243,7 +186,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: TextFormField(
-                        controller: _zoneController,
+                        controller: controller.zoneController,
                         decoration: InputDecoration(
                           labelText: 'Zone',
                           border: OutlineInputBorder(
@@ -259,7 +202,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: _cityController,
+                        controller: controller.cityController,
                         decoration: InputDecoration(
                           labelText: 'City',
                           border: OutlineInputBorder(
@@ -271,7 +214,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: TextFormField(
-                        controller: _kebeleController,
+                        controller: controller.kebeleController,
                         decoration: InputDecoration(
                           labelText: 'Kebele Code',
                           border: OutlineInputBorder(
@@ -291,7 +234,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
-                  controller: _phoneController,
+                  controller: controller.phoneController,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     labelText: 'Phone Number',
@@ -304,12 +247,12 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
-                  controller: _websiteController,
-                  keyboardType: TextInputType.phone,
+                  controller: controller.websiteController,
+                  keyboardType: TextInputType.url,
                   decoration: InputDecoration(
                     labelText: 'Website',
                     hintText: 'Enter website address',
-                    prefixIcon: const Icon(Icons.phone),
+                    prefixIcon: const Icon(Icons.language),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -317,7 +260,7 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
-                  controller: _emailController,
+                  controller: controller.emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email Address',
@@ -355,19 +298,34 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: ElevatedButton(
-                        onPressed: _submitForm,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: TemarLijeColors.accent,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                      child: Obx(
+                        () => ElevatedButton(
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : () {
+                                  _submitForm(controller, context);
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: TemarLijeColors.accent,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          widget.schoolOrganization == null
-                              ? 'Create'
-                              : 'Update',
+                          child: controller.isLoading.value
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Text(
+                                  controller.editingSchool == null
+                                      ? 'Create'
+                                      : 'Update',
+                                ),
                         ),
                       ),
                     ),
@@ -381,54 +339,15 @@ class _SchoolOrgFormDialogState extends State<SchoolOrgFormDialog> {
     );
   }
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      final address = AddressInfo(
-        region: _regionController.text,
-        zone: _zoneController.text,
-        city: _cityController.text,
-        kebeleNo: _kebeleController.text,
-      );
-
-      final location = Location(
-        region: _regionController.text,
-        zone: _zoneController.text,
-        city: _cityController.text,
-        kebeleNo: _kebeleController.text,
-      );
-      final contact = Contact(
-        phone: _phoneController.text,
-        email: _emailController.text,
-        website: _websiteController.text,
-      );
-
-      if (widget.schoolOrganization != null && widget.onSubmitUpdate != null) {
-        // Update existing school
-        final request = UpdateSchoolOrganzationRequest(
-          schoolName: _nameController.text,
-          address: address,
-          location: location,
-          contact: contact,
-          establishedYear: int.parse(_establishedYearController.text),
-          schoolType: _selectedSchoolType.toString().split('.').last,
-        );
-        widget.onSubmitUpdate!(
-          widget.schoolOrganization!.id.toString(),
-          request,
-        );
-      } else if (widget.onSubmit != null) {
-        // Create new school
-        final request = CreateSchoolOrganzationRequest(
-          schoolName: _nameController.text,
-          address: address,
-          location: location,
-          contact: contact,
-          establishedYear: int.parse(_establishedYearController.text),
-          schoolType: _selectedSchoolType.toString().split('.').last,
-        );
-        widget.onSubmit!(request);
+  void _submitForm(SchoolOrgController controller, BuildContext context) {
+    if (controller.validateForm()) {
+      if (controller.editingSchool != null && onSubmitUpdate != null) {
+        final request = controller.getUpdateRequest();
+        onSubmitUpdate!(controller.editingSchool!.id.toString(), request);
+      } else if (onSubmit != null) {
+        final request = controller.getCreateRequest();
+        onSubmit!(request);
       }
-
       Navigator.pop(context);
     }
   }

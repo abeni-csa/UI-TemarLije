@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ui_temarlije/utils/constants/colors.dart';
+import 'package:ui_temarlije/utils/constants/enums.dart';
 
 class TemarLijeHelperFunctions {
   static DateTime getStartOfWeek(DateTime date) {
@@ -162,7 +164,7 @@ class TemarLijeHelperFunctions {
     }
   }
 
-  static int calculateAge(String formattedDate) {
+  static int calculateAgeDT(String formattedDate) {
     // Parse the formatted date string back into a DateTime object
     final dateOfBirth = DateFormat('dd-MMM-yyyy').parse(formattedDate);
     final now = DateTime.now();
@@ -174,5 +176,52 @@ class TemarLijeHelperFunctions {
     }
 
     return age;
+  }
+
+  static int calculateAge(String formattedDate) {
+    // Parse the formatted date string back into a DateTime object
+    final dateOfBirth = DateFormat('yyyy-MMM-dd').parse(formattedDate);
+    final now = DateTime.now();
+    int age = now.year - dateOfBirth.year;
+
+    if (now.month < dateOfBirth.month ||
+        (now.month == dateOfBirth.month && now.day < dateOfBirth.day)) {
+      age--;
+    }
+
+    return age;
+  }
+
+  static String formatDateTime(String dateTime) {
+    try {
+      final parts = dateTime.split(' ');
+      if (parts.length == 2) {
+        return parts[0];
+      }
+      return dateTime;
+    } catch (e) {
+      return dateTime;
+    }
+  }
+
+  static Color getExperienceColor(int years) {
+    if (years < 2) return Colors.orange;
+    if (years < 5) return Colors.blue;
+    if (years < 10) return Colors.green;
+    return Colors.purple;
+  }
+
+  static Color getEmploymentTypeColor(EmploymentType type) {
+    switch (type) {
+      case EmploymentType.permanent:
+        return TemarLijeColors.success;
+      case EmploymentType.contract:
+        return Colors.blue;
+      case EmploymentType.internship:
+        return TemarLijeColors.absent;
+
+      case EmploymentType.partTime:
+        return Colors.purple;
+    }
   }
 }

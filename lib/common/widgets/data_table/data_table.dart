@@ -37,6 +37,7 @@ class TemarLijeDataTable extends StatelessWidget {
         headingRowColor: WidgetStateProperty.resolveWith(
           (states) => TemarLijeColors.primary,
         ),
+
         // Set the decoration for the data table
         decoration: const BoxDecoration(
           color: Colors.white,

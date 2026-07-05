@@ -50,3 +50,5 @@ enum PaymentMethods {
   razorPay,
   paytm,
 }
+
+enum EmploymentType { partTime, permanent, contract, internship }

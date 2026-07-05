@@ -29,14 +29,14 @@ class AccountTypeScreenTabletDesktop extends StatelessWidget {
     ),
     AccountTypeModel(
       title: "Teacher",
-      route: null,
+      route: TemarLijeRoutes.teacherProfile,
       icon: Iconsax.teacher,
       imagePath: "assets/images/teacher.png",
       description: "Create courses, grade assignments, and manage your classes",
     ),
     AccountTypeModel(
       title: "School Administrator",
-      route: null,
+      route: TemarLijeRoutes.profPricpial,
       icon: Iconsax.shield_tick,
       imagePath: "assets/images/admin.png",
       description:

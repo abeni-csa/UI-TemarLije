@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui_temarlije/utils/constants/colors.dart';
 
 class TemarLijePageHeading extends StatelessWidget {
   const TemarLijePageHeading({
@@ -15,9 +16,16 @@ class TemarLijePageHeading extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(heading, style: Theme.of(context).textTheme.headlineLarge),
+        Text(
+          heading,
+          style: Theme.of(context).textTheme.headlineSmall!.apply(
+            color: TemarLijeColors.darkBackground,
+          ),
+        ),
         rightSideWidget ?? const SizedBox(),
       ],
     );
   }
 }
+
+//               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

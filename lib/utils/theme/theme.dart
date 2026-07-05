@@ -10,7 +10,7 @@ class TemarLijeAppTheme {
   TemarLijeAppTheme._();
 
   static ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: TemarLijeColors.secondaryBackground,
+    scaffoldBackgroundColor: TemarLijeColors.primaryBackground,
     brightness: Brightness.dark,
     textTheme: TemarLijeTextTheme.lightTextTheme,
     appBarTheme: TemarLijeAppBarTheme.lightAppBarTheme,

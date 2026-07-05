@@ -7,10 +7,11 @@ class TemarLijeFormHeader extends StatelessWidget {
     super.key,
     required this.title,
     required this.subTitle,
+    this.showImage = true,
   });
   final String title;
   final String subTitle;
-
+  final bool showImage;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -18,11 +19,13 @@ class TemarLijeFormHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Image(
-            width: 100,
-            height: 100,
-            image: AssetImage(TemarLijeImagesStrings.darkAppLogo),
-          ),
+          showImage
+              ? const Image(
+                  width: 100,
+                  height: 100,
+                  image: AssetImage(TemarLijeImagesStrings.darkAppLogo),
+                )
+              : const SizedBox.shrink(),
           const SizedBox(height: TemarLijeSizes.spaceBtwSections),
           Text(title, style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: TemarLijeSizes.sm),

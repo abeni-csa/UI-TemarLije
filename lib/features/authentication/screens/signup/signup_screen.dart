@@ -1,4 +1,3 @@
-// lib/features/authentication/screens/signup/signup_screen.dart
 import 'package:flutter/material.dart';
 import 'package:ui_temarlije/common/widgets/layouts/template/site_layout.dart';
 import 'package:ui_temarlije/features/authentication/screens/signup/responsive_screens/signup_desktop_tablet.dart';

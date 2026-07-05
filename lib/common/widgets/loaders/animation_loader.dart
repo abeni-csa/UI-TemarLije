@@ -31,38 +31,59 @@ class TemarLijeAnimationLoaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Calculate animation size - use a percentage of screen width but cap it
+    // Also ensure it doesn't take more than 50% of screen height
+    final animationSize = (screenWidth * 0.4).clamp(100.0, 400.0);
+    final maxAnimationHeight = screenHeight * 0.4;
+    final finalAnimationSize = animationSize > maxAnimationHeight
+        ? maxAnimationHeight
+        : animationSize;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Lottie.asset(
-            animation,
-            width: MediaQuery.of(context).size.width * 0.8,
-          ), // Display Lottie animation
-          const SizedBox(height: TemarLijeSizes.defaultSpace),
-          Text(
-            text,
-            style: Theme.of(context).textTheme.bodyMedium,
-            textAlign: TextAlign.center,
+          // Constrained Lottie animation with reasonable size
+          SizedBox(
+            width: finalAnimationSize,
+            height: finalAnimationSize,
+            child: Lottie.asset(animation, fit: BoxFit.contain),
           ),
-          const SizedBox(height: TemarLijeSizes.defaultSpace),
-          showAction
-              ? SizedBox(
-                  width: 250,
-                  child: OutlinedButton(
-                    onPressed: onActionPressed,
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: TemarLijeColors.darkContainer,
-                    ),
-                    child: Text(
-                      actionText!,
-                      style: Theme.of(context).textTheme.bodyMedium!.apply(
-                        color: TemarLijeColors.lightContainer,
-                      ),
-                    ),
+          const SizedBox(height: TemarLijeSizes.spaceBtwItems),
+          // Text with proper constraints
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.displaySmall,
+              textAlign: TextAlign.center,
+              softWrap: true,
+            ),
+          ),
+          if (showAction) ...[
+            const SizedBox(height: TemarLijeSizes.spaceBtwItems),
+            SizedBox(
+              width: 250,
+              child: OutlinedButton(
+                onPressed: onActionPressed,
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: TemarLijeColors.darkContainer,
+                ),
+                child: Text(
+                  actionText!,
+                  style: Theme.of(context).textTheme.bodyMedium!.apply(
+                    color: TemarLijeColors.lightContainer,
                   ),
-                )
-              : const SizedBox(),
+                ),
+              ),
+            ),
+          ],
+          // Add some bottom padding for safety
+          const SizedBox(height: TemarLijeSizes.defaultSpace),
         ],
       ),
     );

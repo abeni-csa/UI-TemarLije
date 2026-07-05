@@ -1,7 +1,7 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:ui_temarlije/common/widgets/loaders/animation_loader.dart.';
+import 'package:ui_temarlije/common/widgets/loaders/animation_loader.dart';
 
 import 'package:ui_temarlije/utils/constants/sizes.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
@@ -19,7 +19,7 @@ class TemarLijePaginatedDataTable extends StatelessWidget {
     this.sortColumnIndex,
     this.dataRowHeight = TemarLijeSizes.xl * 2,
     this.sortAscending = true,
-    this.minWidth = 1000,
+    this.minWidth = 500,
   });
 
   /// Whether to sort the DataTable in ascending or descending order.
@@ -78,9 +78,11 @@ class TemarLijePaginatedDataTable extends StatelessWidget {
           renderEmptyRowsInTheEnd: false,
           onRowsPerPageChanged: (noOfRows) {},
           sortColumnIndex: sortColumnIndex,
-          headingTextStyle: Theme.of(context).textTheme.titleMedium,
+          headingTextStyle: Theme.of(
+            context,
+          ).textTheme.titleMedium!.apply(color: TemarLijeColors.primary),
           headingRowColor: WidgetStateProperty.resolveWith(
-            (states) => TemarLijeColors.primaryBackground,
+            (states) => TemarLijeColors.cardBackgroundColor,
           ),
           empty: TemarLijeAnimationLoaderWidget(
             animation: TemarLijeImagesStrings.packageAnimation,

@@ -5,8 +5,10 @@ import 'package:ui_temarlije/data/models/membeship.dart';
 import 'package:ui_temarlije/data/models/school_organzation.dart';
 import 'package:ui_temarlije/data/repositories/school_organzation_repository.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
+import 'package:uuid/uuid.dart';
 
 /// import 'package:ui_temarlije/utils/helpers/network_manager.dart';
+
 /// Service for remote school organization operations
 /// Handles all API calls to the backend server
 class SchoolOrganizationService extends GetxService {
@@ -53,6 +55,38 @@ class SchoolOrganizationService extends GetxService {
     } catch (e) {
       print('error at createSchoolOrg final catch $e');
       rethrow;
+    }
+  }
+  // Add this method to SchoolOrganizationService class
+
+  Future<dynamic> joinSchoolWithData({
+    required Uuid schoolId,
+    required UserType membershipType,
+    required Map<String, dynamic> additionalData,
+  }) async {
+    try {
+      String endpoint;
+      switch (membershipType) {
+        case UserType.student:
+          endpoint = '/org/school/$schoolId/membership/join/student';
+          break;
+        case UserType.teacher:
+          endpoint = '/org/school/$schoolId/membership/join/teacher';
+          break;
+        case UserType.staff:
+          endpoint = '/org/school/$schoolId/membership/join/staff';
+          break;
+      }
+
+      // Merge additional data with user_id
+      final requestBody = {...additionalData};
+
+      final response = await _dioClient.post(endpoint, data: requestBody);
+      return response.data;
+    } catch (e) {
+      throw Exception(
+        'Failed to join as ${membershipType.toString().split('.').last}: $e',
+      );
     }
   }
 
@@ -140,13 +174,13 @@ class SchoolOrganizationService extends GetxService {
   }
 
   /// Lists all school organizations for the current user
-  Future<List<SchoolOrganzationModel>> listSchools() async {
+  Future<List<SchoolOrganzationModel>> listMySchools() async {
     // if (!await _networkManager.checkConnectivity()) {
     //   throw Exception('No internet connection');
     // }
 
     try {
-      final response = await _dioClient.get('/org/school');
+      final response = await _dioClient.get('/org/school/list/my');
       final List<dynamic> data = response.data;
       return data.map((json) => SchoolOrganzationModel.fromJson(json)).toList();
     } on DioException catch (e) {
@@ -178,14 +212,38 @@ class SchoolOrganizationService extends GetxService {
   // School endpoints
   Future<List<SchoolOrganzationModel>> getSchools() async {
     try {
-      final response = await _dioClient.get('/school/list');
+      final response = await _dioClient.get('/org/school/list');
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data is List
             ? response.data
             : (response.data['schools'] ?? response.data['data'] ?? []);
+
+        print(data);
         return data
-            .map((json) => SchoolOrganzationModel.fromJson(json))
+            .map((jsonSchool) => SchoolOrganzationModel.fromJson(jsonSchool))
+            .toList();
+      }
+      return [];
+    } on DioException catch (e) {
+      if (kDebugMode) print('Error getting schools: ${_handleError(e)}');
+      return [];
+    }
+  }
+
+  // School endpoints
+  Future<List<SchoolOrganzationModel>> getMySchools() async {
+    try {
+      final response = await _dioClient.get('/org/school/list/my');
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data is List
+            ? response.data
+            : (response.data['schools'] ?? response.data['data'] ?? []);
+
+        print(data);
+        return data
+            .map((jsonSchool) => SchoolOrganzationModel.fromJson(jsonSchool))
             .toList();
       }
       return [];
@@ -211,7 +269,7 @@ class SchoolOrganizationService extends GetxService {
 
   // Membership endpoints
   Future<Membership> joinSchool({
-    required String schoolId,
+    required Uuid schoolId,
     required String userId,
     required UserType membershipType,
   }) async {
@@ -267,7 +325,7 @@ class SchoolOrganizationService extends GetxService {
     }
   }
 
-  Future<List<Membership>> getSchoolMembers(String schoolId) async {
+  Future<List<Membership>> getSchoolMembers(Uuid schoolId) async {
     try {
       final response = await _dioClient.get(
         '/school/$schoolId/members/list-members',
@@ -286,7 +344,7 @@ class SchoolOrganizationService extends GetxService {
     }
   }
 
-  Future<List<Membership>> getPendingRequests(String schoolId) async {
+  Future<List<Membership>> getPendingRequests(Uuid schoolId) async {
     try {
       final response = await _dioClient.get(
         '/school/$schoolId/members/pending-requests',
@@ -307,14 +365,14 @@ class SchoolOrganizationService extends GetxService {
   }
 
   Future<List<Membership>> updateMembershipStatus({
-    required String schoolId,
+    required Uuid schoolId,
     required MembershipStatus status,
     required List<String> userIds,
   }) async {
     try {
       final bulkUpdate = BulkStatusUpdate(status: status, userIds: userIds);
       final response = await _dioClient.post(
-        '/school/$schoolId/members/update-status',
+        '/org/school/$schoolId/members/update-status',
         data: bulkUpdate.toJson(),
       );
 
@@ -331,7 +389,7 @@ class SchoolOrganizationService extends GetxService {
   }
 
   Future<void> bulkUpdateStatus({
-    required String schoolId,
+    required Uuid schoolId,
     required MembershipStatus status,
     required List<String> userIds,
   }) async {
@@ -357,5 +415,53 @@ class SchoolOrganizationService extends GetxService {
       return 'No internet connection';
     }
     return error.message ?? 'An unexpected error occurred';
+  }
+
+  Future<dynamic> joinSchoolAsStudent({required Uuid schoolId}) async {
+    try {
+      final response = await _dioClient.post(
+        '/org/school/$schoolId/membership/join/student',
+        data: {
+          "membership_type": "Student",
+          "requested_grade_level": "Primary",
+          "test_score": 98.5,
+        },
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to join as student: $e');
+    }
+  }
+
+  Future<dynamic> joinSchoolAsTeacher({
+    required Uuid schoolId,
+    required String userId,
+    String? academicYearId,
+  }) async {
+    try {
+      final response = await _dioClient.post(
+        '/org/school/$schoolId/membership/join/teacher',
+        data: {'user_id': userId, 'academic_year_id': ?academicYearId},
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to join as teacher: $e');
+    }
+  }
+
+  Future<dynamic> joinSchoolAsStaff({
+    required Uuid schoolId,
+    required String userId,
+    String? academicYearId,
+  }) async {
+    try {
+      final response = await _dioClient.post(
+        '/api/v1/org/school/$schoolId/membership/join/staff',
+        data: {'user_id': userId, 'academic_year_id': ?academicYearId},
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to join as staff: $e');
+    }
   }
 }

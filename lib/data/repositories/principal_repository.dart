@@ -65,11 +65,14 @@ class PrincipalRepository {
   // Get current principal (remote first, fallback to local)
   Future<PrincipalModel?> getCurrentPrincipal() async {
     try {
-      final response = await _dioClient.get('/users/principal');
+      final response = await _dioClient.get('/user/principal');
 
       if (response.statusCode == 200) {
         final principal = PrincipalModel.fromJson(response.data);
-        await _localDb.insertPrincipal(principal, isSynced: true);
+        print(principal);
+
+        print(response.data);
+        // await _localDb.insertPrincipal(principal, isSynced: true);
         return principal;
       } else if (response.statusCode == 404) {
         return null;
@@ -92,7 +95,7 @@ class PrincipalRepository {
   // Get all principals (remote with sync)
   Future<List<PrincipalModel>> getAllPrincipals() async {
     try {
-      final response = await _dioClient.get('/users/principal/all');
+      final response = await _dioClient.get('/user/principal/all');
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
@@ -124,7 +127,7 @@ class PrincipalRepository {
   ) async {
     try {
       final response = await _dioClient.put(
-        '/users/principal/$id',
+        '/user/principal/$id',
         data: request.toJson(),
       );
 
@@ -143,7 +146,7 @@ class PrincipalRepository {
   // Delete principal
   Future<void> deletePrincipal(String id) async {
     try {
-      final response = await _dioClient.delete('/users/principal/$id');
+      final response = await _dioClient.delete('/user/principal/$id');
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         await _localDb.deletePrincipal(id);
@@ -159,7 +162,7 @@ class PrincipalRepository {
   Future<List<PrincipalModel>> searchPrincipals(String query) async {
     try {
       final response = await _dioClient.get(
-        '/users/principal/search',
+        '/user/principal/search',
         queryParameters: {'q': query},
       );
 
@@ -184,7 +187,7 @@ class PrincipalRepository {
       try {
         // Check if exists on server
         final checkResponse = await _dioClient.get(
-          '/users/principal/${principal.id}',
+          '/user/principal/${principal.id}',
         );
 
         if (checkResponse.statusCode == 200) {
@@ -204,7 +207,7 @@ class PrincipalRepository {
             canManageAcademics: principal.canManageAcademics,
           );
           await _dioClient.put(
-            '/users/principal/${principal.id}',
+            '/user/principal/${principal.id}',
             data: updateRequest.toJson(),
           );
         } else {
@@ -219,7 +222,7 @@ class PrincipalRepository {
             addressInfo: principal.addressInfo,
           );
           await _dioClient.post(
-            '/users/principal',
+            '/user/principal',
             data: createRequest.toJson(),
           );
         }

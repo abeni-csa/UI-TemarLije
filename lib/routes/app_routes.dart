@@ -1,5 +1,10 @@
 import 'package:get/get.dart';
+import 'package:ui_temarlije/features/administrator/school_members/all_members/members.dart';
+import 'package:ui_temarlije/features/administrator/school_members/create_membership/members.dart';
 import 'package:ui_temarlije/features/administrator/school_org/screens/school_org_screen.dart';
+import 'package:ui_temarlije/features/administrator/teacher_management/all/all_teachers.dart';
+import 'package:ui_temarlije/features/administrator/teacher_management/detail/teacher_detail.dart';
+import 'package:ui_temarlije/features/administrator/teacher_management/enrollments/enrollments.dart';
 import 'package:ui_temarlije/features/authentication/screens/dashboard/dashboard_screen.dart';
 import 'package:ui_temarlije/features/authentication/screens/forget_password/forget_password_screen.dart';
 import 'package:ui_temarlije/features/authentication/screens/login/login_screen.dart';
@@ -8,17 +13,15 @@ import 'package:ui_temarlije/features/authentication/screens/reset_password/rese
 import 'package:ui_temarlije/features/authentication/screens/signup/signup_screen.dart';
 import 'package:ui_temarlije/features/authentication/screens/account_selection/account_type.dart';
 import 'package:ui_temarlije/features/authentication/screens/student_registration/student_registration_screen.dart';
+import 'package:ui_temarlije/features/authentication/screens/teacher_registration/teacher_registration_screen.dart';
 import 'package:ui_temarlije/features/membership/screens/membership_screen.dart';
-// import 'package:ui_temarlije/features/authentication/screens/signup/signup_screen.dart';
-// import 'package:ui_temarlije/features/principal/screens/principal_detail_screen.dart';
 import 'package:ui_temarlije/features/teachers/screens/attendance_tracking/attendance_tracking_screen.dart';
-import 'package:ui_temarlije/features/teachers/screens/join_school/join_school_screen.dart';
 import 'package:ui_temarlije/features/teachers/screens/lesson_planning/lesson_plan_detail_screen.dart';
 import 'package:ui_temarlije/features/teachers/screens/lesson_planning/lesson_planning_screen.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/routes/routes_middilware.dart';
 import 'package:ui_temarlije/views/screens/gradebook_screen.dart';
-import 'package:ui_temarlije/bindings/auth_bindings.dart';
+import 'package:ui_temarlije/bindings/app_bindings.dart';
 
 class TemarLijeAppRoutes {
   static final List<GetPage> pages = [
@@ -50,7 +53,44 @@ class TemarLijeAppRoutes {
       binding: TemarLijeAppBindings(),
     ),
     GetPage(
-      name: TemarLijeRoutes.schoolJoin,
+      name: TemarLijeRoutes.membershipRequests,
+      page: () => const AllMembersScreen(),
+    ),
+    //AllMembersScreen
+    GetPage(
+      name: TemarLijeRoutes.createMembers,
+      page: () => const CreateMembersScreen(),
+    ),
+
+    /// Teachers Pages and Routes
+    GetPage(
+      name: TemarLijeRoutes.schoolTeachers,
+      page: () => const AllTeachers(),
+    ),
+    GetPage(
+      name: TemarLijeRoutes.teacherDetails,
+      page: () => const TeacherDetailScreen(),
+    ),
+    GetPage(
+      name: TemarLijeRoutes.teacherProfile,
+      page: () => const TeacherRegistrationScreen(),
+    ),
+
+    GetPage(
+      name: TemarLijeRoutes.teachersEnrollments,
+      page: () => const TeachersEnrollmentsList(),
+    ),
+
+    // GetPage(
+    //   name: TemarLijeRoutes.membershipRequests,
+    //   page: () => const SchoolMembershipRequestsScreen(),
+    // ),
+    // GetPage(
+    //   name: TemarLijeRoutes.editMembers,
+    //   page: () => const SchoolMembershipEditScreen(),
+    // ),
+    GetPage(
+      name: TemarLijeRoutes.schoolUserJoin,
       page: () => const SchoolMembershipScreen(),
     ),
     GetPage(name: TemarLijeRoutes.markListPage, page: () => GradebookScreen()),

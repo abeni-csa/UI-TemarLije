@@ -4,15 +4,14 @@ import 'package:get/get.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
-import 'package:ui_temarlije/bindings/auth_bindings.dart';
+import 'package:ui_temarlije/bindings/app_bindings.dart';
 import 'package:ui_temarlije/common/widgets/layouts/template/site_layout.dart';
 import 'package:ui_temarlije/routes/app_routes.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/utils/constants/text_string.dart';
 import 'package:ui_temarlije/utils/theme/theme.dart';
 
-Future<void> main() async {
+void main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   // Ensure Flutter binding is initialized (for any platform-specific setup)
@@ -22,7 +21,7 @@ Future<void> main() async {
     databaseFactory = databaseFactoryFfi;
   }
 
-  // Run the app with Riverpod ProviderScope
+  // Run the app with Riverpod ProviderScope / abebealemu@gamil.com
   runApp(const ProviderScope(child: TemarLijeMainApp()));
 }
 
@@ -34,12 +33,14 @@ class TemarLijeMainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       title: TemarLijeTexts.appName,
       themeMode: ThemeMode.light,
       theme: TemarLijeAppTheme.lightTheme,
       darkTheme: TemarLijeAppTheme.darkTheme,
       initialBinding: TemarLijeAppBindings(),
+      defaultTransition: Transition.noTransition,
+      transitionDuration: const Duration(milliseconds: 300),
       getPages: TemarLijeAppRoutes.pages,
       initialRoute: TemarLijeRoutes.logIn,
       unknownRoute: GetPage(

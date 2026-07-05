@@ -41,16 +41,6 @@ class DioClient extends GetxService {
         // onError: _onError,
       ),
     );
-
-    // Add logger interceptor for development debugging
-    dio.interceptors.add(
-      d.LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        logPrint: (obj) =>
-            logger.log("[!] interceptor FOR DEV DIO", error: obj),
-      ),
-    );
   }
 
   /// Request interceptor - adds authentication token to headers if available

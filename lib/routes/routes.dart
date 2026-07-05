@@ -18,9 +18,29 @@ class TemarLijeRoutes {
   static const lessonPlanDetail = '/tools/lesson-plan-detail';
   static const joinTeacher = '/schoolJoin/teacer';
   static const school = '/school';
+  static const schoolMembership = '/membeship/list';
+  static const memberships = '/memberships';
+  static const membershipById = '/memberships/';
+  static const updateMembershipStatus = '/memberships/';
 
-  static const schoolJoin = '/school/j';
+  // ORGINZATION MEMBESHIP
+  static const allMembers = '/members/all-members';
+  static const membershipRequests = '/members/join-requests';
+  static const editMembers = '/members/edit';
+  static const createMembers = '/members/create';
+  // END OF ORGINZATION MEMBESHIP
 
+  // USER's ROUTE
+  static const schoolTeachers = '/teacher-management/all-teachers';
+  static const teacherDetails = '/teachers/details';
+  static const teacherProfile = '/teachers/new';
+  // Teacers Routes
+  static const teachersEnrollments = '/teacher-management/enrollments';
+
+  static const schoolUserAll = '/users/all-users';
+  static const schoolUserJoin = '/users/join-requests';
+  static const schoolUserRolesPermissions = '/users/roles';
+  // END OF USER's ROUTE
   static const myProfile = '/me';
   static const principals = '/principals';
   static const principalDetail = '/principal-detail';

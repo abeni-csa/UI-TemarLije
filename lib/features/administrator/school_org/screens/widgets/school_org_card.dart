@@ -88,11 +88,15 @@ class SchoolOrgCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          schoolOrganzation.schoolType.toString(),
+                          schoolOrganzation.schoolType
+                              .toString()
+                              .split('.')
+                              .last,
                           style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 12,
                           ),
+                          overflow: TextOverflow.fade,
                         ),
                         const SizedBox(width: 12),
                         Icon(
@@ -108,6 +112,7 @@ class SchoolOrgCard extends StatelessWidget {
                             color: Colors.grey.shade600,
                             fontSize: 12,
                           ),
+                          overflow: TextOverflow.fade,
                         ),
                       ],
                     ),
