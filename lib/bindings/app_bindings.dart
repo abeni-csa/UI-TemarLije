@@ -1,10 +1,14 @@
 import 'package:get/get.dart';
 import 'package:ui_temarlije/data/repositories/authentication_repository.dart';
+import 'package:ui_temarlije/data/repositories/teacher_repository.dart';
 import 'package:ui_temarlije/data/repositories/user_repository.dart';
+import 'package:ui_temarlije/features/administrator/school_org/school_org_controller.dart';
 import 'package:ui_temarlije/features/authentication/controllers/login_controller.dart';
 import 'package:ui_temarlije/features/authentication/controllers/principal_controller.dart';
 import 'package:ui_temarlije/features/authentication/controllers/signup_controller.dart';
 import 'package:ui_temarlije/features/authentication/controllers/student_registration_controller.dart';
+import 'package:ui_temarlije/features/membership/membership_controllers.dart';
+import 'package:ui_temarlije/service/teachers_enrollment_service.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
 import 'package:ui_temarlije/service/school_orginzation_service.dart';
 
@@ -17,19 +21,39 @@ class TemarLijeAppBindings extends Bindings {
     Get.lazyPut<DioClient>(() => DioClient(), fenix: true);
     // Get.lazyPut<NetworkManager>(() => NetworkManager(), fenix: true);
 
-    // Repository layer
+    Get.lazyPut<SchoolOrgController>(
+      () => SchoolOrgController(),
+    ); // Repository layer
     Get.lazyPut<AuthRepository>(() => AuthRepository(), fenix: true);
 
     Get.lazyPut<UsersRepository>(() => UsersRepository(), fenix: true);
 
     // Controller layer
-    Get.lazyPut<LoginController>(() => LoginController());
-    Get.lazyPut<PrincipalController>(() => PrincipalController());
+    Get.lazyPut<LoginController>(() => LoginController(), fenix: true);
+    Get.lazyPut<PrincipalController>(() => PrincipalController(), fenix: true);
+    Get.lazyPut<TeacherRepository>(
+      () => TeacherRepository.instance,
+      fenix: true,
+    );
+    Get.lazyPut<TeachersEnrollmentService>(
+      () => TeachersEnrollmentService(),
+      fenix: true,
+    );
+
+    Get.lazyPut<MembershipControllers>(
+      () => MembershipControllers(),
+      fenix: true,
+    );
 
     Get.lazyPut<StudentRegistrationController>(
       () => StudentRegistrationController(),
+      fenix: true,
     );
-    Get.lazyPut<SchoolOrganizationService>(() => SchoolOrganizationService());
-    Get.lazyPut<SignupController>(() => SignupController());
+    Get.lazyPut<SchoolOrganizationService>(
+      () => SchoolOrganizationService(),
+
+      fenix: true,
+    );
+    Get.lazyPut<SignupController>(() => SignupController(), fenix: true);
   }
 }
