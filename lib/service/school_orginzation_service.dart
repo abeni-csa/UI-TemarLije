@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
@@ -242,6 +244,8 @@ class SchoolOrganizationService extends GetxService {
             : (response.data['schools'] ?? response.data['data'] ?? []);
 
         print(data);
+        final _encoded = json.encode(data);
+
         return data
             .map((jsonSchool) => SchoolOrganzationModel.fromJson(jsonSchool))
             .toList();

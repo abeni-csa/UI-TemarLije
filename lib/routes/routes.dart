@@ -45,5 +45,7 @@ class TemarLijeRoutes {
   static const principals = '/principals';
   static const principalDetail = '/principal-detail';
   static const principalForm = '/principal-form';
+
+  static const yearsAC = '/academics/years';
   static List sidebarMenuItems = [dashbord, markListPage];
 }

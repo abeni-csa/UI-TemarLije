@@ -12,7 +12,7 @@ class SchoolOrgView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SchoolOrgController controller = Get.find<SchoolOrgController>();
+    final SchoolOrgController controller = Get.put(SchoolOrgController());
 
     return Obx(
       () => Column(

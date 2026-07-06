@@ -198,11 +198,17 @@ class TemarLijeSidebar extends StatelessWidget {
                       itemName: "Academics",
                       children: [
                         TemarLijeMenuItem(
+                          route: TemarLijeRoutes.yearsAC,
+                          icon: Icons.safety_check_rounded,
+                          itemName: "Years",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
                           route: '/academics/subjects',
                           icon: Iconsax.book_1,
                           itemName: "Subjects",
                           isSubmenu: true,
-                        ),
+                        ), // academic_year
                         TemarLijeMenuItem(
                           route: '/academics/grades',
                           icon: Iconsax.chart,

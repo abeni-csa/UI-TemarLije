@@ -2,12 +2,14 @@ import 'package:get/get.dart';
 import 'package:ui_temarlije/data/repositories/authentication_repository.dart';
 import 'package:ui_temarlije/data/repositories/teacher_repository.dart';
 import 'package:ui_temarlije/data/repositories/user_repository.dart';
+import 'package:ui_temarlije/features/administrator/academic_year/academic_year_controller.dart';
 import 'package:ui_temarlije/features/administrator/school_org/school_org_controller.dart';
 import 'package:ui_temarlije/features/authentication/controllers/login_controller.dart';
 import 'package:ui_temarlije/features/authentication/controllers/principal_controller.dart';
 import 'package:ui_temarlije/features/authentication/controllers/signup_controller.dart';
 import 'package:ui_temarlije/features/authentication/controllers/student_registration_controller.dart';
 import 'package:ui_temarlije/features/membership/membership_controllers.dart';
+import 'package:ui_temarlije/service/academic_year_service.dart';
 import 'package:ui_temarlije/service/teachers_enrollment_service.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
 import 'package:ui_temarlije/service/school_orginzation_service.dart';
@@ -39,7 +41,13 @@ class TemarLijeAppBindings extends Bindings {
       () => TeachersEnrollmentService(),
       fenix: true,
     );
+    // Register AcademicYearService
+    if (!Get.isRegistered<AcademicYearService>()) {
+      Get.put(AcademicYearService(), permanent: true);
+    }
 
+    // Register AcademicYearController
+    Get.put(AcademicYearController(), permanent: true);
     Get.lazyPut<MembershipControllers>(
       () => MembershipControllers(),
       fenix: true,

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:ui_temarlije/common/widgets/buttons/primary_button.dart';
 import 'package:ui_temarlije/features/authentication/controllers/principal_controller.dart';
 import 'package:ui_temarlije/routes/routes.dart';
+import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
 
 class DashboardMobile extends StatelessWidget {
@@ -44,8 +45,10 @@ class DashboardMobile extends StatelessWidget {
               }
 
               return Card(
+                color: TemarLijeColors.cardBackgroundColor,
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
+
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
