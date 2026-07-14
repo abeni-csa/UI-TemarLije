@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:ui_temarlije/features/administrator/academic_year/screens/academic_year_screens.dart';
+import 'package:ui_temarlije/features/administrator/classroom/classroom_controller.dart';
+import 'package:ui_temarlije/features/administrator/classroom/classroom_screen.dart';
 import 'package:ui_temarlije/features/administrator/school_members/all_members/members.dart';
 import 'package:ui_temarlije/features/administrator/school_members/create_membership/members.dart';
 import 'package:ui_temarlije/features/administrator/school_org/screens/school_org_screen.dart';
@@ -126,6 +128,13 @@ class TemarLijeAppRoutes {
     GetPage(
       name: TemarLijeRoutes.toolLessonPlaner,
       page: () => const LessonPlanningScreen(),
+    ),
+    GetPage(
+      name: TemarLijeRoutes.classes,
+      page: () => const ClassroomScreens(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<ClassroomController>(() => ClassroomController());
+      }),
     ),
   ];
 }

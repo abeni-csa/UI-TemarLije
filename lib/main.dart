@@ -14,7 +14,6 @@ import 'package:ui_temarlije/utils/theme/theme.dart';
 void main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
-  // Ensure Flutter binding is initialized (for any platform-specific setup)
 
   if (Platform.isWindows) {
     sqfliteFfiInit();
@@ -63,19 +62,19 @@ class ErrorScreen extends StatelessWidget {
     tablet: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text("NotFOund")],
+        children: [Text(" Not FOund")],
       ),
     ),
     desktop: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text("NotFOund")],
+        children: [Text(" Not FOund")],
       ),
     ),
     mobile: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text("NotFOund")],
+        children: [Text(" Not FOund")],
       ),
     ),
   );

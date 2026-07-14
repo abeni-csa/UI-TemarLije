@@ -11,7 +11,7 @@ class TemarLijeRoutes {
 
   static const forgetPassword = '/forget-password';
   static const resetPassword = '/reset-password/:email';
-
+  static const classes = '/student-management/classes';
   // teacher Route
   static const toolLessonPlaner = '/tools/lesson-planer';
   static const toolAttendaceTrack = '/tools/attendace';
