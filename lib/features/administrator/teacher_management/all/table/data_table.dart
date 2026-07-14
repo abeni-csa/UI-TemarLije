@@ -9,13 +9,9 @@ class AllTeachersDataTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TemarLijePaginatedDataTable(
-      minWidth: 1200,
+      // minWidth: 1200,
       columns: const [
-        DataColumn2(label: Text("Teacher ID")),
-        DataColumn2(label: Text("Full Name")),
-        DataColumn2(label: Text("Date of Birth")),
-        DataColumn2(label: Text("Qualification")),
-        DataColumn2(label: Text("Specialization")),
+        DataColumn2(label: Text("Full Name"), fixedWidth: 200),
         DataColumn2(label: Text("Experience")),
         DataColumn2(label: Text("Employment Type")),
         DataColumn2(label: Text("Phone Number")),
