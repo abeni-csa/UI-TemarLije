@@ -96,7 +96,7 @@ class TemarLijeSidebar extends StatelessWidget {
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: '/student-management/classes',
+                          route: TemarLijeRoutes.classes,
                           icon: Iconsax.building,
                           itemName: "Classes",
                           isSubmenu: true,

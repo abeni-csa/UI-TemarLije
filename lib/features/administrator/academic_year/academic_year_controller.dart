@@ -1,12 +1,12 @@
-// lib/features/administrator/academic_year/academic_year_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:ui_temarlije/data/models/academic_year.dart';
 import 'package:ui_temarlije/data/models/school_organzation.dart';
 import 'package:ui_temarlije/features/administrator/academic_year/screens/widgets/academic_year_form.dart';
+import 'package:ui_temarlije/features/administrator/school_org/global_school_controller.dart';
 import 'package:ui_temarlije/service/academic_year_service.dart';
+import 'package:ui_temarlije/service/school_orginzation_service.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
 
 class AcademicYearController extends GetxController {
@@ -15,7 +15,11 @@ class AcademicYearController extends GetxController {
 
   final AcademicYearService _academicYearService =
       Get.find<AcademicYearService>();
-  final GetStorage _storage = GetStorage();
+  final SchoolOrganizationService _schoolService = Get.put(
+    SchoolOrganizationService(),
+  );
+  final GlobalSchoolController _schoolController =
+      Get.find<GlobalSchoolController>();
 
   // State
   final RxList<AcademicYear> academicYears = <AcademicYear>[].obs;
@@ -23,23 +27,32 @@ class AcademicYearController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString error = ''.obs;
 
+  // School selection state
+  final RxList<SchoolOrganzationModel> schools = <SchoolOrganzationModel>[].obs;
+  final Rx<SchoolOrganzationModel?> selectedSchool =
+      Rx<SchoolOrganzationModel?>(null);
+  final RxBool isLoadingSchools = false.obs;
+
   // Form controllers
   final formKey = GlobalKey<FormState>();
   final yearRangeController = TextEditingController();
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
   final isCurrentController = false.obs;
-  final RxList<SchoolOrganzationModel> loadedSchools =
-      <SchoolOrganzationModel>[].obs;
 
   // Form data
   AcademicYear? editingAcademicYear;
 
-  String get schoolId => _storage.read("CURRENT_SCHOOL_ID");
-
+  // Getter for selected school ID
+  String? get schoolId => _schoolController.schoolId;
   @override
   void onInit() {
     super.onInit();
+    // Load academic years when school is selected
+    ever(_schoolController.selectedSchool, (_) {
+      loadAcademicYears();
+    });
+
     loadAcademicYears();
   }
 
@@ -51,10 +64,42 @@ class AcademicYearController extends GetxController {
     super.onClose();
   }
 
+  // Load schools for the current user
+  Future<void> loadSchools() async {
+    isLoadingSchools.value = true;
+    error.value = '';
+
+    try {
+      final schoolList = await _schoolService.getMySchools();
+      schools.assignAll(schoolList);
+
+      if (schoolList.isNotEmpty) {
+        // If only one school, select it automatically
+        if (schoolList.length == 1) {
+          selectedSchool.value = schoolList.first;
+          await loadAcademicYears();
+        } else {
+          // Multiple schools - user must select one
+          selectedSchool.value = null;
+          academicYears.clear();
+          currentAcademicYear.value = null;
+        }
+      } else {
+        error.value = 'No schools found. Please join or create a school first.';
+      }
+    } catch (e) {
+      error.value = 'Failed to load schools: ${e.toString()}';
+      _showError(error.value);
+    } finally {
+      isLoadingSchools.value = false;
+    }
+  }
+
   // Load academic years from API
   Future<void> loadAcademicYears() async {
-    if (schoolId.isEmpty) {
-      error.value = 'No school selected';
+    if (schoolId == null) {
+      academicYears.clear();
+      currentAcademicYear.value = null;
       return;
     }
 
@@ -62,12 +107,11 @@ class AcademicYearController extends GetxController {
     error.value = '';
 
     try {
-      final response = await _academicYearService.getAcademicYears(schoolId);
+      final response = await _academicYearService.getAcademicYears(schoolId!);
       academicYears.assignAll(response.academicYears);
       currentAcademicYear.value = response.currentAcademicYear;
     } catch (e) {
       error.value = e.toString();
-      // Show error in snackbar
       _showError(error.value);
     } finally {
       isLoading.value = false;
@@ -79,13 +123,24 @@ class AcademicYearController extends GetxController {
     await loadAcademicYears();
   }
 
+  // Select a school from dropdown
+  void selectSchool(SchoolOrganzationModel school) {
+    selectedSchool.value = school;
+    loadAcademicYears();
+  }
+
   // Create academic year
   Future<void> createAcademicYear(CreateAcademicYearRequest request) async {
+    if (schoolId == null) {
+      _showError('No school selected');
+      return;
+    }
+
     isLoading.value = true;
     error.value = '';
 
     try {
-      await _academicYearService.createAcademicYear(schoolId, request);
+      await _academicYearService.createAcademicYear(schoolId!, request);
       await loadAcademicYears();
       _showSuccess('Academic year created successfully!');
     } catch (e) {
@@ -102,12 +157,17 @@ class AcademicYearController extends GetxController {
     String academicYearId,
     UpdateAcademicYearRequest request,
   ) async {
+    if (schoolId == null) {
+      _showError('No school selected');
+      return;
+    }
+
     isLoading.value = true;
     error.value = '';
 
     try {
       await _academicYearService.updateAcademicYear(
-        schoolId,
+        schoolId!,
         academicYearId,
         request,
       );
@@ -124,11 +184,16 @@ class AcademicYearController extends GetxController {
 
   // Delete academic year
   Future<void> deleteAcademicYear(String academicYearId) async {
+    if (schoolId == null) {
+      _showError('No school selected');
+      return;
+    }
+
     isLoading.value = true;
     error.value = '';
 
     try {
-      await _academicYearService.deleteAcademicYear(schoolId, academicYearId);
+      await _academicYearService.deleteAcademicYear(schoolId!, academicYearId);
       await loadAcademicYears();
       _showSuccess('Academic year deleted successfully!');
     } catch (e) {
@@ -215,6 +280,11 @@ class AcademicYearController extends GetxController {
 
   // Show form dialog
   void showCreateForm() {
+    if (schoolId == null) {
+      _showError('Please select a school first');
+      return;
+    }
+
     setEditingAcademicYear(null);
     Get.dialog(
       AcademicYearFormDialog(
