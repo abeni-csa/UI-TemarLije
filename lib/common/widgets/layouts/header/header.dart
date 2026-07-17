@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ui_temarlije/common/widgets/images/t_rounded_image.dart';
+import 'package:ui_temarlije/common/widgets/layouts/header/school_selector.dart';
 import 'package:ui_temarlije/features/authentication/controllers/login_controller.dart';
 import 'package:ui_temarlije/features/authentication/controllers/principal_controller.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
@@ -45,18 +46,9 @@ class TemarLijeHeader extends StatelessWidget implements PreferredSizeWidget {
                 icon: Icon(Iconsax.menu),
               )
             : null,
-        // Search Field
+
         title: TemarLijeDeviceUtils.isDesktopScreen(context)
-            ? SizedBox(
-                width: double.infinity,
-                child: TextFormField(
-                  // maxLength: 300,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.search_normal),
-                    hintText: "Search Anything...",
-                  ),
-                ),
-              )
+            ? const SchoolSelector()
             : null,
         // Actions
         actions: [
@@ -158,7 +150,7 @@ class TemarLijeHeader extends StatelessWidget implements PreferredSizeWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  overflow: TextOverflow.ellipsis,
+                                  overflow: TextOverflow.fade,
                                   controller.currentPrincipal.value?.fullName ??
                                       'User',
 
