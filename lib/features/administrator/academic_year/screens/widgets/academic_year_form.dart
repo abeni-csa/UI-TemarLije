@@ -5,11 +5,13 @@ import 'package:intl/intl.dart';
 import 'package:ui_temarlije/data/models/academic_year.dart';
 import 'package:ui_temarlije/features/administrator/academic_year/academic_year_controller.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
+import 'package:ui_temarlije/utils/validators/validation.dart';
+import 'package:uuid/uuid.dart';
 
 class AcademicYearFormDialog extends StatelessWidget {
   final AcademicYear? academicYear;
   final Function(CreateAcademicYearRequest)? onSubmit;
-  final Function(String, UpdateAcademicYearRequest)? onSubmitUpdate;
+  final Function(UuidValue, UpdateAcademicYearRequest)? onSubmitUpdate;
 
   const AcademicYearFormDialog({
     super.key,
@@ -90,11 +92,9 @@ class AcademicYearFormDialog extends StatelessWidget {
                     ),
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter year range';
-                    }
+                    TemarLijeValidator.validateEmptyText("Year Range", value);
                     final pattern = RegExp(r'^\d{4}-\d{4}$');
-                    if (!pattern.hasMatch(value)) {
+                    if (!pattern.hasMatch(value!)) {
                       return 'Please enter valid year range (e.g., 2024-2025)';
                     }
                     return null;
@@ -117,10 +117,12 @@ class AcademicYearFormDialog extends StatelessWidget {
                   ),
                   onTap: () async {
                     final date = await showDatePicker(
+                      initialDatePickerMode: DatePickerMode.year,
+
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
+                      firstDate: DateTime(1800),
+                      lastDate: DateTime(3100),
                     );
                     if (date != null) {
                       controller.startDateController.text = DateFormat(
@@ -152,6 +154,7 @@ class AcademicYearFormDialog extends StatelessWidget {
                   ),
                   onTap: () async {
                     final date = await showDatePicker(
+                      initialDatePickerMode: DatePickerMode.year,
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2000),

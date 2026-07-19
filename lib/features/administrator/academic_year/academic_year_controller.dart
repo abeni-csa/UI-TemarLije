@@ -8,6 +8,7 @@ import 'package:ui_temarlije/features/administrator/school_org/global_school_con
 import 'package:ui_temarlije/service/academic_year_service.dart';
 import 'package:ui_temarlije/service/school_orginzation_service.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
+import 'package:uuid/uuid.dart';
 
 class AcademicYearController extends GetxController {
   static AcademicYearController get instance =>
@@ -44,7 +45,7 @@ class AcademicYearController extends GetxController {
   AcademicYear? editingAcademicYear;
 
   // Getter for selected school ID
-  String? get schoolId => _schoolController.schoolId;
+  UuidValue? get schoolId => _schoolController.schoolId;
   @override
   void onInit() {
     super.onInit();
@@ -154,7 +155,7 @@ class AcademicYearController extends GetxController {
 
   // Update academic year
   Future<void> updateAcademicYear(
-    String academicYearId,
+    UuidValue academicYearId,
     UpdateAcademicYearRequest request,
   ) async {
     if (schoolId == null) {
@@ -183,7 +184,7 @@ class AcademicYearController extends GetxController {
   }
 
   // Delete academic year
-  Future<void> deleteAcademicYear(String academicYearId) async {
+  Future<void> deleteAcademicYear(UuidValue academicYearId) async {
     if (schoolId == null) {
       _showError('No school selected');
       return;
