@@ -270,14 +270,7 @@ class SchoolOrgFormDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  validator: (value) {
-                    if (value != null && value.isNotEmpty) {
-                      if (!value.contains('@')) {
-                        return 'Please enter a valid email';
-                      }
-                    }
-                    return null;
-                  },
+                  validator: (value) => TemarLijeValidator.validateEmail(value),
                 ),
                 const SizedBox(height: 24),
 

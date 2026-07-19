@@ -363,7 +363,7 @@ class SchoolOrganzationRepository {
 
     try {
       // Fetch latest data from remote
-      final remoteSchools = await _remoteService.listMySchools();
+      final remoteSchools = await _remoteService.getMySchools();
 
       // Clear local db and insert fresh data from remote
       await db.delete(_tableName);

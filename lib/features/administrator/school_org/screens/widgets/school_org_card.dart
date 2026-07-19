@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ui_temarlije/data/models/school_organzation.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
-import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
 
 class SchoolOrgCard extends StatelessWidget {
@@ -27,10 +25,10 @@ class SchoolOrgCard extends StatelessWidget {
 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: () => Get.toNamed(
-          TemarLijeRoutes.lessonPlanDetail,
-          arguments: schoolOrganzation,
-        ),
+        // onTap: () => Get.toNamed(
+        // TemarLijeRoutes.lessonPlanDetail,
+        // arguments: schoolOrganzation,
+        // ),
         borderRadius: BorderRadius.circular(TemarLijeSizes.borderRadiusMd),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -42,12 +40,12 @@ class SchoolOrgCard extends StatelessWidget {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: TemarLijeColors.primary,
+                  color: TemarLijeColors.primary.withAlpha(100),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
-                  Icons.menu_book,
-                  color: TemarLijeColors.primary,
+                  Icons.house_sharp,
+                  color: TemarLijeColors.facebookBackgroundColor,
                   size: 28,
                 ),
               ),

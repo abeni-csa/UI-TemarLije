@@ -118,8 +118,7 @@ class SchoolOrgController extends GetxController {
     isLoading.value = true;
     error.value = '';
     try {
-      final updatedSchool = await _schoolService.updateSchoolOrg(id, request);
-      // await _repository.updateSchoolOrgFromRemote(updatedSchool);
+      await _schoolService.updateSchoolOrg(id, request);
       await loadSchools();
       return;
     } catch (e) {

@@ -9,7 +9,7 @@ class SchoolOrgMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsetsGeometry.all(TemarLijeSizes.defaultSpace),
+        padding: EdgeInsetsGeometry.all(TemarLijeSizes.mobileSpace),
         child: Column(children: [SchoolOrgView()]),
       ),
     );
