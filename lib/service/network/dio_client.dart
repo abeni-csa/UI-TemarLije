@@ -136,6 +136,15 @@ class DioClient extends GetxService {
     }
   }
 
+  /// Generic PATCH request wrapper
+  Future<d.Response> patch(String path, {dynamic data}) async {
+    try {
+      return await dio.patch(path, data: data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   /// Generic DELETE request wrapper
   Future<d.Response> delete(String path) async {
     try {
