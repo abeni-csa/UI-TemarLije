@@ -1,14 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ui_temarlije/utils/helpers/uuid_json_converter.dart';
 import 'package:uuid/uuid.dart';
 
 part 'section.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Section {
-  final String id;
-  final String schoolId;
-  final String classroomId;
-  final String? roomTeacherId;
+  @UuidJsonConverter()
+  final UuidValue id;
+  @UuidJsonConverter()
+  final UuidValue schoolId;
+  @UuidJsonConverter()
+  final UuidValue classroomId;
+  @UuidJsonConverter()
+  final UuidValue? roomTeacherId;
   final String sectionName;
   final String sectionCode;
   final int capacity;
@@ -41,8 +46,10 @@ class Section {
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class BulkSectionRequest {
-  final String schoolId;
-  final String academicYearId;
+  @UuidJsonConverter()
+  final UuidValue schoolId;
+  @UuidJsonConverter()
+  final UuidValue academicYearId;
   final int sectionsPerClassroom;
   final NamingPattern namingPattern;
   final List<String>? roomTeacherIds;

@@ -53,7 +53,9 @@ const _$KgClassTypeEnumMap = {
 CreateClassroomRequest _$CreateClassroomRequestFromJson(
   Map<String, dynamic> json,
 ) => CreateClassroomRequest(
-  academicYearId: json['academic_year_id'] as String,
+  academicYearId: const UuidJsonConverter().fromJson(
+    json['academic_year_id'] as String,
+  ),
   gradeLevel: $enumDecode(_$GradeLevelEnumMap, json['grade_level']),
   displayOrderOffset: (json['display_order_offset'] as num).toInt(),
   capacity: (json['capacity'] as num).toInt(),
@@ -63,7 +65,7 @@ CreateClassroomRequest _$CreateClassroomRequestFromJson(
 Map<String, dynamic> _$CreateClassroomRequestToJson(
   CreateClassroomRequest instance,
 ) => <String, dynamic>{
-  'academic_year_id': instance.academicYearId,
+  'academic_year_id': const UuidJsonConverter().toJson(instance.academicYearId),
   'grade_level': _$GradeLevelEnumMap[instance.gradeLevel]!,
   'display_order_offset': instance.displayOrderOffset,
   'capacity': instance.capacity,

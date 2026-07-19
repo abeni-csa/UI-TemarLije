@@ -7,7 +7,7 @@ part of 'academic_year.dart';
 // **************************************************************************
 
 AcademicYear _$AcademicYearFromJson(Map<String, dynamic> json) => AcademicYear(
-  id: json['id'] as String,
+  id: const UuidJsonConverter().fromJson(json['id'] as String),
   schoolId: json['school_id'] as String,
   yearRange: json['year_range'] as String,
   startDate: DateTime.parse(json['start_date'] as String),
@@ -19,7 +19,7 @@ AcademicYear _$AcademicYearFromJson(Map<String, dynamic> json) => AcademicYear(
 
 Map<String, dynamic> _$AcademicYearToJson(AcademicYear instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'id': const UuidJsonConverter().toJson(instance.id),
       'school_id': instance.schoolId,
       'year_range': instance.yearRange,
       'start_date': instance.startDate.toIso8601String(),

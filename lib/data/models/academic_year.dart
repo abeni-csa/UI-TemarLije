@@ -1,11 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ui_temarlije/utils/helpers/uuid_json_converter.dart';
+import 'package:uuid/uuid.dart';
 
 part 'academic_year.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class AcademicYear extends Equatable {
-  final String id;
+  @UuidJsonConverter()
+  final UuidValue id;
   final String schoolId;
   final String yearRange;
   final DateTime startDate;

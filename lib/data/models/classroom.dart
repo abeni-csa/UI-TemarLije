@@ -1,6 +1,7 @@
 // lib/data/models/classroom.dart
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ui_temarlije/utils/helpers/uuid_json_converter.dart';
 import 'package:uuid/uuid.dart';
 
 part 'classroom.g.dart';
@@ -98,7 +99,8 @@ class Classroom {
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class CreateClassroomRequest {
-  final String academicYearId;
+  @UuidJsonConverter()
+  final UuidValue academicYearId;
   final GradeLevel gradeLevel;
   final int displayOrderOffset;
   final int capacity;
