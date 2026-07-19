@@ -213,14 +213,14 @@ class TemarLijeHelperFunctions {
 
   static Color getEmploymentTypeColor(EmploymentType type) {
     switch (type) {
-      case EmploymentType.permanent:
+      case EmploymentType.Permanent:
         return TemarLijeColors.success;
-      case EmploymentType.contract:
+      case EmploymentType.Contract:
         return Colors.blue;
-      case EmploymentType.internship:
+      case EmploymentType.Internship:
         return TemarLijeColors.absent;
 
-      case EmploymentType.partTime:
+      case EmploymentType.PartTime:
         return Colors.purple;
     }
   }
