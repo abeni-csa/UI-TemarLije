@@ -7,7 +7,7 @@
 // //   final DioClient _dioClient = Get.find<DioClient>();
 
 // //   // Fetch pending enrollment requests
-// //   Future<List<Membership>> getPendingRequests(String schoolId) async {
+// //   Future<List<Membership>> getPendingRequests(UuidValue schoolId) async {
 // //     try {
 // //       final response = await _dioClient.get(
 // //         '/org/school/$schoolId/members/pending-requests',
@@ -78,7 +78,7 @@
 
 // //   // Batch reject requests
 // //   Future<void> batchRejectRequests(
-// //     String schoolId,
+// //     UuidValue schoolId,
 // //     List<Uuid> requestIds,
 // //   ) async {
 // //     try {
@@ -106,7 +106,7 @@
 //   final DioClient _dioClient = Get.find<DioClient>();
 
 //   // Fetch pending enrollment requests
-//   Future<List<Membership>> getPendingRequests(String schoolId) async {
+//   Future<List<Membership>> getPendingRequests(UuidValue schoolId) async {
 //     try {
 //       final response = await _dioClient.get(
 //         '/org/school/$schoolId/members/pending-requests',
@@ -127,7 +127,7 @@
 
 //   // Batch update membership status
 //   Future<void> batchUpdateStatus({
-//     required String schoolId,
+//     required UuidValue schoolId,
 //     required MembershipStatus status,
 //     required List<Uuid> userIds,
 //   }) async {
@@ -173,7 +173,7 @@
 
 //   // Accept a single enrollment request (using the same batch endpoint)
 //   Future<void> acceptRequest(
-//     String schoolId,
+//     UuidValue schoolId,
 //     String userId,
 //     String academicYearId,
 //   ) async {
@@ -192,7 +192,7 @@
 //   }
 
 //   // Reject a single enrollment request
-//   Future<void> rejectRequest(String schoolId, String userId) async {
+//   Future<void> rejectRequest(UuidValue schoolId, String userId) async {
 //     try {
 //       await batchUpdateStatus(
 //         schoolId: schoolId,
@@ -205,7 +205,7 @@
 //   }
 
 //   // Batch accept requests
-//   Future<void> batchAcceptRequests(String schoolId, List<Uuid> userIds) async {
+//   Future<void> batchAcceptRequests(UuidValue schoolId, List<Uuid> userIds) async {
 //     try {
 //       await batchUpdateStatus(
 //         schoolId: schoolId,
@@ -218,7 +218,7 @@
 //   }
 
 //   // Batch reject requests
-//   Future<void> batchRejectRequests(String schoolId, List<Uuid> userIds) async {
+//   Future<void> batchRejectRequests(UuidValue schoolId, List<Uuid> userIds) async {
 //     try {
 //       await batchUpdateStatus(
 //         schoolId: schoolId,
@@ -263,7 +263,7 @@ class TeachersEnrollmentService extends GetxService {
 
   // Batch update membership status
   Future<void> batchUpdateStatus({
-    required String schoolId,
+    required UuidValue schoolId,
     required MembershipStatus status,
     required List<String> userIds, // Changed from List<Uuid> to List<String>
   }) async {
@@ -310,7 +310,7 @@ class TeachersEnrollmentService extends GetxService {
 
   // Accept a single enrollment request
   Future<void> acceptRequest(
-    String schoolId,
+    UuidValue schoolId,
     String userId,
     String academicYearId,
   ) async {
@@ -326,7 +326,7 @@ class TeachersEnrollmentService extends GetxService {
   }
 
   // Reject a single enrollment request
-  Future<void> rejectRequest(String schoolId, String userId) async {
+  Future<void> rejectRequest(UuidValue schoolId, String userId) async {
     try {
       await batchUpdateStatus(
         schoolId: schoolId,
@@ -339,7 +339,10 @@ class TeachersEnrollmentService extends GetxService {
   }
 
   // Batch accept requests
-  Future<void> batchAcceptRequests(String schoolId, List<Uuid> userIds) async {
+  Future<void> batchAcceptRequests(
+    UuidValue schoolId,
+    List<Uuid> userIds,
+  ) async {
     try {
       // Convert Uuid list to String list
       final List<String> userIdStrings = userIds
@@ -357,7 +360,10 @@ class TeachersEnrollmentService extends GetxService {
   }
 
   // Batch reject requests
-  Future<void> batchRejectRequests(String schoolId, List<Uuid> userIds) async {
+  Future<void> batchRejectRequests(
+    UuidValue schoolId,
+    List<Uuid> userIds,
+  ) async {
     try {
       // Convert Uuid list to String list
       final List<String> userIdStrings = userIds

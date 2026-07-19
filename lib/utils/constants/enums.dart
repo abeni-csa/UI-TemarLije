@@ -51,4 +51,5 @@ enum PaymentMethods {
   paytm,
 }
 
-enum EmploymentType { partTime, permanent, contract, internship }
+// ignore: constant_identifier_names
+enum EmploymentType { PartTime, Permanent, Contract, Internship }

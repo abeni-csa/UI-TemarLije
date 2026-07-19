@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
@@ -9,7 +7,7 @@ import 'package:ui_temarlije/data/repositories/school_organzation_repository.dar
 import 'package:ui_temarlije/service/network/dio_client.dart';
 import 'package:uuid/uuid.dart';
 
-/// import 'package:ui_temarlije/utils/helpers/network_manager.dart';
+// import 'package:ui_temarlije/utils/helpers/network_manager.dart';
 
 /// Service for remote school organization operations
 /// Handles all API calls to the backend server
@@ -175,23 +173,6 @@ class SchoolOrganizationService extends GetxService {
     }
   }
 
-  /// Lists all school organizations for the current user
-  Future<List<SchoolOrganzationModel>> listMySchools() async {
-    // if (!await _networkManager.checkConnectivity()) {
-    //   throw Exception('No internet connection');
-    // }
-
-    try {
-      final response = await _dioClient.get('/org/school/list/my');
-      final List<dynamic> data = response.data;
-      return data.map((json) => SchoolOrganzationModel.fromJson(json)).toList();
-    } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Failed to fetch schools');
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   /// Fetches all school organizations from remote server
   Future<List<SchoolOrganzationModel>> getAllSchools() async {
     try {
@@ -233,18 +214,15 @@ class SchoolOrganizationService extends GetxService {
     }
   }
 
-  // School endpoints
+  /// Lists all school organizations for the current user
   Future<List<SchoolOrganzationModel>> getMySchools() async {
     try {
       final response = await _dioClient.get('/org/school/list/my');
-
+      print(response.data);
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data is List
             ? response.data
             : (response.data['schools'] ?? response.data['data'] ?? []);
-
-        print(data);
-        final _encoded = json.encode(data);
 
         return data
             .map((jsonSchool) => SchoolOrganzationModel.fromJson(jsonSchool))

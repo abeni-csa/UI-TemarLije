@@ -5,6 +5,7 @@ import 'package:ui_temarlije/features/administrator/classroom/classroom_screen.d
 import 'package:ui_temarlije/features/administrator/school_members/all_members/members.dart';
 import 'package:ui_temarlije/features/administrator/school_members/create_membership/members.dart';
 import 'package:ui_temarlije/features/administrator/school_org/screens/school_org_screen.dart';
+import 'package:ui_temarlije/features/administrator/student_management/enrollments/enrollments.dart';
 import 'package:ui_temarlije/features/administrator/teacher_management/all/all_teachers.dart';
 import 'package:ui_temarlije/features/administrator/teacher_management/detail/teacher_detail.dart';
 import 'package:ui_temarlije/features/administrator/teacher_management/enrollments/enrollments.dart';
@@ -86,6 +87,10 @@ class TemarLijeAppRoutes {
     GetPage(
       name: TemarLijeRoutes.yearsAC,
       page: () => const AcademicYearScreens(),
+    ),
+    GetPage(
+      name: TemarLijeRoutes.studentEnrollments,
+      page: () => const StudentEnrollmentsScreen(),
     ),
 
     // GetPage(

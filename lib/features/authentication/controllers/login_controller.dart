@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ui_temarlije/data/repositories/authentication_repository.dart';
+import 'package:ui_temarlije/features/administrator/school_org/global_school_controller.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 
 /// Manages login flow including authentication, 2FA verification,
@@ -105,6 +106,8 @@ class LoginController extends GetxController {
           await _storage.remove('REMEMBER_ME_EMAIL');
           await _storage.remove('REMEMBER_ME_PASSWORD');
         }
+        final ctrl = Get.put(GlobalSchoolController());
+        ctrl.loadUserSchools();
 
         // Navigate to main app screen
         Get.offAllNamed(TemarLijeRoutes.dashbord);

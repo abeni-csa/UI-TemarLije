@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:ui_temarlije/data/models/classroom.dart';
 import 'package:ui_temarlije/data/models/section.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
+import 'package:uuid/uuid.dart';
 
 class ClassroomService extends GetxService {
   static ClassroomService get instance => Get.find();
@@ -11,8 +12,8 @@ class ClassroomService extends GetxService {
 
   /// Get all classrooms for a school and academic year
   Future<List<Classroom>> getClassroomsByAcademicYear(
-    String schoolId,
-    String academicYearId,
+    UuidValue schoolId,
+    UuidValue academicYearId,
   ) async {
     try {
       final response = await _dioClient.get(
@@ -34,8 +35,8 @@ class ClassroomService extends GetxService {
 
   /// Get all classrooms grouped by grade level
   Future<Map<GradeLevel, List<Classroom>>> getClassroomsGroupedByLevel(
-    String schoolId,
-    String academicYearId,
+    UuidValue schoolId,
+    UuidValue academicYearId,
   ) async {
     final classrooms = await getClassroomsByAcademicYear(
       schoolId,
@@ -58,7 +59,7 @@ class ClassroomService extends GetxService {
 
   /// Generate classrooms for a grade level
   Future<List<Classroom>> generateClassrooms(
-    String schoolId,
+    UuidValue schoolId,
     CreateClassroomRequest request,
   ) async {
     try {
@@ -92,7 +93,7 @@ class ClassroomService extends GetxService {
 
   /// Get sections for a classroom
   Future<List<Section>> getSectionsByClassroom(
-    String schoolId,
+    UuidValue schoolId,
     String classroomId,
   ) async {
     try {
@@ -114,7 +115,7 @@ class ClassroomService extends GetxService {
   }
 
   Future<void> createBulkSections(
-    String schoolId,
+    UuidValue schoolId,
     BulkSectionRequest request,
   ) async {
     try {
@@ -133,7 +134,7 @@ class ClassroomService extends GetxService {
 
   /// Bulk create sections for all classrooms
   Future<List<Section>> bulkCreateSections(
-    String schoolId,
+    UuidValue schoolId,
     BulkSectionRequest request,
   ) async {
     try {
@@ -158,8 +159,8 @@ class ClassroomService extends GetxService {
 
   /// Create single section for a classroom
   Future<Section> createSection(
-    String schoolId,
-    String academicYearId,
+    UuidValue schoolId,
+    UuidValue academicYearId,
     Map<String, dynamic> request,
   ) async {
     try {

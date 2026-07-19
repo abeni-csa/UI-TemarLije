@@ -2,6 +2,7 @@ import 'package:dio/dio.dart' as d;
 import 'package:get/get.dart';
 import 'package:ui_temarlije/data/models/academic_year.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
+import 'package:uuid/uuid.dart';
 
 class AcademicYearService extends GetxService {
   final DioClient _dioClient = Get.find<DioClient>();
@@ -9,7 +10,7 @@ class AcademicYearService extends GetxService {
   // Base path for academic year endpoints
   static const String _basePath = '/org/school';
 
-  Future<AcademicYearListResponse> getAcademicYears(String schoolId) async {
+  Future<AcademicYearListResponse> getAcademicYears(UuidValue schoolId) async {
     try {
       final response = await _dioClient.get(
         '$_basePath/$schoolId/academic_year/list',
@@ -30,8 +31,8 @@ class AcademicYearService extends GetxService {
   }
 
   Future<AcademicYear> getAcademicYear(
-    String schoolId,
-    String academicYearId,
+    UuidValue schoolId,
+    UuidValue academicYearId,
   ) async {
     try {
       final response = await _dioClient.get(
@@ -52,7 +53,7 @@ class AcademicYearService extends GetxService {
     }
   }
 
-  Future<AcademicYear> getCurrentAcademicYear(String schoolId) async {
+  Future<AcademicYear> getCurrentAcademicYear(UuidValue schoolId) async {
     try {
       final response = await _dioClient.get(
         '$_basePath/$schoolId/academic_year/current',
@@ -78,7 +79,7 @@ class AcademicYearService extends GetxService {
   }
 
   Future<AcademicYear> createAcademicYear(
-    String schoolId,
+    UuidValue schoolId,
     CreateAcademicYearRequest request,
   ) async {
     try {
@@ -104,8 +105,8 @@ class AcademicYearService extends GetxService {
   }
 
   Future<AcademicYear> updateAcademicYear(
-    String schoolId,
-    String academicYearId,
+    UuidValue schoolId,
+    UuidValue academicYearId,
     UpdateAcademicYearRequest request,
   ) async {
     try {
@@ -129,8 +130,8 @@ class AcademicYearService extends GetxService {
   }
 
   Future<void> deleteAcademicYear(
-    String schoolId,
-    String academicYearId,
+    UuidValue schoolId,
+    UuidValue academicYearId,
   ) async {
     try {
       final response = await _dioClient.delete(

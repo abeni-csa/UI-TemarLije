@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:ui_temarlije/data/models/teacher.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
+import 'package:uuid/uuid.dart';
 
 class TeacherService extends GetxService {
   final DioClient _dioClient = Get.find<DioClient>();
@@ -32,7 +33,7 @@ class TeacherService extends GetxService {
     int page = 1,
     int limit = 20,
     String? search,
-    required String schoolId,
+    required UuidValue schoolId,
     String? employmentType,
     String? gender,
     bool? isHomeroom,

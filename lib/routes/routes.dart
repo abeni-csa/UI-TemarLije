@@ -34,6 +34,10 @@ class TemarLijeRoutes {
   static const schoolTeachers = '/teacher-management/all-teachers';
   static const teacherDetails = '/teachers/details';
   static const teacherProfile = '/teachers/new';
+  //  Student  Routes
+
+  static const studentEnrollments = '/student-management/enrollments';
+
   // Teacers Routes
   static const teachersEnrollments = '/teacher-management/enrollments';
 

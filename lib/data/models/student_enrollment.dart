@@ -7,14 +7,19 @@ part 'student_enrollment.g.dart';
 
 enum EnrollmentStatus {
   @JsonValue('Active')
+  // ignore: constant_identifier_names
   Active,
   @JsonValue('Transferred')
+  // ignore: constant_identifier_names
   Transferred,
   @JsonValue('Withdrawn')
+  // ignore: constant_identifier_names
   Withdrawn,
   @JsonValue('Graduated')
+  // ignore: constant_identifier_names
   Graduated,
   @JsonValue('Suspended')
+  // ignore: constant_identifier_names
   Suspended,
 }
 
