@@ -15,6 +15,7 @@ import 'package:ui_temarlije/features/authentication/controllers/student_registr
 import 'package:ui_temarlije/features/membership/membership_controllers.dart';
 import 'package:ui_temarlije/service/academic_year_service.dart';
 import 'package:ui_temarlije/service/classroom_sections_service.dart';
+import 'package:ui_temarlije/service/student_enrollment_service.dart';
 import 'package:ui_temarlije/service/teacher_service.dart';
 import 'package:ui_temarlije/service/teachers_enrollment_service.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
@@ -79,6 +80,8 @@ class TemarLijeAppBindings extends Bindings {
     Get.lazyPut<SignupController>(() => SignupController(), fenix: true);
     Get.put(GlobalSchoolController());
     Get.lazyPut<ClassroomController>(() => ClassroomController());
+
+    Get.lazyPut<StudentEnrollmentService>(() => StudentEnrollmentService());
     Get.lazyPut<ClassroomService>(() => ClassroomService());
   }
 }

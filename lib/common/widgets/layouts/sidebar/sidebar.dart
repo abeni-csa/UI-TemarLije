@@ -90,7 +90,7 @@ class TemarLijeSidebar extends StatelessWidget {
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: '/student-management/enrollments',
+                          route: TemarLijeRoutes.studentEnrollments,
                           icon: Iconsax.add_circle,
                           itemName: "Enrollments",
                           isSubmenu: true,
