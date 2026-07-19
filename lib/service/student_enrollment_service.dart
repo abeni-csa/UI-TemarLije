@@ -1,13 +1,14 @@
 import 'package:get/get.dart';
 import 'package:ui_temarlije/data/models/student_enrollment.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
+import 'package:uuid/uuid.dart';
 
 class StudentEnrollmentService extends GetxService {
   final DioClient _dioClient = Get.find<DioClient>();
 
   // Enroll a single student
   Future<StudentEnrollment> enrollStudent({
-    required String schoolId,
+    required UuidValue schoolId,
     required String studentId,
     required String sectionId,
     required String academicYearId,
@@ -36,7 +37,7 @@ class StudentEnrollmentService extends GetxService {
 
   // Bulk enroll students
   Future<List<StudentEnrollment>> bulkEnrollStudents({
-    required String schoolId,
+    required UuidValue schoolId,
     required List<String> studentIds,
     required String sectionId,
     required String academicYearId,
@@ -68,7 +69,7 @@ class StudentEnrollmentService extends GetxService {
 
   // Get single enrollment
   Future<StudentEnrollmentWithDetails> getEnrollment({
-    required String schoolId,
+    required UuidValue schoolId,
     required String enrollmentId,
   }) async {
     try {
@@ -88,25 +89,27 @@ class StudentEnrollmentService extends GetxService {
 
   // Get enrollments (with filters)
   Future<List<StudentEnrollmentWithDetails>> getEnrollments({
-    required String schoolId,
+    required UuidValue schoolId,
     String? studentId,
     String? sectionId,
     String? academicYearId,
     EnrollmentStatus? status,
   }) async {
     try {
-      // final queryParams = <String, dynamic>{};
-      // if (studentId != null) queryParams['student_id'] = studentId;
-      // if (sectionId != null) queryParams['section_id'] = sectionId;
-      // if (academicYearId != null)
-      //   queryParams['academic_year_id'] = academicYearId;
-      // if (status != null)
-      //   queryParams['status'] = status.toString().split('.').last;
+      final queryParams = <String, dynamic>{};
+      if (studentId != null) queryParams['student_id'] = studentId;
+      if (sectionId != null) queryParams['section_id'] = sectionId;
+      if (academicYearId != null) {
+        queryParams['academic_year_id'] = academicYearId;
+      }
+      if (status != null) {
+        queryParams['status'] = status.toString().split('.').last;
+      }
 
       final response = await _dioClient.get(
-        // '/org/school/$schoolId/enrollments',
-        '/org/school/015cb15a-86d8-7591-bc8f-1945d440c398/enrollments?section_id=2a48e239-87f8-4fd7-b60c-fc3a48949814&academic_year_id=015cb15a-86d8-7101-ba13-c9e332e61ce0',
-        // queryParameters: queryParams,
+        '/org/school/$schoolId/enrollments',
+
+        queryParameters: queryParams,
       );
       print(response.data);
       if (response.statusCode == 200) {
@@ -126,7 +129,7 @@ class StudentEnrollmentService extends GetxService {
 
   // Get student's current enrollment
   Future<StudentEnrollmentWithDetails?> getCurrentEnrollment({
-    required String schoolId,
+    required UuidValue schoolId,
     required String studentId,
   }) async {
     try {
@@ -151,7 +154,7 @@ class StudentEnrollmentService extends GetxService {
 
   // Update enrollment status
   Future<StudentEnrollment> updateEnrollmentStatus({
-    required String schoolId,
+    required UuidValue schoolId,
     required String enrollmentId,
     required EnrollmentStatus status,
   }) async {
@@ -175,7 +178,7 @@ class StudentEnrollmentService extends GetxService {
 
   // Transfer student to new section
   Future<StudentEnrollment> transferStudent({
-    required String schoolId,
+    required UuidValue schoolId,
     required String enrollmentId,
     required String newSectionId,
   }) async {
@@ -197,7 +200,7 @@ class StudentEnrollmentService extends GetxService {
 
   // Withdraw student
   Future<StudentEnrollment> withdrawStudent({
-    required String schoolId,
+    required UuidValue schoolId,
     required String enrollmentId,
   }) async {
     try {
@@ -217,7 +220,7 @@ class StudentEnrollmentService extends GetxService {
 
   // Delete enrollment
   Future<bool> deleteEnrollment({
-    required String schoolId,
+    required UuidValue schoolId,
     required String enrollmentId,
   }) async {
     try {
@@ -237,7 +240,7 @@ class StudentEnrollmentService extends GetxService {
 
   // Get enrollment summary
   Future<EnrollmentSummary> getEnrollmentSummary({
-    required String schoolId,
+    required UuidValue schoolId,
     required String academicYearId,
   }) async {
     try {

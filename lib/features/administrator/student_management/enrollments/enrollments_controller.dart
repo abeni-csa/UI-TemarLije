@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui_temarlije/data/models/academic_year.dart';
 import 'package:ui_temarlije/data/models/student_enrollment.dart';
+import 'package:ui_temarlije/features/administrator/academic_year/academic_year_controller.dart';
 import 'package:ui_temarlije/features/administrator/school_org/global_school_controller.dart';
 import 'package:ui_temarlije/service/student_enrollment_service.dart';
+import 'package:uuid/uuid.dart';
 
 class StudentEnrollmentsController extends GetxController {
   final StudentEnrollmentService _service =
       Get.find<StudentEnrollmentService>();
   final GlobalSchoolController _schoolController =
       Get.find<GlobalSchoolController>();
+  final AcademicYearController _academicYearController =
+      Get.find<AcademicYearController>();
 
-  String? get schoolId => _schoolController.schoolId;
+  UuidValue? get schoolId => _schoolController.schoolId;
 
   // Observable state
   final RxList<StudentEnrollmentWithDetails> enrollments =
@@ -22,7 +27,8 @@ class StudentEnrollmentsController extends GetxController {
   final RxString selectedAcademicYearId = ''.obs;
   final RxString selectedSectionId = ''.obs;
   final RxString searchQuery = ''.obs;
-
+  AcademicYear? get currentAcademicYear =>
+      _academicYearController.currentAcademicYear.value;
   // Filter options
   final Rx<EnrollmentStatus?> filterStatus = Rx<EnrollmentStatus?>(null);
 
@@ -32,6 +38,9 @@ class StudentEnrollmentsController extends GetxController {
     ever(_schoolController.selectedSchool, (_) {
       fetchEnrollments();
     });
+    ever(_academicYearController.currentAcademicYear, (_) {
+      fetchEnrollments();
+    });
     ever(filterStatus, (_) => applyFilters());
     ever(searchQuery, (_) => applyFilters());
     fetchEnrollments();
@@ -39,7 +48,7 @@ class StudentEnrollmentsController extends GetxController {
 
   // Fetch all enrollments for the current school
   Future<void> fetchEnrollments() async {
-    if (schoolId == null || schoolId!.isEmpty) {
+    if (schoolId == null) {
       errorMessage.value = 'School ID is empty';
       return;
     }
@@ -47,12 +56,12 @@ class StudentEnrollmentsController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = '';
+      print("schoolId = $schoolId");
+      print("AYID $currentAcademicYear!.id.toString()");
 
       final results = await _service.getEnrollments(
         schoolId: schoolId!,
-        academicYearId: selectedAcademicYearId.value.isNotEmpty
-            ? selectedAcademicYearId.value
-            : null,
+        academicYearId: currentAcademicYear!.id.toString(),
       );
       print('WHat is GOing On ${results} enrollments');
 
