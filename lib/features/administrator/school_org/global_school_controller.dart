@@ -6,6 +6,7 @@ import 'package:ui_temarlije/features/administrator/academic_year/academic_year_
 import 'package:ui_temarlije/features/authentication/controllers/teacher_controller.dart';
 import 'package:ui_temarlije/features/authentication/screens/dashboard/responsive_screens/dashboard_tablet.dart';
 import 'package:ui_temarlije/service/school_orginzation_service.dart';
+import 'package:uuid/uuid.dart';
 
 class GlobalSchoolController extends GetxController {
   static GlobalSchoolController get instance =>
@@ -23,7 +24,7 @@ class GlobalSchoolController extends GetxController {
   final RxString error = ''.obs;
 
   // Get the selected school ID
-  String? get schoolId => selectedSchool.value?.id.toString();
+  UuidValue? get schoolId => selectedSchool.value?.id;
 
   // Get the selected school name
   String get schoolName => selectedSchool.value?.name ?? 'No School Selected';

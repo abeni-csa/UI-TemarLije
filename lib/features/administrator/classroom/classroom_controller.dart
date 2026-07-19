@@ -7,6 +7,7 @@ import 'package:ui_temarlije/features/administrator/academic_year/academic_year_
 import 'package:ui_temarlije/features/administrator/school_org/global_school_controller.dart';
 import 'package:ui_temarlije/service/classroom_sections_service.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
+import 'package:uuid/uuid.dart';
 
 class ClassroomController extends GetxController {
   static ClassroomController get instance => Get.find();
@@ -58,7 +59,7 @@ class ClassroomController extends GetxController {
     GradeLevel.preparatory: const Color(0xFFFF8A5C),
   };
 
-  String? get schoolId => _schoolController.schoolId;
+  UuidValue? get schoolId => _schoolController.schoolId;
   AcademicYear? get currentAcademicYear =>
       _academicYearController.currentAcademicYear.value;
 
