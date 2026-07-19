@@ -56,7 +56,7 @@ class PrincipalModel {
   });
 
   String get fullName =>
-      '$firstName ${middleName.isNotEmpty ? '$middleName ' : ''}$lastName';
+      '$firstName ${middleName.isNotEmpty ? '$middleName ' : ''}';
   String get shortName => '$firstName $lastName';
 
   factory PrincipalModel.fromJson(Map<String, dynamic> json) =>

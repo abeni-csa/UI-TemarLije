@@ -53,8 +53,8 @@ Map<String, dynamic> _$TeacherToJson(Teacher instance) => <String, dynamic>{
 };
 
 const _$EmploymentTypeEnumMap = {
-  EmploymentType.partTime: 'partTime',
-  EmploymentType.permanent: 'permanent',
-  EmploymentType.contract: 'contract',
-  EmploymentType.internship: 'internship',
+  EmploymentType.PartTime: 'PartTime',
+  EmploymentType.Permanent: 'Permanent',
+  EmploymentType.Contract: 'Contract',
+  EmploymentType.Internship: 'Internship',
 };
