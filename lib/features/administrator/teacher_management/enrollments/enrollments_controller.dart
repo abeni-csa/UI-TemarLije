@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui_temarlije/features/administrator/school_org/global_school_controller.dart';
 import 'package:uuid/uuid.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:ui_temarlije/data/models/membeship.dart';
 import 'package:ui_temarlije/service/teachers_enrollment_service.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
@@ -9,10 +9,10 @@ import 'package:ui_temarlije/utils/constants/colors.dart';
 class EnrollmentsController extends GetxController {
   final TeachersEnrollmentService _service =
       Get.find<TeachersEnrollmentService>();
-
+  final GlobalSchoolController _schoolController =
+      Get.find<GlobalSchoolController>();
   // Use String for schoolId
-  final RxString schoolId = ''.obs;
-  final GetStorage _storage = GetStorage();
+  UuidValue? get schoolId => _schoolController.schoolId;
 
   // Observable state - use String for IDs instead of Uuid
   final RxList<Membership> pendingRequests = <Membership>[].obs;
@@ -24,59 +24,22 @@ class EnrollmentsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    ever(_schoolController.selectedSchool, (_) {
+      loadSchoolId();
+    });
     loadSchoolId();
   }
 
   Future<void> loadSchoolId() async {
-    // Try to get from storage first
-    final storedSchoolId = _storage.read('CURRENT_SCHOOL_ID');
-    print('Stored School ID: $storedSchoolId');
-
-    if (storedSchoolId != null && storedSchoolId.toString().isNotEmpty) {
-      schoolId.value = storedSchoolId.toString();
-      print('School ID set from storage: ${schoolId.value}');
-      fetchPendingRequests();
-    } else {
-      // Try Get.arguments
-      try {
-        final args = Get.arguments;
-        if (args != null && args is String && args.isNotEmpty) {
-          schoolId.value = args;
-          _storage.write('CURRENT_SCHOOL_ID', args);
-          fetchPendingRequests();
-          return;
-        }
-      } catch (e) {
-        print('No arguments found');
-      }
-
-      // Try route parameters
-      try {
-        final paramId = Get.parameters['schoolId'];
-        if (paramId != null && paramId.isNotEmpty) {
-          schoolId.value = paramId;
-          _storage.write('CURRENT_SCHOOL_ID', paramId);
-          fetchPendingRequests();
-          return;
-        }
-      } catch (e) {
-        print('No route parameters found');
-      }
-
-      // If all else fails, use the default school ID from the API response
-      // The school ID from the API is: 015cb15a-86d8-7462-bef0-a9ad9b735c27
-      schoolId.value = "015cb15a-86d8-7462-bef0-a9ad9b735c27";
-      print('Using default school ID: ${schoolId.value}');
-      fetchPendingRequests();
-    }
+    fetchPendingRequests();
   }
 
   // Fetch pending requests
   Future<void> fetchPendingRequests() async {
     print("Calling fetchPendingRequests()");
-    print("School ID: ${schoolId.value}");
+    print("School ID: ${schoolId}");
 
-    if (schoolId.isEmpty) {
+    if (schoolId == null) {
       errorMessage.value = 'School ID is empty';
       print(errorMessage.value);
       Get.snackbar(
@@ -92,8 +55,8 @@ class EnrollmentsController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = '';
-      print(schoolId.value);
-      final requests = await _service.getPendingRequests(schoolId.value);
+
+      final requests = await _service.getPendingRequests(schoolId!);
       pendingRequests.assignAll(requests);
       print('Fetched ${requests.length} pending requests');
     } catch (e) {
@@ -177,7 +140,7 @@ class EnrollmentsController extends GetxController {
 
       final userIds = selectedIds.toList();
 
-      await _service.batchAcceptRequests(schoolId.value, userIds);
+      await _service.batchAcceptRequests(schoolId!, userIds);
 
       // Remove accepted requests from the list
       pendingRequests.removeWhere((r) => selectedIds.contains(r.id));
@@ -243,7 +206,7 @@ class EnrollmentsController extends GetxController {
 
       final userIds = selectedIds.toList();
 
-      await _service.batchRejectRequests(schoolId.value, userIds);
+      await _service.batchRejectRequests(schoolId!, userIds);
 
       // Remove rejected requests from the list
       pendingRequests.removeWhere((r) => selectedIds.contains(r.id));
@@ -296,7 +259,7 @@ class EnrollmentsController extends GetxController {
     try {
       isLoading.value = true;
       await _service.acceptRequest(
-        schoolId.value,
+        schoolId!,
         request.userId,
         selectedAcademicYearId.value,
       );
@@ -347,7 +310,7 @@ class EnrollmentsController extends GetxController {
 
     try {
       isLoading.value = true;
-      await _service.rejectRequest(schoolId.value, request.id);
+      await _service.rejectRequest(schoolId!, request.id);
       pendingRequests.remove(request);
 
       Get.snackbar(

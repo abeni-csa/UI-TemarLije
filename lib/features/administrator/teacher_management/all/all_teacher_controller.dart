@@ -1,10 +1,9 @@
-// lib/features/administrator/teacher_management/teacher_controller.dart
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ui_temarlije/data/models/teacher.dart';
 import 'package:ui_temarlije/features/administrator/school_org/global_school_controller.dart';
 import 'package:ui_temarlije/service/teacher_service.dart';
+import 'package:uuid/uuid.dart';
 
 class AllTeacherController extends GetxController {
   static AllTeacherController get instance => Get.find();
@@ -25,7 +24,7 @@ class AllTeacherController extends GetxController {
   final GlobalSchoolController _schoolController =
       Get.find<GlobalSchoolController>();
   // Getter for selected school ID
-  String? get schoolId => _schoolController.schoolId;
+  UuidValue? get schoolId => _schoolController.schoolId;
   @override
   void onInit() {
     super.onInit();

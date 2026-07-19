@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ui_temarlije/common/widgets/breadcrumbs/breadcrumbs_with_heading.dart';
 import 'package:ui_temarlije/data/models/teacher.dart';
 import 'package:ui_temarlije/features/administrator/teacher_management/detail/widgets/basic_info.dart';
@@ -14,43 +15,45 @@ class TeacherDetailDesktopScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.all(TemarLijeSizes.mobileSpace),
+        padding: const EdgeInsets.all(TemarLijeSizes.defaultSpace),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TemarLijeBreadcrumbsWithHeading(
-              heading: 'Teachers Details',
-              breadcrumbsItems: ['/products', '/electronics', '/laptops'],
+              heading: 'Teacher Details [${teacher.teacherId}]',
+              breadcrumbsItems: ['/teachers', '/details'],
               returnToPreviousScreen: true,
             ),
-            SizedBox(height: TemarLijeSizes.spaceBtwSections),
+            const SizedBox(height: TemarLijeSizes.spaceBtwSections),
 
-            //Body
+            // Body - Row layout for desktop
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Left Side Order Info
+                // Left Column - Basic Info & Certifications
                 Expanded(
                   flex: 2,
                   child: Column(
                     children: [
                       BasicTeacherInfo(teacher: teacher),
                       const SizedBox(height: TemarLijeSizes.spaceBtwSections),
-
                       TeacherCertificateEducationBackgroundInfo(
                         teacher: teacher,
                       ),
                       const SizedBox(height: TemarLijeSizes.spaceBtwSections),
-                      //PastSchoolsTeacherInfo(teacher: teacher),
+                      // TeacherPastSchoolsInfo(teacher: teacher),
                     ],
                   ),
                 ),
-                const SizedBox(height: TemarLijeSizes.spaceBtwSections),
+                const SizedBox(width: TemarLijeSizes.spaceBtwSections),
+                // Right Column - Personal Information
                 Expanded(
+                  flex: 1,
                   child: Column(
                     children: [
-                      TeacherPersonalInformaton(teacher: teacher),
+                      TeacherPersonalInformation(teacher: teacher),
                       const SizedBox(height: TemarLijeSizes.spaceBtwSections),
+                      // TeacherContactInfo(teacher: teacher),
                     ],
                   ),
                 ),
