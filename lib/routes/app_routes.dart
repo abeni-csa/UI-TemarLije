@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:ui_temarlije/data/models/student_enrollment.dart';
 import 'package:ui_temarlije/features/administrator/academic_year/screens/academic_year_screens.dart';
 import 'package:ui_temarlije/features/administrator/classroom/classroom_controller.dart';
 import 'package:ui_temarlije/features/administrator/classroom/classroom_screen.dart';
@@ -6,12 +7,16 @@ import 'package:ui_temarlije/features/administrator/school_members/all_members/m
 import 'package:ui_temarlije/features/administrator/school_members/create_membership/members.dart';
 import 'package:ui_temarlije/features/administrator/school_org/screens/school_org_screen.dart';
 import 'package:ui_temarlije/features/administrator/student_management/enrollments/enrollments.dart';
+import 'package:ui_temarlije/features/administrator/student_management/list/student_list.dart';
+import 'package:ui_temarlije/features/administrator/subject/screens/subject_screen.dart';
+import 'package:ui_temarlije/features/administrator/subject/subject_controller.dart';
 import 'package:ui_temarlije/features/administrator/teacher_management/all/all_teachers.dart';
 import 'package:ui_temarlije/features/administrator/teacher_management/detail/teacher_detail.dart';
 import 'package:ui_temarlije/features/administrator/teacher_management/enrollments/enrollments.dart';
 import 'package:ui_temarlije/features/authentication/screens/dashboard/dashboard_screen.dart';
 import 'package:ui_temarlije/features/authentication/screens/forget_password/forget_password_screen.dart';
 import 'package:ui_temarlije/features/authentication/screens/login/login_screen.dart';
+import 'package:ui_temarlije/features/administrator/student_management/detail/enrollment_detail_page.dart';
 import 'package:ui_temarlije/features/authentication/screens/pricipal_registration/pricipal_registration_screen.dart';
 import 'package:ui_temarlije/features/authentication/screens/reset_password/reset_password_screen.dart';
 import 'package:ui_temarlije/features/authentication/screens/signup/signup_screen.dart';
@@ -19,7 +24,6 @@ import 'package:ui_temarlije/features/authentication/screens/account_selection/a
 import 'package:ui_temarlije/features/authentication/screens/student_registration/student_registration_screen.dart';
 import 'package:ui_temarlije/features/authentication/screens/teacher_registration/teacher_registration_screen.dart';
 import 'package:ui_temarlije/features/membership/screens/membership_screen.dart';
-import 'package:ui_temarlije/features/teachers/screens/attendance_tracking/attendance_tracking_screen.dart';
 import 'package:ui_temarlije/features/teachers/screens/lesson_planning/lesson_plan_detail_screen.dart';
 import 'package:ui_temarlije/features/teachers/screens/lesson_planning/lesson_planning_screen.dart';
 import 'package:ui_temarlije/routes/routes.dart';
@@ -47,14 +51,16 @@ class TemarLijeAppRoutes {
     GetPage(name: TemarLijeRoutes.school, page: () => SchoolOrgScreen()),
 
     GetPage(
+      name: TemarLijeRoutes.subjects,
+      page: () => const SubjectScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => SubjectController());
+      }),
+    ),
+    GetPage(
       name: TemarLijeRoutes.lessonPlanDetail,
       page: () => const LessonPlanDetailScreen(),
       binding: LessonPlanDetailBinding(),
-    ),
-    GetPage(
-      name: TemarLijeRoutes.toolAttendaceTrack,
-      page: () => const AttendanceTrackingScreen(),
-      binding: TemarLijeAppBindings(),
     ),
     GetPage(
       name: TemarLijeRoutes.membershipRequests,
@@ -92,7 +98,21 @@ class TemarLijeAppRoutes {
       name: TemarLijeRoutes.studentEnrollments,
       page: () => const StudentEnrollmentsScreen(),
     ),
+    GetPage(
+      name: TemarLijeRoutes.schoolStudentAll,
+      page: () => const StudentListScreen(),
+    ),
 
+    GetPage(
+      name: TemarLijeRoutes.studentEnrollments,
+      page: () => const StudentListScreen(),
+    ),
+    GetPage(
+      name: TemarLijeRoutes.studentEnrollmentDetails,
+      page: () => EnrollmentDetailPage(
+        enrollment: Get.arguments as StudentEnrollmentWithDetails,
+      ),
+    ),
     // GetPage(
     //   name: TemarLijeRoutes.membershipRequests,
     //   page: () => const SchoolMembershipRequestsScreen(),

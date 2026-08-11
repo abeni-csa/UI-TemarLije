@@ -15,6 +15,7 @@ class TemarLijeRoutes {
   // teacher Route
   static const toolLessonPlaner = '/tools/lesson-planer';
   static const toolAttendaceTrack = '/tools/attendace';
+  static const toolAttendaceTrack2 = '/tools/attendace2';
   static const lessonPlanDetail = '/tools/lesson-plan-detail';
   static const joinTeacher = '/schoolJoin/teacer';
   static const school = '/school';
@@ -36,10 +37,15 @@ class TemarLijeRoutes {
   static const teacherProfile = '/teachers/new';
   //  Student  Routes
 
-  static const studentEnrollments = '/student-management/enrollments';
+  static const schoolStudentAll = '/student-management/all-student';
 
+  static const studentEnrollments = '/student-management/enrollments';
+  static const studentEnrollmentDetails =
+      '/student-management/enrollments/details';
   // Teacers Routes
   static const teachersEnrollments = '/teacher-management/enrollments';
+
+  static const subjects = '/academics/subjects';
 
   static const schoolUserAll = '/users/all-users';
   static const schoolUserJoin = '/users/join-requests';
