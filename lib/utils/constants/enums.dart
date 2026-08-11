@@ -53,3 +53,48 @@ enum PaymentMethods {
 
 // ignore: constant_identifier_names
 enum EmploymentType { PartTime, Permanent, Contract, Internship }
+
+// ignore: constant_identifier_names
+enum RoomType { Regular, Laboratory, ComputerLab, SportsField }
+
+enum EducationLevel {
+  // ignore: constant_identifier_names
+  KG1,
+  // ignore: constant_identifier_names
+  KG2,
+  // ignore: constant_identifier_names
+  KG3,
+  // ignore: constant_identifier_names
+  Primary,
+  // ignore: constant_identifier_names
+  Middle,
+  // ignore: constant_identifier_names
+  Secondary9_10,
+  // ignore: constant_identifier_names
+  Secondary11_12,
+}
+
+enum SubjectTypeStream {
+  // ignore: constant_identifier_names
+  SchoolSpecific,
+  // ignore: constant_identifier_names
+  FieldBased,
+  // ignore: constant_identifier_names
+  Core,
+  // ignore: constant_identifier_names
+  NaturalScience,
+  // ignore: constant_identifier_names
+  SocialScience,
+  // ignore: constant_identifier_names
+  Business,
+  // ignore: constant_identifier_names
+  Arts,
+  // ignore: constant_identifier_names
+  Technology,
+  // ignore: constant_identifier_names
+  Agriculture,
+  // ignore: constant_identifier_names
+  HealthScience,
+  // ignore: constant_identifier_names
+  General, // For levels without streams
+}

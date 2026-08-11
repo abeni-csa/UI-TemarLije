@@ -87,7 +87,7 @@ class StudentEnrollmentService extends GetxService {
     }
   }
 
-  // Get enrollments (with filters)
+  // Get enrollments with improved null safety
   Future<List<StudentEnrollmentWithDetails>> getEnrollments({
     required UuidValue schoolId,
     String? studentId,
@@ -97,34 +97,74 @@ class StudentEnrollmentService extends GetxService {
   }) async {
     try {
       final queryParams = <String, dynamic>{};
-      if (studentId != null) queryParams['student_id'] = studentId;
-      if (sectionId != null) queryParams['section_id'] = sectionId;
-      if (academicYearId != null) {
+      if (studentId != null && studentId.isNotEmpty) {
+        queryParams['student_id'] = studentId;
+      }
+      if (sectionId != null && sectionId.isNotEmpty) {
+        queryParams['section_id'] = sectionId;
+      }
+      if (academicYearId != null && academicYearId.isNotEmpty) {
         queryParams['academic_year_id'] = academicYearId;
       }
       if (status != null) {
         queryParams['status'] = status.toString().split('.').last;
       }
 
-      final response = await _dioClient.get(
-        '/org/school/$schoolId/enrollments',
+      // Build URL with query parameters
+      String url = '/org/school/$schoolId/enrollments';
+      if (queryParams.isNotEmpty) {
+        final queryString = queryParams.entries
+            .map((e) => '${e.key}=${Uri.encodeComponent(e.value.toString())}')
+            .join('&');
+        url = '$url?$queryString';
+      }
 
-        queryParameters: queryParams,
-      );
-      print(response.data);
+      print('GET $url');
+
+      final response = await _dioClient.get(url);
+
       if (response.statusCode == 200) {
-        final List<dynamic> data = response.data['enrollments'] ?? [];
-        print(data);
+        // Handle different response structures with null safety
+        List<dynamic> data = [];
 
-        return data
-            .map((json) => StudentEnrollmentWithDetails.fromJson(json))
-            .toList();
+        if (response.data is List) {
+          data = response.data;
+        } else if (response.data is Map) {
+          data =
+              response.data['enrollments'] ??
+              response.data['data'] ??
+              response.data['items'] ??
+              [];
+        }
+
+        print('Found ${data.length} enrollments');
+        print('Found ${data} enrollments');
+
+        return data.map((json) {
+          try {
+            return StudentEnrollmentWithDetails.fromJson(_safeJson(json));
+          } catch (e) {
+            print('Error parsing enrollment: $e');
+            print('JSON data: $json');
+            // Return a default or rethrow
+            rethrow;
+          }
+        }).toList();
       } else {
         throw Exception('Failed to get enrollments: ${response.statusCode}');
       }
     } catch (e) {
+      print('Error getting enrollments: $e');
       throw Exception('Error getting enrollments: $e');
     }
+  }
+
+  // Safe JSON parsing helper
+  Map<String, dynamic> _safeJson(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      return json;
+    }
+    return {};
   }
 
   // Get student's current enrollment

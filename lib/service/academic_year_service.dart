@@ -58,7 +58,7 @@ class AcademicYearService extends GetxService {
       final response = await _dioClient.get(
         '$_basePath/$schoolId/academic_year/current',
       );
-
+      print(response.realUri);
       if (response.statusCode == 200) {
         return AcademicYear.fromJson(response.data);
       } else if (response.statusCode == 404) {
