@@ -510,9 +510,7 @@ class GradeLevelGroup extends StatelessWidget {
                   ? null
                   : () async {
                       if (controller.selectedClassroom.value != null) {
-                        await controller.createBulkSections(
-                          // controller.selectedClassroom.value!.id,
-                        );
+                        await controller.createBulkSections();
                       }
                     },
               style: ElevatedButton.styleFrom(
