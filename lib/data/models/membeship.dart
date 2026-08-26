@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ui_temarlije/data/models/student_enrollment.dart';
+import 'package:ui_temarlije/utils/helpers/uuid_json_converter.dart';
 import 'package:uuid/uuid.dart';
+import 'package:ui_temarlije/data/models/fileds.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'membeship.g.dart';
 
 class User {
   final String id;
@@ -39,7 +44,6 @@ class User {
   }
 }
 
-// lib/models/school.dart
 class School {
   final String id;
   final String name;
@@ -88,11 +92,17 @@ class School {
 
 // lib/models/membership.dart
 enum MembershipStatus {
+  // ignore: constant_identifier_names
   Active,
+  // ignore: constant_identifier_names
   Rejected,
+  // ignore: constant_identifier_names
   Pending,
+  // ignore: constant_identifier_names
   Archived,
+  // ignore: constant_identifier_names
   TransferdToOther,
+  // ignore: constant_identifier_names
   Promoted,
 }
 
@@ -130,6 +140,150 @@ extension MembershipStatusExtension on MembershipStatus {
         return Colors.blue;
     }
   }
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, createFactory: true)
+class UnenrolledStudentWithDetails {
+  @UuidJsonConverter()
+  final UuidValue studentId;
+  @UuidJsonConverter()
+  final UuidValue authUserId;
+
+  final String firstName;
+  final String middleName;
+  final String lastName;
+  final DateTime dateOfBirth;
+
+  final String phoneNumber;
+  final String gender;
+  final AddressInfo addressInfo;
+  final String email;
+  final DateTime userCreatedAt;
+
+  @UuidJsonConverter()
+  final UuidValue membershipId;
+  @UuidJsonConverter()
+  final UuidValue? schoolId;
+
+  final UserType membershipType;
+  final MembershipStatus membershipStatus;
+  @UuidJsonConverter()
+  final UuidValue? joinedAcademicYearId;
+
+  final DateTime? membershipCreatedAt;
+
+  final dynamic enrollmentId;
+  final dynamic sectionId;
+  final dynamic academicYearId;
+
+  final EnrollmentStatus? enrollmentStatus;
+
+  final String? enrollmentDate;
+
+  final bool? hasActiveEnrollment;
+
+  final List<EnrollmentHistoryEntry>? enrollmentHistory;
+
+  final EnrollmentIntent? enrollmentIntent;
+
+  const UnenrolledStudentWithDetails({
+    required this.studentId,
+    required this.authUserId,
+    required this.firstName,
+    required this.middleName,
+    required this.lastName,
+    required this.dateOfBirth,
+    required this.phoneNumber,
+    required this.gender,
+    required this.addressInfo,
+    required this.email,
+    required this.userCreatedAt,
+    required this.membershipId,
+    this.schoolId,
+    required this.membershipType,
+    required this.membershipStatus,
+    this.joinedAcademicYearId,
+    this.membershipCreatedAt,
+    this.enrollmentId,
+    this.academicYearId,
+    this.hasActiveEnrollment,
+    this.enrollmentStatus,
+    this.enrollmentDate,
+    this.enrollmentHistory,
+    this.sectionId,
+    this.enrollmentIntent,
+  });
+
+  factory UnenrolledStudentWithDetails.fromJson(Map<String, dynamic> json) =>
+      _$UnenrolledStudentWithDetailsFromJson(json);
+  Map<String, dynamic> toJson() => _$UnenrolledStudentWithDetailsToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, createFactory: true)
+class EnrollmentHistoryEntry {
+  final String enrollmentId;
+
+  final String academicYearId;
+
+  final String? sectionId;
+
+  final String gradeLevel;
+
+  final int? gradeNumber;
+
+  final EnrollmentStatus status;
+  final String enrolledAt;
+
+  final String? leftAt;
+
+  EnrollmentHistoryEntry({
+    required this.enrollmentId,
+    required this.academicYearId,
+    this.sectionId,
+    required this.gradeLevel,
+    this.gradeNumber,
+    required this.status,
+    required this.enrolledAt,
+    this.leftAt,
+  });
+
+  factory EnrollmentHistoryEntry.fromJson(Map<String, dynamic> json) =>
+      _$EnrollmentHistoryEntryFromJson(json);
+  Map<String, dynamic> toJson() => _$EnrollmentHistoryEntryToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, createFactory: true)
+class EnrollmentIntent {
+  final String id;
+
+  final String? requestedGradeLevel;
+
+  final int? requestedGradeNumber;
+
+  final String? requestedKgClassType;
+
+  final String? previousSchool;
+
+  final String? previousGradeLevel;
+
+  final int? previousGrade;
+
+  final MembershipStatus status;
+
+  EnrollmentIntent({
+    required this.id,
+    this.requestedGradeLevel,
+    this.requestedGradeNumber,
+    this.requestedKgClassType,
+    this.previousSchool,
+    this.previousGradeLevel,
+    this.previousGrade,
+    required this.status,
+  });
+
+  factory EnrollmentIntent.fromJson(Map<String, dynamic> json) =>
+      _$EnrollmentIntentFromJson(json);
+  Map<String, dynamic> toJson() => _$EnrollmentIntentToJson(this);
 }
 
 enum UserType {
@@ -175,19 +329,7 @@ class BatchMembershipRequest {
   }
 }
 
-//{
-//id: 2c08d091-273a-4f4b-a579-d1a002819dcd,
-//school_id: 015cb15a-86d8-7462-bef0-a9ad9b735c27,
-//base_user_id: 015cb15a-86d8-7841-8595-cddc0640aded,
-//joined_acadmic_year_id: null,
-//membership_type: Teacher,
-//status: Pending,
-//created_at: 2026-07-04T06:53:07.531865Z,
-//updated_at: 2026-07-04T06:53:07.531867Z
-//}
-
-// membership.dart
-
+@JsonSerializable(fieldRename: FieldRename.snake, createFactory: true)
 class Membership {
   final String id; // Change from Uuid to String
   final String schoolId; // Change from Uuid to String
@@ -209,117 +351,11 @@ class Membership {
     required this.updatedAt,
   });
 
-  factory Membership.fromJson(Map<String, dynamic> json) {
-    return Membership(
-      id: json['id']?.toString() ?? '',
-      schoolId: json['school_id']?.toString() ?? '',
-      userId: json['base_user_id']?.toString() ?? '',
-      joinedAcademicYearId: json['joined_acadmic_year_id']?.toString(),
-      membershipType: _parseUserType(json['membership_type']),
-      status: _parseMembershipStatus(json['status']),
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-    );
-  }
-
-  static UserType _parseUserType(String type) {
-    switch (type.toLowerCase()) {
-      case 'student':
-        return UserType.student;
-      case 'teacher':
-        return UserType.teacher;
-      case 'staff':
-        return UserType.staff;
-      default:
-        return UserType.student;
-    }
-  }
-
-  static MembershipStatus _parseMembershipStatus(String status) {
-    switch (status.toLowerCase()) {
-      case 'active':
-        return MembershipStatus.Active;
-      case 'rejected':
-        return MembershipStatus.Rejected;
-      case 'pending':
-        return MembershipStatus.Pending;
-      case 'archived':
-        return MembershipStatus.Archived;
-      case 'transferd_to_other':
-        return MembershipStatus.TransferdToOther;
-      case 'promoted':
-        return MembershipStatus.Promoted;
-      default:
-        return MembershipStatus.Pending;
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'school_id': schoolId,
-      'base_user_id': userId,
-      'joined_acadmic_year_id': joinedAcademicYearId,
-      'membership_type': membershipType.toString().split('.').last,
-      'status': status.toString().split('.').last,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-    };
-  }
-}
-
-class OldMembership {
-  final Uuid id;
-  final Uuid schoolId;
-  final Uuid userId;
-  final Uuid? joinedAcademicYearId;
-  final UserType membershipType;
-  final MembershipStatus status;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
-  OldMembership({
-    required this.id,
-    required this.schoolId,
-    required this.userId,
-
-    required this.membershipType,
-    this.joinedAcademicYearId,
-    required this.status,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory OldMembership.fromJson(Map<String, dynamic> json) {
-    return OldMembership(
-      id: json['id'],
-      schoolId: json['school_id'],
-      userId: json['base_user_id'],
-      membershipType: UserType.fromString(
-        json['membership_type']?.toString() ?? 'student',
-      ),
-      joinedAcademicYearId: json['joined_academic_year_id'],
-      status: json['status'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'school_id': schoolId,
-      'base_user_id': userId,
-      'membership_type': membershipType.name,
-      'joined_academic_year_id': joinedAcademicYearId,
-      'status': status.name,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-    };
-  }
-
   bool get isActive => status == MembershipStatus.Active;
   bool get isPending => status == MembershipStatus.Pending;
+  factory Membership.fromJson(Map<String, dynamic> json) =>
+      _$MembershipFromJson(json);
+  Map<String, dynamic> toJson() => _$MembershipToJson(this);
 }
 
 class MembershipRequest {
