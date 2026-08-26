@@ -67,7 +67,7 @@ class SchoolSelector extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.school, color: TemarLijeColors.primary, size: 18),
+              // Icon(Icons.school, color: TemarLijeColors.primary, size: 18),
               const SizedBox(width: 8),
               Text(
                 controller.schools.first.name,

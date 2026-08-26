@@ -2,7 +2,6 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ui_temarlije/common/widgets/loaders/animation_loader.dart';
-
 import 'package:ui_temarlije/utils/constants/sizes.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/utils/constants/image_strings.dart';
