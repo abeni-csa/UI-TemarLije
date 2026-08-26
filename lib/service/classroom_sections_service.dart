@@ -24,6 +24,7 @@ class ClassroomService extends GetxService {
         final List<dynamic> data = response.data is List
             ? response.data
             : (response.data['classrooms'] ?? response.data['data'] ?? []);
+        print('Going To URL [+] ${(response.realUri.toString())} ');
         return data.map((json) => Classroom.fromJson(json)).toList();
       }
       return [];
@@ -74,6 +75,7 @@ class ClassroomService extends GetxService {
         if (classrooms is List) {
           return classrooms.map((json) => Classroom.fromJson(json)).toList();
         }
+        print('Going To URL [+] ${(response.realUri.toString())} ');
         return [];
       }
       throw Exception('Failed to generate classrooms');
@@ -105,6 +107,7 @@ class ClassroomService extends GetxService {
         final List<dynamic> data = response.data is List
             ? response.data
             : (response.data['sections'] ?? response.data['data'] ?? []);
+        print('Going To URL [+] ${(response.realUri.toString())} ');
         return data.map((json) => Section.fromJson(json)).toList();
       }
       return [];

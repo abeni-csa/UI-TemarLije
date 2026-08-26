@@ -7,6 +7,7 @@ import 'package:ui_temarlije/features/administrator/school_members/all_members/m
 import 'package:ui_temarlije/features/administrator/school_members/create_membership/members.dart';
 import 'package:ui_temarlije/features/administrator/school_org/screens/school_org_screen.dart';
 import 'package:ui_temarlije/features/administrator/student_management/enrollments/enrollments.dart';
+import 'package:ui_temarlije/features/administrator/student_management/kg/kg_students.dart';
 import 'package:ui_temarlije/features/administrator/student_management/list/student_list.dart';
 import 'package:ui_temarlije/features/administrator/subject/screens/subject_screen.dart';
 import 'package:ui_temarlije/features/administrator/subject/subject_controller.dart';
@@ -102,7 +103,10 @@ class TemarLijeAppRoutes {
       name: TemarLijeRoutes.schoolStudentAll,
       page: () => const StudentListScreen(),
     ),
-
+        GetPage(
+      name: TemarLijeRoutes.schoolStudentKG,
+      page: () => const KgStudentsScreen(),
+    ),
     GetPage(
       name: TemarLijeRoutes.studentEnrollments,
       page: () => const StudentListScreen(),

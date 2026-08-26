@@ -36,7 +36,7 @@ class TemarLijeRoutes {
   static const teacherDetails = '/teachers/details';
   static const teacherProfile = '/teachers/new';
   //  Student  Routes
-
+  static const schoolStudentKG = '/student-management/all-kg-student';
   static const schoolStudentAll = '/student-management/all-student';
 
   static const studentEnrollments = '/student-management/enrollments';
