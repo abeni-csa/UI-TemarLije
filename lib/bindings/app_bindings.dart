@@ -25,7 +25,7 @@ import 'package:ui_temarlije/service/teachers_enrollment_service.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
 import 'package:ui_temarlije/service/school_orginzation_service.dart';
 
-/// Dependency injection bindings for authentication module
+/// Dependency injection bindings for authentication modules
 /// Registers all required dependencies before they're used
 class TemarLijeAppBindings extends Bindings {
   @override
