@@ -1,12 +1,144 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ui_temarlije/data/models/students.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
+import 'package:uuid/uuid.dart';
 
-class StudentService {
+class StudentService extends GetxService {
   final DioClient _dioClient = Get.find<DioClient>();
+
+  Future<KGStudents> createKgStudent({
+    required KGStudentRegistrationRequest kgStudent,
+    required UuidValue schoolId,
+    required String academicYearId,
+  }) async {
+    final requestData = <String, dynamic>{
+      "first_name": kgStudent.firstName,
+      "middle_name": kgStudent.middleName,
+      "last_name": kgStudent.lastName,
+      "date_of_birth": kgStudent.dateOfBirth.toIso8601String().split('T')[0],
+      "phone_number": kgStudent.phoneNumber,
+      "gender": kgStudent.gender,
+      "guardian_id": kgStudent.guardianId,
+      "national_id": kgStudent.nationalId,
+      "address_info": {
+        "region": kgStudent.addressInfo.region,
+        "zone": kgStudent.addressInfo.zone,
+        "city": kgStudent.addressInfo.city,
+        "kebele_no": kgStudent.addressInfo.kebeleNo,
+      },
+      "birth_certificate": {
+        "certificate_number": kgStudent.birthCertificate.certificateNumber,
+        "issuing_authority": kgStudent.birthCertificate.issuingAuthority,
+        "original_copy": kgStudent.birthCertificate.originalCopy,
+        "photocopy_provided": kgStudent.birthCertificate.photocopyProvided,
+        "issue_date": kgStudent.birthCertificate.issueDate
+            .toIso8601String()
+            .split('T')[0],
+      },
+    };
+    debugPrint('Request JSON being sent: ${jsonEncode(requestData)}');
+    try {
+      final response = await _dioClient.post(
+        '/org/school/$schoolId/members/$academicYearId/kg',
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return KGStudents.fromJson(response.data);
+      } else {
+        throw Exception('Failed to enroll student: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error enrolling student: $e');
+    }
+  }
+
+  // Get KG Students by Academic Year
+  Future<List<KGStudents>> getKGStudents({
+    required UuidValue schoolId,
+    required UuidValue academicYearId,
+    int page = 1,
+    int limit = 20,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        '/org/school/$schoolId/members/$academicYearId/kg',
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        return data.map((json) => KGStudents.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to load KG students: ${response.data}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load KG students: $e');
+    }
+  }
+
+  // Get KG Student by ID
+  Future<KGStudents> getKGStudentById({
+    required UuidValue schoolId,
+    required UuidValue academicYearId,
+    required UuidValue studentId,
+  }) async {
+    try {
+      final response = await _dioClient.get(
+        '/api/schools/$schoolId/academic-years/$academicYearId/kg-students/$studentId',
+      );
+
+      if (response.statusCode == 200) {
+        return KGStudents.fromJson(response.data['data']);
+      } else {
+        throw Exception('Failed to load KG student: ${response.data}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load KG student: $e');
+    }
+  }
+
+  // Update KG Student
+  Future<void> updateKGStudent({
+    required UuidValue schoolId,
+    required UuidValue academicYearId,
+    required UuidValue studentId,
+    required Map<String, dynamic> updateData,
+  }) async {
+    try {
+      final response = await _dioClient.put(
+        '/api/schools/$schoolId/academic-years/$academicYearId/kg-students/$studentId',
+        data: updateData,
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update KG student: ${response.data}');
+      }
+    } catch (e) {
+      throw Exception('Failed to update KG student: $e');
+    }
+  }
+
+  // Delete KG Student
+  Future<void> deleteKGStudent({
+    required UuidValue schoolId,
+    required UuidValue academicYearId,
+    required UuidValue studentId,
+  }) async {
+    try {
+      final response = await _dioClient.delete(
+        '/org/school/$schoolId/members/$academicYearId/kg-students/$studentId',
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to delete KG student: ${response.data}');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete KG student: $e');
+    }
+  }
 
   Future<Map<String, dynamic>> registerStudent({
     required Students student,
