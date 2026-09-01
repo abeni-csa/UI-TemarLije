@@ -19,8 +19,10 @@ class KGStudentsController extends GetxController {
   final AcademicYearController _academicYearController =
       Get.find<AcademicYearController>();
 
-  final Rx<IssuingAuthority> selectedCertIssuer =
-      IssuingAuthority.CityAdministration.obs;
+  // Use Rx for better reactivity
+  final Rx<IssuingAuthority?> selectedIssuingAuthority = Rx<IssuingAuthority?>(
+    IssuingAuthority.CityAdministration,
+  );
 
   final RxList<String> genderItems = ['Male', 'Female'].obs;
   final valueListenableOnGender = ValueNotifier<String?>(null);
@@ -28,8 +30,15 @@ class KGStudentsController extends GetxController {
       RegionalStatesAndCities.AddisAbaba.obs;
   final valueListenableOnRegionalStates =
       ValueNotifier<RegionalStatesAndCities?>(null);
-  final ValueNotifier<IssuingAuthority?> selectedIssuingAuthority =
-      ValueNotifier<IssuingAuthority?>(null);
+  final ValueNotifier<IssuingAuthority?>
+  valueListenableOnSelectedIssuingAuthority = ValueNotifier<IssuingAuthority?>(
+    null,
+  );
+  // final RxList<String> genderItems = ['Male', 'Female'].obs;
+  // final Rx<String?> selectedGender = Rx<String?>(null);
+  final Rx<RegionalStatesAndCities?> selectedRegion =
+      Rx<RegionalStatesAndCities?>(RegionalStatesAndCities.AddisAbaba);
+
   // State
   final RxList<KGStudents> kgStudents = <KGStudents>[].obs;
   final RxBool isLoading = false.obs;
@@ -48,11 +57,9 @@ class KGStudentsController extends GetxController {
   final lastNameController = TextEditingController();
   final dateOfBirthController = TextEditingController();
   final phoneNumberController = TextEditingController();
-  final genderController = TextEditingController();
   final nationalIdController = TextEditingController();
 
   // Address Controllers
-  final regionController = TextEditingController();
   final cityController = TextEditingController();
   final zoneController = TextEditingController();
   final woredaController = TextEditingController();
@@ -61,7 +68,6 @@ class KGStudentsController extends GetxController {
 
   // Birth Certificate Controllers
   final certificateNumberController = TextEditingController();
-  final issuingAuthorityController = TextEditingController();
   final issueDateController = TextEditingController();
   final isOriginalCopy = false.obs;
   final isPhotocopyProvided = false.obs;
@@ -76,6 +82,7 @@ class KGStudentsController extends GetxController {
 
   AcademicYear? get currentAcademicYear =>
       _academicYearController.currentAcademicYear.value;
+
   @override
   void onInit() {
     super.onInit();
@@ -96,16 +103,13 @@ class KGStudentsController extends GetxController {
     lastNameController.dispose();
     dateOfBirthController.dispose();
     phoneNumberController.dispose();
-    genderController.dispose();
     nationalIdController.dispose();
-    regionController.dispose();
     cityController.dispose();
     zoneController.dispose();
     woredaController.dispose();
     kebeleController.dispose();
     houseNumberController.dispose();
     certificateNumberController.dispose();
-    issuingAuthorityController.dispose();
     issueDateController.dispose();
     guardianIdController.dispose();
     super.onClose();
@@ -161,7 +165,7 @@ class KGStudentsController extends GetxController {
     await loadKGStudents(page: 1);
   }
 
-  // Create KG Student
+  // Create KG Student - FIXED VERSION
   Future<void> createKGStudent() async {
     if (schoolId == null) {
       _showError('No school selected');
@@ -181,31 +185,73 @@ class KGStudentsController extends GetxController {
     errorMessage.value = '';
 
     try {
+      // Parse date of birth
+      DateTime dateOfBirth;
+      try {
+        dateOfBirth = DateTime.parse(dateOfBirthController.text.trim());
+      } catch (e) {
+        _showError('Invalid date of birth format');
+        isSubmitting.value = false;
+        return;
+      }
+
+      // Parse issue date
+      DateTime issueDate;
+      try {
+        issueDate = DateTime.parse(issueDateController.text.trim());
+      } catch (e) {
+        _showError('Invalid issue date format');
+        isSubmitting.value = false;
+        return;
+      }
+
+      // Get issuing authority from selected value
+      final issuingAuthority = selectedIssuingAuthority.value;
+      if (issuingAuthority == null) {
+        _showError('Please select issuing authority');
+        isSubmitting.value = false;
+        return;
+      }
+
+      // Get gender from selected value
+      final gender = valueListenableOnGender.value;
+      if (gender == null || gender.isEmpty) {
+        _showError('Please select gender');
+        isSubmitting.value = false;
+        return;
+      }
+
+      // Get region from selected value
+      final region = selectedRegion.value;
+      if (region == null) {
+        _showError('Please select region');
+        isSubmitting.value = false;
+        return;
+      }
+
       final request = KGStudentRegistrationRequest(
         firstName: firstNameController.text.trim(),
         middleName: middleNameController.text.trim(),
         lastName: lastNameController.text.trim(),
-        dateOfBirth: DateTime.parse(dateOfBirthController.text),
+        dateOfBirth: dateOfBirth,
         phoneNumber: phoneNumberController.text.trim(),
-        gender: genderController.text.trim(),
+        gender: gender,
         guardianId: UuidValue.fromString(guardianIdController.text.trim()),
         nationalId: nationalIdController.text.trim().isEmpty
             ? null
             : nationalIdController.text.trim(),
         addressInfo: AddressInfo(
-          region: regionController.text.trim(),
+          region: region.name.toTitleCase(), // Use the enum value name
           city: cityController.text.trim(),
           zone: zoneController.text.trim(),
           kebeleNo: kebeleController.text.trim(),
         ),
         birthCertificate: BirthCertificate(
           certificateNumber: certificateNumberController.text.trim(),
-          issuingAuthority: _parseIssuingAuthority(
-            issuingAuthorityController.text.trim(),
-          ),
+          issuingAuthority: issuingAuthority,
           originalCopy: isOriginalCopy.value,
           photocopyProvided: isPhotocopyProvided.value,
-          issueDate: DateTime.parse(issuingAuthorityController.text),
+          issueDate: issueDate,
         ),
       );
 
@@ -218,11 +264,11 @@ class KGStudentsController extends GetxController {
       await loadKGStudents(page: 1);
       _showSuccess('KG Student created successfully!');
       _clearForm();
-      Get.back(); // Close dialog if open
+      Navigator.pop(Get.context!);
     } catch (e) {
       errorMessage.value = e.toString();
-      print(e.toString());
-      _showError(errorMessage.value);
+      debugPrint('Error creating KG student: $e');
+      _showError('Failed to create KG student: $e');
     } finally {
       isSubmitting.value = false;
     }
@@ -290,39 +336,25 @@ class KGStudentsController extends GetxController {
   }
 
   // Helper methods
-  IssuingAuthority _parseIssuingAuthority(String value) {
-    switch (value.toLowerCase()) {
-      case 'cityadministration':
-        return IssuingAuthority.CityAdministration;
-      case 'woreda':
-        return IssuingAuthority.Woreda;
-      case 'kebele':
-        return IssuingAuthority.Kebele;
-      default:
-        return IssuingAuthority.Other;
-    }
-  }
-
   void _clearForm() {
     firstNameController.clear();
     middleNameController.clear();
     lastNameController.clear();
     dateOfBirthController.clear();
     phoneNumberController.clear();
-    genderController.clear();
     nationalIdController.clear();
-    regionController.clear();
     cityController.clear();
     zoneController.clear();
     woredaController.clear();
     kebeleController.clear();
     houseNumberController.clear();
     certificateNumberController.clear();
-    issuingAuthorityController.clear();
     issueDateController.clear();
     guardianIdController.clear();
     isOriginalCopy.value = false;
     isPhotocopyProvided.value = false;
+    selectedRegion.value = RegionalStatesAndCities.AddisAbaba;
+    selectedIssuingAuthority.value = IssuingAuthority.CityAdministration;
     formKey.currentState?.reset();
   }
 

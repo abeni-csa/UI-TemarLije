@@ -38,7 +38,7 @@ class KGStudentFormDialog extends StatelessWidget {
               children: [
                 // Header
                 _buildHeader(context),
-                const SizedBox(height: 24),
+                const SizedBox(height: 10),
 
                 // Personal Information
                 _buildSectionTitle('Personal Information'),
@@ -164,8 +164,6 @@ class KGStudentFormDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-
-            // Start Date
             Expanded(
               child: TextFormField(
                 controller: controller.dateOfBirthController,
@@ -216,57 +214,57 @@ class KGStudentFormDialog extends StatelessWidget {
             const SizedBox(width: 12),
 
             Expanded(
-              child: DropdownButtonFormField2<String>(
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 16,
+              child: Obx(
+                () => DropdownButtonFormField2<String>(
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 16,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      gapPadding: 0,
+                    ),
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    gapPadding: 0,
+                  hint: const Text(
+                    'Select Gender',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: TemarLijeColors.textPrimary,
+                    ),
                   ),
-                ),
-                hint: const Text(
-                  'Select Your Gender',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: TemarLijeColors.textPrimary,
-                  ),
-                ),
-                items: controller.genderItems
-                    .map(
-                      (item) => DropdownItem<String>(
-                        value: item,
-
-                        child: Text(
-                          item,
-
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                  items: controller.genderItems
+                      .map(
+                        (item) => DropdownItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    )
-                    .toList(),
-                valueListenable: controller.valueListenableOnGender,
-                validator: (value) =>
-                    TemarLijeValidator.validateEmptyText("Gender", value),
-                onChanged: (value) {
-                  controller.valueListenableOnGender.value = value;
-                },
-                iconStyleData: const IconStyleData(
-                  icon: Icon(Icons.arrow_drop_down, color: Colors.black45),
-                ),
-                dropdownStyleData: DropdownStyleData(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
+                      )
+                      .toList(),
+                  valueListenable: controller.valueListenableOnGender,
+                  validator: (value) =>
+                      TemarLijeValidator.validateEmptyText("Gender", value),
+                  onChanged: (value) {
+                    controller.valueListenableOnGender.value = value;
+                  },
+                  iconStyleData: const IconStyleData(
+                    icon: Icon(Icons.arrow_drop_down, color: Colors.black45),
                   ),
-                ),
-                menuItemStyleData: const MenuItemStyleData(
-                  useDecorationHorizontalPadding: true,
+                  dropdownStyleData: DropdownStyleData(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  menuItemStyleData: const MenuItemStyleData(
+                    useDecorationHorizontalPadding: true,
+                  ),
                 ),
               ),
             ),
@@ -303,7 +301,7 @@ class KGStudentFormDialog extends StatelessWidget {
                   ),
                 ),
                 hint: const Text(
-                  'Select Your Reginal States Or Citiy ',
+                  'Select Region Or Citiy ',
                   style: TextStyle(
                     fontSize: 14,
                     overflow: TextOverflow.ellipsis,
@@ -429,27 +427,60 @@ class KGStudentFormDialog extends StatelessWidget {
             ),
             const SizedBox(width: 12),
 
-            DropdownButtonHideUnderline(
-              child: DropdownButton2<IssuingAuthority>(
-                hint: Text(
-                  'Select Cert Issuer',
-                  style: TextStyle(fontSize: 14),
+            Expanded(
+              child: DropdownButtonFormField2<IssuingAuthority>(
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    gapPadding: 0,
+                  ),
                 ),
-                items: IssuingAuthority.values.map((IssuingAuthority issuAuth) {
-                  return DropdownItem<IssuingAuthority>(
-                    value: issuAuth,
-                    height: 40,
-                    child: Text(issuAuth.name.toUpperCase()),
-                  );
-                }).toList(),
-                valueListenable: controller.selectedIssuingAuthority,
-                onChanged: (IssuingAuthority? newValue) {
-                  controller.selectedIssuingAuthority.value = newValue;
+                hint: const Text(
+                  'Select Issuing Authority',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: TemarLijeColors.textPrimary,
+                  ),
+                ),
+                items: IssuingAuthority.values
+                    .map(
+                      (item) => DropdownItem<IssuingAuthority>(
+                        value: item,
+                        child: Text(
+                          item.name.toTitleCase(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
 
-                  if (newValue != null) {
-                    controller.selectedIssuingAuthority.value = newValue;
-                  }
+                valueListenable:
+                    controller.valueListenableOnSelectedIssuingAuthority,
+                validator: (value) => TemarLijeValidator.validateEmptyText(
+                  "Issuing Authority",
+                  value.toString(),
+                ),
+                onChanged: (value) {
+                  controller.selectedIssuingAuthority.value = value;
                 },
+                iconStyleData: const IconStyleData(
+                  icon: Icon(Icons.arrow_drop_down, color: Colors.black45),
+                ),
+                dropdownStyleData: DropdownStyleData(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                menuItemStyleData: const MenuItemStyleData(
+                  useDecorationHorizontalPadding: true,
+                ),
               ),
             ),
           ],
@@ -466,7 +497,6 @@ class KGStudentFormDialog extends StatelessWidget {
                   suffixIcon: Icon(Icons.calendar_today),
                   border: OutlineInputBorder(),
                 ),
-
                 onTap: () async {
                   final date = await showDatePicker(
                     context: Get.context!,
@@ -480,6 +510,8 @@ class KGStudentFormDialog extends StatelessWidget {
                     ).format(date);
                   }
                 },
+                validator: (value) =>
+                    TemarLijeValidator.validateEmptyText("Issue Date", value),
               ),
             ),
             const SizedBox(width: 12),
