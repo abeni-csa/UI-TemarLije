@@ -4,6 +4,7 @@ import 'package:ui_temarlije/data/repositories/authentication_repository.dart';
 import 'package:ui_temarlije/data/repositories/teacher_repository.dart';
 import 'package:ui_temarlije/data/repositories/user_repository.dart';
 import 'package:ui_temarlije/features/administrator/academic_year/academic_year_controller.dart';
+import 'package:ui_temarlije/features/administrator/student_management/kg/kg_students_controller.dart';
 import 'package:ui_temarlije/features/administrator/classroom/classroom_controller.dart';
 import 'package:ui_temarlije/features/administrator/school_org/global_school_controller.dart';
 import 'package:ui_temarlije/features/administrator/school_org/school_org_controller.dart';
@@ -17,6 +18,7 @@ import 'package:ui_temarlije/features/membership/membership_controllers.dart';
 import 'package:ui_temarlije/service/academic_year_service.dart';
 import 'package:ui_temarlije/service/classroom_sections_service.dart';
 import 'package:ui_temarlije/service/student_enrollment_service.dart';
+import 'package:ui_temarlije/service/student_service.dart';
 import 'package:ui_temarlije/service/subject_service.dart';
 import 'package:ui_temarlije/service/teacher_service.dart';
 import 'package:ui_temarlije/service/teachers_enrollment_service.dart';
@@ -87,6 +89,8 @@ class TemarLijeAppBindings extends Bindings {
     Get.put(GlobalSchoolController());
     Get.lazyPut<ClassroomController>(() => ClassroomController());
 
+    Get.put<StudentService>(StudentService());
+    Get.lazyPut<KGStudentsController>(() => KGStudentsController());
     Get.lazyPut<StudentEnrollmentService>(() => StudentEnrollmentService());
     Get.lazyPut<ClassroomService>(() => ClassroomService());
   }
