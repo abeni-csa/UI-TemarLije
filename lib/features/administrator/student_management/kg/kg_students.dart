@@ -4,15 +4,15 @@ import 'package:ui_temarlije/features/administrator/student_management/kg/respon
 import 'package:ui_temarlije/features/administrator/student_management/kg/responsive_screens/kg_students_mobile.dart';
 import 'package:ui_temarlije/features/administrator/student_management/kg/responsive_screens/kg_students_tablet.dart';
 
-class KgStudentsScreen extends StatelessWidget {
-  const KgStudentsScreen({super.key});
+class KGStudentsScreen extends StatelessWidget {
+  const KGStudentsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const TemarLijeSiteTemplate(
-      mobile: KgStudentsMobileScreen(),
-      tablet: KgStudentsTabletScreen(),
-      desktop: KgStudentsDesktopScreen(),
+      mobile: KGStudentsMobileScreen(),
+      tablet: KGStudentsTabletScreen(),
+      desktop: KGStudentsDesktopScreen(),
     );
   }
 }
