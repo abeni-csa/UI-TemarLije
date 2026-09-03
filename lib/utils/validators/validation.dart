@@ -12,19 +12,6 @@ class TemarLijeValidator {
     return null;
   }
 
-  static String? validatePinCode(String? pinCode) {
-    if (pinCode == null || pinCode.isEmpty) {
-      return 'Pin Code is required.';
-    }
-
-    // Check for minimum pinCode length
-    if (pinCode.length < 6) {
-      return 'Pin Code must be 6 Digits.';
-    }
-
-    return null;
-  }
-
   static String? validateAge(String? input) {
     if (input == null || input.isEmpty) {
       return 'Date of Birth is required.';

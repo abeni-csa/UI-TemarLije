@@ -98,3 +98,47 @@ enum SubjectTypeStream {
   // ignore: constant_identifier_names
   General, // For levels without streams
 }
+
+enum RegionalStatesAndCities {
+  // ignore: constant_identifier_names
+  AddisAbaba,
+  // ignore: constant_identifier_names
+  DireDawa,
+  // ignore: constant_identifier_names
+  AfarRegion,
+  // ignore: constant_identifier_names
+  AmharaRegion,
+  // ignore: constant_identifier_names
+  BenishangulGumuzRegion,
+  // ignore: constant_identifier_names
+  CentralEthiopiaRegionalState,
+  // ignore: constant_identifier_names
+  GambelaRegion,
+  // ignore: constant_identifier_names
+  HarariRegion,
+  // ignore: constant_identifier_names
+  OromiaRegion,
+  // ignore: constant_identifier_names
+  SidamaRegion,
+  // ignore: constant_identifier_names
+  SomaliRegion,
+  // ignore: constant_identifier_names
+  SouthEthiopiaRegion,
+  // ignore: constant_identifier_names
+  SouthWestEthiopiaPeoplesRegion,
+  // ignore: constant_identifier_names
+  TigrayRegion,
+}
+
+extension CamelToTitleCase on String {
+  String toTitleCase() {
+    if (isEmpty) return this;
+
+    String spaced = replaceAllMapped(
+      RegExp(r'(?<=[a-z])[A-Z]'),
+      (Match match) => ' ${match.group(0)}',
+    );
+
+    return spaced[0].toUpperCase() + spaced.substring(1);
+  }
+}

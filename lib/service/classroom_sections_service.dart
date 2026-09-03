@@ -85,9 +85,15 @@ class ClassroomService extends GetxService {
   }
 
   /// Delete a classroom
-  Future<void> deleteClassroom(String schoolId, String classroomId) async {
+  Future<void> deleteClassroom(
+    UuidValue schoolId,
+    String classroomId,
+    UuidValue academicYearId,
+  ) async {
     try {
-      await _dioClient.delete('/org/school/$schoolId/classroom/$classroomId');
+      await _dioClient.delete(
+        '/org/school/$schoolId/classroom/$academicYearId/classroom/$classroomId',
+      );
     } on DioException catch (e) {
       throw Exception('Failed to delete classroom: ${e.message}');
     }

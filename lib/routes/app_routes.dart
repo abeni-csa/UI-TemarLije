@@ -103,9 +103,9 @@ class TemarLijeAppRoutes {
       name: TemarLijeRoutes.schoolStudentAll,
       page: () => const StudentListScreen(),
     ),
-        GetPage(
+    GetPage(
       name: TemarLijeRoutes.schoolStudentKG,
-      page: () => const KgStudentsScreen(),
+      page: () => const KGStudentsScreen(),
     ),
     GetPage(
       name: TemarLijeRoutes.studentEnrollments,
