@@ -90,7 +90,10 @@ class TemarLijeAppBindings extends Bindings {
     Get.lazyPut<ClassroomController>(() => ClassroomController());
 
     Get.put<StudentService>(StudentService());
-    Get.lazyPut<KGStudentsController>(() => KGStudentsController());
+    Get.lazyPut<KGStudentsController>(
+      () => KGStudentsController(),
+      fenix: true,
+    );
     Get.lazyPut<StudentEnrollmentService>(() => StudentEnrollmentService());
     Get.lazyPut<ClassroomService>(() => ClassroomService());
   }

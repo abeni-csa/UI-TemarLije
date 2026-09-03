@@ -6,6 +6,40 @@ part of 'students.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+KGStudentRegistrationRequest _$KGStudentRegistrationRequestFromJson(
+  Map<String, dynamic> json,
+) => KGStudentRegistrationRequest(
+  firstName: json['first_name'] as String,
+  middleName: json['middle_name'] as String,
+  lastName: json['last_name'] as String,
+  dateOfBirth: DateTime.parse(json['date_of_birth'] as String),
+  phoneNumber: json['phone_number'] as String,
+  gender: json['gender'] as String,
+  guardianId: const UuidJsonConverter().fromJson(json['guardian_id'] as String),
+  nationalId: json['national_id'] as String?,
+  addressInfo: AddressInfo.fromJson(
+    json['address_info'] as Map<String, dynamic>,
+  ),
+  birthCertificate: BirthCertificate.fromJson(
+    json['birth_certificate'] as Map<String, dynamic>,
+  ),
+);
+
+Map<String, dynamic> _$KGStudentRegistrationRequestToJson(
+  KGStudentRegistrationRequest instance,
+) => <String, dynamic>{
+  'first_name': instance.firstName,
+  'middle_name': instance.middleName,
+  'last_name': instance.lastName,
+  'date_of_birth': instance.dateOfBirth.toIso8601String(),
+  'phone_number': instance.phoneNumber,
+  'guardian_id': const UuidJsonConverter().toJson(instance.guardianId),
+  'gender': instance.gender,
+  'national_id': instance.nationalId,
+  'address_info': instance.addressInfo,
+  'birth_certificate': instance.birthCertificate,
+};
+
 KGStudents _$KGStudentsFromJson(Map<String, dynamic> json) => KGStudents(
   id: const UuidJsonConverter().fromJson(json['id'] as String),
   firstName: json['first_name'] as String,
@@ -63,7 +97,7 @@ BirthCertificate _$BirthCertificateFromJson(Map<String, dynamic> json) =>
       ),
       originalCopy: json['original_copy'] as bool,
       photocopyProvided: json['photocopy_provided'] as bool,
-      issueDate: json['issue_date'] as String,
+      issueDate: DateTime.parse(json['issue_date'] as String),
     );
 
 Map<String, dynamic> _$BirthCertificateToJson(
@@ -73,7 +107,7 @@ Map<String, dynamic> _$BirthCertificateToJson(
   'issuing_authority': _$IssuingAuthorityEnumMap[instance.issuingAuthority]!,
   'original_copy': instance.originalCopy,
   'photocopy_provided': instance.photocopyProvided,
-  'issue_date': instance.issueDate,
+  'issue_date': instance.issueDate.toIso8601String(),
 };
 
 const _$IssuingAuthorityEnumMap = {

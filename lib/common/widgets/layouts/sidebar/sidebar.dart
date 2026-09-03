@@ -84,7 +84,7 @@ class TemarLijeSidebar extends StatelessWidget {
                       itemName: "Student Management",
                       children: [
                         TemarLijeMenuItem(
-                          route: '/student-management/all-students',
+                          route: TemarLijeRoutes.schoolStudentAll,
                           icon: Iconsax.profile_circle,
                           itemName: "All Students",
                           isSubmenu: true,
@@ -96,9 +96,15 @@ class TemarLijeSidebar extends StatelessWidget {
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: TemarLijeRoutes.classes,
-                          icon: Iconsax.building,
-                          itemName: "Classes",
+                          route: TemarLijeRoutes.schoolStudentKG,
+                          icon: Iconsax.user_add,
+                          itemName: "Kindergarten",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: 'TemarLijeRoutes.studentEnrollments',
+                          icon: Iconsax.user_add,
+                          itemName: "Unsigned Enrollments",
                           isSubmenu: true,
                         ),
                       ],
@@ -122,9 +128,15 @@ class TemarLijeSidebar extends StatelessWidget {
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: '/teacher-management/attendance',
+                          route: TemarLijeRoutes.toolAttendaceTrack,
                           icon: Iconsax.timer,
                           itemName: "Attendance",
+                          isSubmenu: true,
+                        ),
+                        TemarLijeMenuItem(
+                          route: TemarLijeRoutes.toolAttendaceTrack2,
+                          icon: Iconsax.arrow_swap_horizontal,
+                          itemName: "Subject Assignment",
                           isSubmenu: true,
                         ),
                       ],
@@ -204,13 +216,13 @@ class TemarLijeSidebar extends StatelessWidget {
                           isSubmenu: true,
                         ),
                         TemarLijeMenuItem(
-                          route: '/academics/subjects',
+                          route: TemarLijeRoutes.subjects,
                           icon: Iconsax.book_1,
                           itemName: "Subjects",
                           isSubmenu: true,
                         ), // academic_year
                         TemarLijeMenuItem(
-                          route: '/academics/grades',
+                          route: TemarLijeRoutes.classes,
                           icon: Iconsax.chart,
                           itemName: "Grades",
                           isSubmenu: true,

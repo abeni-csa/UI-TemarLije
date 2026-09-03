@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ui_temarlije/utils/helpers/uuid_json_converter.dart';
+import 'package:ui_temarlije/data/models/classroom.dart';
 import 'package:uuid/uuid.dart';
 
 part 'student_enrollment.g.dart';
@@ -100,7 +101,7 @@ class StudentEnrollmentWithDetails {
   final String sectionName;
   final String sectionCode;
   final String classroomName;
-  final String gradeLevel;
+  final GradeLevel gradeLevel;
   @UuidJsonConverter()
   final UuidValue academicYearId;
   final String yearRange;

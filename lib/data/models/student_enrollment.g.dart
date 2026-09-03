@@ -57,7 +57,7 @@ StudentEnrollmentWithDetails _$StudentEnrollmentWithDetailsFromJson(
   sectionName: json['section_name'] as String,
   sectionCode: json['section_code'] as String,
   classroomName: json['classroom_name'] as String,
-  gradeLevel: json['grade_level'] as String,
+  gradeLevel: $enumDecode(_$GradeLevelEnumMap, json['grade_level']),
   academicYearId: const UuidJsonConverter().fromJson(
     json['academic_year_id'] as String,
   ),
@@ -86,13 +86,21 @@ Map<String, dynamic> _$StudentEnrollmentWithDetailsToJson(
   'section_name': instance.sectionName,
   'section_code': instance.sectionCode,
   'classroom_name': instance.classroomName,
-  'grade_level': instance.gradeLevel,
+  'grade_level': _$GradeLevelEnumMap[instance.gradeLevel]!,
   'academic_year_id': const UuidJsonConverter().toJson(instance.academicYearId),
   'year_range': instance.yearRange,
   'enrollment_date': instance.enrollmentDate.toIso8601String(),
   'enrollment_status': _$EnrollmentStatusEnumMap[instance.enrollmentStatus]!,
   'created_at': instance.createdAt.toIso8601String(),
   'updated_at': instance.updatedAt.toIso8601String(),
+};
+
+const _$GradeLevelEnumMap = {
+  GradeLevel.kindergarten: 'Kindergarten',
+  GradeLevel.primary: 'Primary',
+  GradeLevel.secondary: 'Secondary',
+  GradeLevel.highSchool: 'HighSchool',
+  GradeLevel.preparatory: 'Preparatory',
 };
 
 EnrollmentSummary _$EnrollmentSummaryFromJson(Map<String, dynamic> json) =>

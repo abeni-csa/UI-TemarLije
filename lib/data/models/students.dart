@@ -4,6 +4,59 @@ import 'package:uuid/uuid.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'students.g.dart';
 
+// #[derive(Debug, Clone, Deserialize, Validate)]
+// pub struct KGStudentRegistrationRequest {
+//     #[validate(length(min = 3, max = 150, message = "First name is required"))]
+//     pub first_name: String,
+//     #[validate(length(min = 3, max = 150, message = "Last name is required"))]
+//     pub middle_name: String,
+//     #[validate(length(min = 3, max = 150, message = "Last name is required"))]
+//     pub last_name: String,
+//     pub date_of_birth: NaiveDate,
+//     #[validate(length(min = 9, max = 16, message = "Phone number is required"))]
+//     pub phone_number: String,
+//     #[validate(length(min = 3, max = 10, message = "Gender is required"))]
+//     pub gender: String,
+//     pub guardian_id: Uuid,
+//     pub national_id: Option<String>, // FIN or FAN
+//     pub address_info: sqlx::types::Json<AddressInfo>,
+//     pub birth_certificate: sqlx::types::Json<BirthCertificate>,
+// }
+
+@JsonSerializable(fieldRename: FieldRename.snake, createFactory: true)
+class KGStudentRegistrationRequest {
+  final String firstName;
+
+  final String middleName;
+
+  final String lastName;
+
+  final DateTime dateOfBirth; // Using String for NaiveDate (YYYY-MM-DD)
+  final String phoneNumber;
+  @UuidJsonConverter()
+  final UuidValue guardianId;
+  final String gender;
+  final String? nationalId;
+  final AddressInfo addressInfo;
+
+  final BirthCertificate birthCertificate;
+  KGStudentRegistrationRequest({
+    required this.firstName,
+    required this.middleName,
+    required this.lastName,
+    required this.dateOfBirth,
+    required this.phoneNumber,
+    required this.gender,
+    required this.guardianId,
+    this.nationalId,
+    required this.addressInfo,
+    required this.birthCertificate,
+  });
+  factory KGStudentRegistrationRequest.fromJson(Map<String, dynamic> json) =>
+      _$KGStudentRegistrationRequestFromJson(json);
+  Map<String, dynamic> toJson() => _$KGStudentRegistrationRequestToJson(this);
+}
+
 @JsonSerializable(fieldRename: FieldRename.snake, createFactory: true)
 class KGStudents {
   @UuidJsonConverter()
@@ -62,6 +115,18 @@ class KGStudents {
     required this.updatedAt,
   });
 
+  String get fullName =>
+      '$firstName ${middleName.isNotEmpty ? '$middleName  $lastName' : ''}';
+
+  String get initials {
+    if (fullName.isEmpty) return '';
+    final words = fullName.trim().split(RegExp(r'\s+'));
+    if (words.length > 1) {
+      return '${words[0][0]}${words[1][0]}'.toUpperCase();
+    }
+    return words[0][0].toUpperCase();
+  }
+
   factory KGStudents.fromJson(Map<String, dynamic> json) =>
       _$KGStudentsFromJson(json);
   Map<String, dynamic> toJson() => _$KGStudentsToJson(this);
@@ -77,7 +142,7 @@ class BirthCertificate {
 
   final bool photocopyProvided;
 
-  final String issueDate;
+  final DateTime issueDate;
 
   BirthCertificate({
     required this.certificateNumber,
