@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ui_temarlije/data/models/teacher.dart';
 import 'package:ui_temarlije/features/administrator/school_org/global_school_controller.dart';
 import 'package:uuid/uuid.dart';
-import 'package:ui_temarlije/data/models/membeship.dart';
 import 'package:ui_temarlije/service/teachers_enrollment_service.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
 
@@ -15,7 +15,9 @@ class EnrollmentsController extends GetxController {
   UuidValue? get schoolId => _schoolController.schoolId;
 
   // Observable state - use String for IDs instead of Uuid
-  final RxList<Membership> pendingRequests = <Membership>[].obs;
+  final RxList<TeacherWithMembership> pendingRequests =
+      <TeacherWithMembership>[].obs;
+  // final RxList<Membership> pendingRequests = <Membership>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
   final RxSet<Uuid> selectedIds = <Uuid>{}.obs; // Changed to String
@@ -233,7 +235,7 @@ class EnrollmentsController extends GetxController {
   }
 
   // Accept single request
-  Future<void> acceptSingleRequest(Membership request) async {
+  Future<void> acceptSingleRequest(dynamic request) async {
     // Show confirmation
     final confirm = await Get.dialog<bool>(
       AlertDialog(
@@ -260,7 +262,7 @@ class EnrollmentsController extends GetxController {
       isLoading.value = true;
       await _service.acceptRequest(
         schoolId!,
-        request.userId,
+        request.baseUserId,
         selectedAcademicYearId.value,
       );
       pendingRequests.remove(request);
@@ -286,7 +288,7 @@ class EnrollmentsController extends GetxController {
   }
 
   // Reject single request
-  Future<void> rejectSingleRequest(Membership request) async {
+  Future<void> rejectSingleRequest(dynamic request) async {
     final confirm = await Get.dialog<bool>(
       AlertDialog(
         backgroundColor: TemarLijeColors.lightBackground,

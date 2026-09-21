@@ -59,37 +59,6 @@ class SchoolOrganizationService extends GetxService {
   }
   // Add this method to SchoolOrganizationService class
 
-  Future<dynamic> joinSchoolWithData({
-    required Uuid schoolId,
-    required UserType membershipType,
-    required Map<String, dynamic> additionalData,
-  }) async {
-    try {
-      String endpoint;
-      switch (membershipType) {
-        case UserType.student:
-          endpoint = '/org/school/$schoolId/membership/join/student';
-          break;
-        case UserType.teacher:
-          endpoint = '/org/school/$schoolId/membership/join/teacher';
-          break;
-        case UserType.staff:
-          endpoint = '/org/school/$schoolId/membership/join/staff';
-          break;
-      }
-
-      // Merge additional data with user_id
-      final requestBody = {...additionalData};
-
-      final response = await _dioClient.post(endpoint, data: requestBody);
-      return response.data;
-    } catch (e) {
-      throw Exception(
-        'Failed to join as ${membershipType.toString().split('.').last}: $e',
-      );
-    }
-  }
-
   /// Retrieves a school organization by tenant ID
   Future<SchoolOrganzationModel?> getSchoolByTenantId(String tenantId) async {
     // if (!await _networkManager.checkConnectivity()) {
@@ -246,46 +215,6 @@ class SchoolOrganizationService extends GetxService {
     } on DioException catch (e) {
       if (kDebugMode) print('Error getting school: ${_handleError(e)}');
       return null;
-    }
-  }
-
-  // Membership endpoints
-  Future<Membership> joinSchool({
-    required Uuid schoolId,
-    required String userId,
-    required UserType membershipType,
-  }) async {
-    try {
-      String endpoint;
-      switch (membershipType) {
-        case UserType.student:
-          endpoint = '/school/$schoolId/members/join/student';
-          break;
-        case UserType.staff:
-          endpoint = '/school/$schoolId/members/join/staff';
-          break;
-        case UserType.teacher:
-          endpoint = '/school/$schoolId/members/join/teacher';
-          break;
-        default:
-          endpoint = '/school/$schoolId/members/join/student';
-      }
-
-      final request = MembershipRequest(
-        userId: userId,
-        membershipType: membershipType,
-      );
-
-      final response = await _dioClient.post(endpoint, data: request.toJson());
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = response.data;
-        final membershipData = data['created'] ?? data['membership'] ?? data;
-        return Membership.fromJson(membershipData);
-      }
-      throw Exception('Failed to join school');
-    } on DioException catch (e) {
-      throw _handleError(e);
     }
   }
 

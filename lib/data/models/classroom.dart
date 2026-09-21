@@ -30,7 +30,8 @@ enum KgClassType {
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Classroom {
-  final String id;
+  @UuidJsonConverter()
+  final UuidValue id;
   final String schoolId;
   final String academicYearId;
   final String createdBy;

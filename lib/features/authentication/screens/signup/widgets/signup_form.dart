@@ -4,6 +4,7 @@ import 'package:ui_temarlije/features/authentication/controllers/signup_controll
 import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/utils/constants/text_string.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:ui_temarlije/utils/validators/validation.dart';
 
 class TemarLijeSignupForm extends StatelessWidget {
   const TemarLijeSignupForm({super.key});
@@ -29,12 +30,10 @@ class TemarLijeSignupForm extends StatelessWidget {
                   prefixIcon: Icon(Iconsax.direct_right),
                   labelText: TemarLijeTexts.email,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email or username';
-                  }
-                  return null;
-                },
+                validator: (value) => TemarLijeValidator.validateEmptyText(
+                  TemarLijeTexts.email,
+                  value,
+                ),
               ),
               const SizedBox(height: 16),
               // Password field
@@ -57,13 +56,11 @@ class TemarLijeSignupForm extends StatelessWidget {
                     ),
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter password';
-                    }
-                    if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
-                    }
-                    return null;
+                    TemarLijeValidator.validatePassword(value);
+                    TemarLijeValidator.validateEmptyText(
+                      TemarLijeTexts.password,
+                      value,
+                    );
                   },
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:ui_temarlije/features/administrator/academic_year/academic_year_controller.dart';
 import 'package:ui_temarlije/features/administrator/student_management/kg/kg_students_controller.dart';
 import 'package:ui_temarlije/features/administrator/student_management/kg/widgets/kg_student_list.dart';
+import 'package:ui_temarlije/utils/constants/colors.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
 
 class KGStudentsView extends StatelessWidget {
@@ -89,34 +90,106 @@ class KGStudentsView extends StatelessWidget {
               ),
             ),
 
-          const SizedBox(height: TemarLijeSizes.spaceBtwSections),
+          const SizedBox(height: TemarLijeSizes.spaceBtwItems),
 
           // Add Student Button
           if (academicController.currentAcademicYear.value != null) ...[
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: controller.showCreateForm,
-                icon: const Icon(Icons.add, color: Colors.white),
-                label: const Text(
-                  'Register New KG Student',
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 12.0,
+                horizontal: 8.0,
+              ),
+              child: Wrap(
+                spacing: 16.0, // Horizontal gap between buttons
+                runSpacing: 12.0, // Vertical gap if buttons wrap to a new line
+                alignment: WrapAlignment.start,
+                children: [
+                  _buildActionButton(
+                    label: 'Register New KG Student',
+                    icon: Icons.person_add_alt_1_rounded,
+                    onPressed: controller.showCreateForm,
+                    background: Colors.blueAccent,
+                    foreground: Colors.white,
                   ),
-                ),
+                  _buildActionButton(
+                    label: 'Enroll To Classes',
+                    icon: Icons.school_rounded,
+                    onPressed: () {
+                      // GO TO Student Distribution and enrollments page
+                    },
+                    background: TemarLijeColors.success,
+                    foreground: TemarLijeColors.red,
+                  ),
+                  _buildActionButton(
+                    label: 'Enroll To Classes',
+                    icon: Icons.school_rounded,
+                    onPressed: () {
+                      // GO TO Student Distribution and enrollments page
+                    },
+                    background: TemarLijeColors.absent,
+                    foreground: TemarLijeColors.warning,
+                  ),
+                  _buildActionButton(
+                    label: 'Enroll To Classes',
+                    icon: Icons.school_rounded,
+                    onPressed: () {
+                      // GO TO Student Distribution and enrollments page
+                    },
+                    background: TemarLijeColors.absent,
+                    foreground: TemarLijeColors.warning,
+                  ),
+                  _buildActionButton(
+                    label: 'Register New KG Student',
+                    icon: Icons.person_add_alt_1_rounded,
+                    onPressed: controller.showCreateForm,
+                    background: Colors.blueAccent,
+                    foreground: Colors.white,
+                  ),
+                  _buildActionButton(
+                    label: 'Register KG Student',
+                    icon: Icons.person_add_alt_1_rounded,
+                    onPressed: controller.showCreateForm,
+                    background: Colors.blueAccent,
+                    foreground: Colors.white,
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: TemarLijeSizes.spaceBtwSections),
-
-            // Student List
-            const KGStudentList(),
           ],
+          const SizedBox(height: TemarLijeSizes.spaceBtwItems),
+          // Student List
+          const KGStudentList(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onPressed,
+    required Color background,
+    required Color foreground,
+  }) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, color: Colors.white, size: 20),
+      label: Text(
+        label,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.5,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: background,
+        foregroundColor: foreground,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), // Modern rounded corners
+        ),
       ),
     );
   }

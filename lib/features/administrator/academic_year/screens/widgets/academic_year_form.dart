@@ -1,4 +1,3 @@
-// lib/features/administrator/academic_year/screens/widgets/academic_year_form.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -130,12 +129,8 @@ class AcademicYearFormDialog extends StatelessWidget {
                       ).format(date);
                     }
                   },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select start date';
-                    }
-                    return null;
-                  },
+                  validator: (value) =>
+                      TemarLijeValidator.validateEmptyText("Start Date", value),
                 ),
                 const SizedBox(height: 16),
 
@@ -166,12 +161,8 @@ class AcademicYearFormDialog extends StatelessWidget {
                       ).format(date);
                     }
                   },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select end date';
-                    }
-                    return null;
-                  },
+                  validator: (value) =>
+                      TemarLijeValidator.validateEmptyText("End Date", value),
                 ),
                 const SizedBox(height: 16),
 
@@ -188,7 +179,7 @@ class AcademicYearFormDialog extends StatelessWidget {
                     onChanged: (value) {
                       controller.isCurrentController.value = value;
                     },
-                    activeColor: TemarLijeColors.primary,
+                    activeThumbColor: TemarLijeColors.primary,
                     contentPadding: EdgeInsets.zero,
                   ),
                 ),

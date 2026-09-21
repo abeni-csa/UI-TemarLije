@@ -79,11 +79,12 @@ class MembershipControllers extends GetxController {
     _isLoading.value = true;
     _error = null;
     try {
-      await _schoolOrganizationService.joinSchoolWithData(
-        schoolId: schoolId,
-        membershipType: membershipType,
-        additionalData: additionalData,
-      );
+      // await _schoolOrganizationService.joinSchoolWithData(
+      //   schoolId: schoolId,
+      //   membershipType: membershipType,
+      //   additionalData: additionalData,
+      // );
+      UnimplementedError;
       _isLoading.value = false;
     } catch (e) {
       _error = e.toString();
@@ -143,26 +144,28 @@ class MembershipControllers extends GetxController {
     String? academicYearId,
   }) async {
     switch (membershipType) {
-      case UserType.student:
+      case UserType.Student:
         await joinSchoolAsStudent(
           schoolId: schoolId,
           userId: userId,
           academicYearId: academicYearId,
         );
         break;
-      case UserType.teacher:
+      case UserType.Teacher:
         await joinSchoolAsTeacher(
           schoolId: schoolId,
           userId: userId,
           academicYearId: academicYearId,
         );
         break;
-      case UserType.staff:
+      case UserType.Librarian:
         await joinSchoolAsStaff(
           schoolId: schoolId,
           userId: userId,
           academicYearId: academicYearId,
         );
+        break;
+      default:
         break;
     }
   }

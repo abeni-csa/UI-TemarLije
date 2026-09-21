@@ -1,4 +1,3 @@
-// features/administrator/student_management/enrollments/enrollments.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ui_temarlije/common/widgets/layouts/template/site_layout.dart';

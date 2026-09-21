@@ -232,6 +232,7 @@
 // }
 import 'package:get/get.dart';
 import 'package:ui_temarlije/data/models/membeship.dart';
+import 'package:ui_temarlije/data/models/teacher.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
 import 'package:uuid/uuid.dart';
 
@@ -239,18 +240,22 @@ class TeachersEnrollmentService extends GetxService {
   final DioClient _dioClient = Get.find<DioClient>();
 
   // Fetch pending enrollment requests
-  Future<List<Membership>> getPendingRequests(dynamic schoolId) async {
+  Future<List<TeacherWithMembership>> getPendingRequests(
+    dynamic schoolId,
+  ) async {
     try {
       // http://127.0.0.1:57000/api/v1/org/school/015cb15a-86d8-7052-8376-15ec5d6bc8d3/members/pending-requests
       final response = await _dioClient.get(
-        '/org/school/$schoolId/members/pending-requests',
+        '/org/school/$schoolId/members/teachers/pending',
       );
       print('Going To URL [+] ${(response.realUri.toString())} ');
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
         print(data.toString());
-        return data.map((json) => Membership.fromJson(json)).toList();
+        return data
+            .map((json) => TeacherWithMembership.fromJson(json))
+            .toList();
       } else {
         throw Exception(
           'Failed to load pending requests: ${response.statusCode}',

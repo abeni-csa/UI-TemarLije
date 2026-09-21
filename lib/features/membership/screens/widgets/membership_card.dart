@@ -131,7 +131,7 @@ class SchoolMembershipCard extends StatelessWidget {
   }
 
   void _showJoinDialog(BuildContext context, MembershipControllers controller) {
-    UserType? selectedRole = UserType.student;
+    UserType? selectedRole = UserType.Student;
     String? selectedGradeLevel;
     String? selectedPosition;
     double? testScore;
@@ -179,7 +179,7 @@ class SchoolMembershipCard extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // Student-specific fields
-                if (selectedRole == UserType.student) ...[
+                if (selectedRole == UserType.Student) ...[
                   const Text(
                     'Student Information',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
@@ -221,7 +221,7 @@ class SchoolMembershipCard extends StatelessWidget {
                             });
                           },
                     validator: (value) {
-                      if (selectedRole == UserType.student && value == null) {
+                      if (selectedRole == UserType.Student && value == null) {
                         return 'Please select grade level';
                       }
                       return null;
@@ -247,7 +247,7 @@ class SchoolMembershipCard extends StatelessWidget {
                 ],
 
                 // Teacher-specific fields
-                if (selectedRole == UserType.teacher) ...[
+                if (selectedRole == UserType.Teacher) ...[
                   const Text(
                     'Teacher Information',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
@@ -315,7 +315,7 @@ class SchoolMembershipCard extends StatelessWidget {
                 ],
 
                 // Staff-specific fields
-                if (selectedRole == UserType.staff) ...[
+                if (selectedRole == UserType.FinanceAccountant) ...[
                   const Text(
                     'Staff Information',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
@@ -381,7 +381,7 @@ class SchoolMembershipCard extends StatelessWidget {
                   ? null
                   : () async {
                       // Validate student fields
-                      if (selectedRole == UserType.student &&
+                      if (selectedRole == UserType.Student &&
                           selectedGradeLevel == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -406,18 +406,18 @@ class SchoolMembershipCard extends StatelessWidget {
                         };
 
                         // Add role-specific fields
-                        if (selectedRole == UserType.student) {
+                        if (selectedRole == UserType.Student) {
                           requestData['requested_grade_level'] =
                               selectedGradeLevel!;
                           if (testScore != null) {
                             requestData['test_score'] = testScore as String;
                           }
-                        } else if (selectedRole == UserType.teacher) {
+                        } else if (selectedRole == UserType.Teacher) {
                           requestData['subject_specialization'] =
                               selectedPosition ?? 'General';
                           requestData['years_of_experience'] =
                               0 as String; // You can add this from the text field
-                        } else if (selectedRole == UserType.staff) {
+                        } else if (selectedRole == UserType.Parent) {
                           requestData['department'] =
                               selectedPosition ?? 'General Staff';
                           requestData['role'] = selectedPosition ?? 'Staff';

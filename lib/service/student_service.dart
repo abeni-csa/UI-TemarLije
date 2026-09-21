@@ -64,52 +64,6 @@ class StudentService extends GetxService {
     }
   }
 
-  Future<KGStudents> createKgStudentsss({
-    required KGStudentRegistrationRequest kgStudent,
-    required UuidValue schoolId,
-    required String academicYearId,
-  }) async {
-    final requestData = <String, dynamic>{
-      "first_name": kgStudent.firstName,
-      "middle_name": kgStudent.middleName,
-      "last_name": kgStudent.lastName,
-      "date_of_birth": kgStudent.dateOfBirth.toIso8601String().split('T')[0],
-      "phone_number": kgStudent.phoneNumber,
-      "gender": kgStudent.gender,
-      "guardian_id": kgStudent.guardianId,
-      "national_id": kgStudent.nationalId,
-      "address_info": {
-        "region": kgStudent.addressInfo.region,
-        "zone": kgStudent.addressInfo.zone,
-        "city": kgStudent.addressInfo.city,
-        "kebele_no": kgStudent.addressInfo.kebeleNo,
-      },
-      "birth_certificate": {
-        "certificate_number": kgStudent.birthCertificate.certificateNumber,
-        "issuing_authority": kgStudent.birthCertificate.issuingAuthority,
-        "original_copy": kgStudent.birthCertificate.originalCopy,
-        "photocopy_provided": kgStudent.birthCertificate.photocopyProvided,
-        "issue_date": kgStudent.birthCertificate.issueDate
-            .toIso8601String()
-            .split('T')[0],
-      },
-    };
-    debugPrint('Request JSON being sent: ${jsonEncode(requestData)}');
-    try {
-      final response = await _dioClient.post(
-        '/org/school/$schoolId/members/$academicYearId/kg',
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return KGStudents.fromJson(response.data);
-      } else {
-        throw Exception('Failed to enroll student: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error enrolling student: $e');
-    }
-  }
-
   // Get KG Students by Academic Year
   Future<List<KGStudents>> getKGStudents({
     required UuidValue schoolId,

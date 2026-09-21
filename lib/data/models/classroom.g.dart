@@ -7,7 +7,7 @@ part of 'classroom.dart';
 // **************************************************************************
 
 Classroom _$ClassroomFromJson(Map<String, dynamic> json) => Classroom(
-  id: json['id'] as String,
+  id: const UuidJsonConverter().fromJson(json['id'] as String),
   schoolId: json['school_id'] as String,
   academicYearId: json['academic_year_id'] as String,
   createdBy: json['created_by'] as String,
@@ -22,7 +22,7 @@ Classroom _$ClassroomFromJson(Map<String, dynamic> json) => Classroom(
 );
 
 Map<String, dynamic> _$ClassroomToJson(Classroom instance) => <String, dynamic>{
-  'id': instance.id,
+  'id': const UuidJsonConverter().toJson(instance.id),
   'school_id': instance.schoolId,
   'academic_year_id': instance.academicYearId,
   'created_by': instance.createdBy,

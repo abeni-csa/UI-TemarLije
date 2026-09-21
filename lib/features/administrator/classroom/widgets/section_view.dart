@@ -4,7 +4,10 @@ import 'package:ui_temarlije/common/widgets/data_table/table_action.dart';
 import 'package:ui_temarlije/data/models/classroom.dart';
 import 'package:ui_temarlije/data/models/section.dart';
 import 'package:ui_temarlije/features/administrator/classroom/classroom_controller.dart';
+import 'package:ui_temarlije/features/administrator/section_management/section_management.dart';
 import 'package:ui_temarlije/utils/constants/colors.dart';
+import 'package:ui_temarlije/utils/validators/validation.dart';
+import 'package:ui_temarlije/utils/constants/sizes.dart';
 
 class SectionView extends StatelessWidget {
   final Classroom classroom;
@@ -44,10 +47,39 @@ class SectionView extends StatelessWidget {
                 ),
               ),
               const Spacer(),
+              OutlinedButton(
+                onPressed: () => {_showCreateSectionDialog()},
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: TemarLijeColors.googleForegroundColor,
+                  side: BorderSide(
+                    color: TemarLijeColors.facebookBackgroundColor,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text('Add Section'),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.refresh,
+                  color: TemarLijeColors.present,
+                  size: 20,
+                ),
+                // onPressed: () =>
+                //     classroomController.loadSectionsForClassroom(classroom.id),
+                onPressed: classroomController.loadClassrooms,
+              ),
               IconButton(
                 icon: const Icon(Icons.close, size: 20),
-                onPressed: () =>
-                    classroomController.selectedClassroom.value = null,
+                onPressed: () => {
+                  classroomController.selectedClassroom.value = null,
+                  // _showCreateSectionDialog(),
+                },
               ),
             ],
           ),
@@ -111,7 +143,7 @@ class SectionView extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Show dialog to create sections
-                _showCreateSectionDialog();
+                // _showCreateSectionDialog();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: TemarLijeColors.primary,
@@ -150,6 +182,7 @@ class SectionView extends StatelessWidget {
         const SizedBox(height: 8),
         // Section items
         ...sections.map((section) => _buildSectionItem(section)),
+        const SizedBox(height: TemarLijeSizes.spaceBtwItems),
       ],
     );
   }
@@ -219,8 +252,9 @@ class SectionView extends StatelessWidget {
               view: true,
               delete: false,
               onEditPressed: () => {},
+
               onViewPressed: () =>
-                  {}, //Get.toNamed(TemarLijeRoutes.teacherDetails),
+                  Get.to(() => SectionManagement(section: section)),
             ),
           ),
         ],
@@ -262,90 +296,124 @@ class SectionView extends StatelessWidget {
     );
   }
 
-  void _showCreateBulkSectionDialog() {
-    // Implement section creation dialog
-    final classroomController = Get.find<ClassroomController>();
-
-    Get.dialog(
-      AlertDialog(
-        backgroundColor: TemarLijeColors.cardBackgroundColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Create Sections'),
-        content: Obx(
-          () => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Number of sections to create:'),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.remove),
-                    onPressed: () => classroomController.numberOfSection - 1,
-                  ),
-                  Text('${classroomController.numberOfSection.value}'),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () => classroomController.numberOfSection + 1,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
-          ElevatedButton(
-            onPressed: () => Get.back(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: TemarLijeColors.primary,
-            ),
-            child: const Text('Create'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showCreateSectionDialog() {
-    // Implement section creation dialog
-    final classroomController = Get.find<ClassroomController>();
+    final controller = Get.find<ClassroomController>();
+    // Reset the form
+    controller.sectionNameController.clear();
+    controller.capacityController.text = '45';
+    controller.roomTeacherIdController.clear();
 
     Get.dialog(
       AlertDialog(
         backgroundColor: TemarLijeColors.cardBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Create Sections'),
-        content: Obx(
-          () => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Number of sections to create:'),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.remove),
-                    onPressed: () => classroomController.numberOfSection - 1,
+        title: const Text('Create Section'),
+        content: SizedBox(
+          width: 400,
+          child: Form(
+            key: controller.formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: controller.sectionNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Section Name *',
+                    hintText: 'e.g., Section A, Class 1A',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                   ),
-                  Text('${classroomController.numberOfSection.value}'),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () => classroomController.numberOfSection + 1,
+                  validator: (value) {
+                    TemarLijeValidator.validateEmptyText("Section name", value);
+                    if (value == null || value.trim().length < 2) {
+                      return 'Section name must be at least 2 characters';
+                    }
+                    if (value.trim().length > 50) {
+                      return 'Section name must be less than 50 characters';
+                    }
+                    // Only allow letters, numbers, and spaces
+                    if (!RegExp(r'^[a-zA-Z0-9\s]+$').hasMatch(value.trim())) {
+                      return 'Only letters, numbers, and spaces allowed';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: controller.capacityController,
+                  decoration: const InputDecoration(
+                    labelText: 'Capacity *',
+                    hintText: 'Maximum students (1-80)',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                   ),
-                ],
-              ),
-            ],
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Capacity is required';
+                    }
+                    final capacity = int.tryParse(value.trim());
+                    if (capacity == null) {
+                      return 'Please enter a valid number';
+                    }
+                    if (capacity < 1 || capacity > 80) {
+                      return 'Capacity must be between 1 and 80';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: controller.roomTeacherIdController,
+                  decoration: const InputDecoration(
+                    labelText: 'Room Teacher ID (Optional)',
+                    hintText: 'Enter teacher ID or leave empty',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
-          ElevatedButton(
-            onPressed: () => Get.back(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: TemarLijeColors.primary,
+          TextButton(
+            onPressed: () => Navigator.pop(Get.context!),
+            child: const Text('Cancel'),
+          ),
+          Obx(
+            () => ElevatedButton(
+              onPressed: controller.isGenerating.value
+                  ? null
+                  : () {
+                      if (controller.formKey.currentState?.validate() ??
+                          false) {
+                        controller.createSingleSection();
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: TemarLijeColors.primary,
+              ),
+              child: controller.isGenerating.value
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : const Text('Create Section'),
             ),
-            child: const Text('Create'),
           ),
         ],
       ),

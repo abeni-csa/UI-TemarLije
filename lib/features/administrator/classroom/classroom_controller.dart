@@ -22,13 +22,14 @@ class ClassroomController extends GetxController {
   final RxList<Classroom> classrooms = <Classroom>[].obs;
   final RxMap<GradeLevel, List<Classroom>> groupedClassrooms =
       <GradeLevel, List<Classroom>>{}.obs;
-  final RxMap<String, List<Section>> sectionsByClassroom =
-      <String, List<Section>>{}.obs;
+  final RxMap<UuidValue, List<Section>> sectionsByClassroom =
+      <UuidValue, List<Section>>{}.obs;
   final RxBool isLoading = false.obs;
   final RxBool isGenerating = false.obs;
   final RxString error = ''.obs;
   final Rx<GradeLevel?> selectedGradeLevel = Rx<GradeLevel?>(null);
 
+  final RxBool isGeneratingAll = false.obs;
   // Selected classroom for section view
   final Rx<Classroom?> selectedClassroom = Rx<Classroom?>(null);
   // Number of section
@@ -43,6 +44,11 @@ class ClassroomController extends GetxController {
   final RxInt defaultCapacity = 45.obs;
   final RxString selectedNamingPattern =
       'sequential'.obs; // 'sequential' or 'alpha'
+
+  // Controllers for form (single-section) fields
+  final TextEditingController sectionNameController = TextEditingController();
+  final TextEditingController capacityController = TextEditingController();
+  final TextEditingController roomTeacherIdController = TextEditingController();
 
   // Form controllers for bulk sections
   late final TextEditingController sectionsPerClassroomController;
@@ -60,6 +66,7 @@ class ClassroomController extends GetxController {
   };
 
   UuidValue? get schoolId => _schoolController.schoolId;
+  UuidValue? get selectedCS => _schoolController.schoolId;
   AcademicYear? get currentAcademicYear =>
       _academicYearController.currentAcademicYear.value;
 
@@ -176,13 +183,34 @@ class ClassroomController extends GetxController {
     }
   }
 
+  // Delete KG Student
+  Future<void> deleteClassroom(Classroom classroom) async {
+    if (schoolId == null || currentAcademicYear == null) return;
+    try {
+      isLoading.value = true;
+      await _classroomService.deleteClassroom(
+        schoolId!,
+        classroom.id,
+        currentAcademicYear!.id,
+      );
+      classrooms.remove(classroom);
+
+      update();
+      _showSuccess('${classroom.gradeDisplay} deleted successfully!');
+      loadClassrooms();
+    } catch (e) {
+      _showError('Failed to delete classroom : $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   /// Generate classrooms for a grade level
   Future<void> generateClassrooms(
     GradeLevel gradeLevel,
     int displayOrderOffset,
   ) async {
-    print(currentAcademicYear.toString());
-    print('Current ID${currentAcademicYear!.id}');
+    debugPrint('Current ID${currentAcademicYear!.id}');
     if (schoolId == null || currentAcademicYear == null) {
       _showError('No school or academic year selected');
       return;
@@ -211,13 +239,76 @@ class ClassroomController extends GetxController {
     }
   }
 
-  /// Generate classrooms for a grade level
-  Future<void> generateSectionsForClassrooms(
-    GradeLevel gradeLevel,
-    int displayOrderOffset,
-  ) async {
-    print(currentAcademicYear.toString());
-    print('Current ID${currentAcademicYear!.id}');
+  // In classroom_controller.dart
+
+  Future<void> createSingleSection() async {
+    debugPrint(
+      'Creating section for classroom: ${selectedClassroom.value?.id}',
+    );
+
+    if (schoolId == null || currentAcademicYear == null) {
+      _showError('No school or academic year selected');
+      return;
+    }
+
+    if (selectedClassroom.value == null) {
+      _showError('No classroom selected');
+      return;
+    }
+
+    // Validate inputs
+    final name = sectionNameController.text.trim();
+    if (name.isEmpty) {
+      _showError('Section name is required');
+      return;
+    }
+
+    final capacity = int.tryParse(capacityController.text);
+    if (capacity == null || capacity < 1 || capacity > 80) {
+      _showError('Capacity must be between 1 and 80');
+      return;
+    }
+
+    isGenerating.value = true;
+    error.value = '';
+
+    try {
+      final sectionRequest = SectionRequest(
+        classroomId: selectedClassroom.value!.id,
+        academicYearId: currentAcademicYear!.id,
+        sectionName: name,
+        capacity: capacity,
+        roomTeacherId: roomTeacherIdController.text.isNotEmpty
+            ? UuidValue.raw(roomTeacherIdController.text)
+            : null,
+      );
+      await _classroomService.createSection(
+        schoolId!,
+        currentAcademicYear!.id,
+        sectionRequest,
+      );
+
+      // Clear the form
+      sectionNameController.clear();
+      capacityController.clear();
+      roomTeacherIdController.clear();
+
+      // Reload sections for this classroom
+      // loadSectionsForClassroom(selectedClassroom.value!.id);
+      _showSuccess('Section "$name" created successfully!');
+
+      Navigator.pop(Get.context!); // Close dialog if it's open
+      update();
+    } catch (e) {
+      error.value = e.toString();
+      _showError(error.value);
+    } finally {
+      isGenerating.value = false;
+    }
+  }
+
+  Future<void> createSingleSectionOld() async {
+    debugPrint('Current ID${currentAcademicYear!.id}');
     if (schoolId == null || currentAcademicYear == null) {
       _showError('No school or academic year selected');
       return;
@@ -227,17 +318,19 @@ class ClassroomController extends GetxController {
     error.value = '';
 
     try {
-      final request = CreateClassroomRequest(
+      final SectionRequest sectionRequest = SectionRequest(
         academicYearId: currentAcademicYear!.id,
-        gradeLevel: gradeLevel,
-        displayOrderOffset: displayOrderOffset,
-        capacity: 45,
-        createKgTypes: gradeLevel == GradeLevel.kindergarten,
+        capacity: capacityController.value as int,
+        classroomId: selectedClassroom.value!.id,
+        sectionName: sectionNameController.text,
       );
-
-      await _classroomService.generateClassrooms(schoolId!, request);
+      await _classroomService.createSection(
+        schoolId!,
+        currentAcademicYear!.id,
+        sectionRequest,
+      );
       await loadClassrooms();
-      _showSuccess('${_getGradeLevelDisplay(gradeLevel)} classrooms created!');
+      _showSuccess('Section created successfully!');
     } catch (e) {
       error.value = e.toString();
       _showError(error.value);
@@ -247,7 +340,7 @@ class ClassroomController extends GetxController {
   }
 
   /// Load sections for a specific classroom
-  Future<void> loadSectionsForClassroom(String classroomId) async {
+  Future<void> loadSectionsForClassroom(UuidValue classroomId) async {
     if (schoolId == null) return;
 
     try {
@@ -258,13 +351,13 @@ class ClassroomController extends GetxController {
       sectionsByClassroom[classroomId] = sections;
       update();
     } catch (e) {
-      print('Error loading sections: $e');
+      debugPrint('Error loading sections: $e');
     }
   }
 
   /// Get sections for a classroom (cached or loaded)
-  Future<List<Section>> getSectionsForClassroom(String classroomId) async {
-    if (!sectionsByClassroom.containsKey(classroomId)) {
+  Future<List<Section>> getSectionsForClassroom(UuidValue classroomId) async {
+    if (!sectionsByClassroom.containsKey(classroomId.toString())) {
       await loadSectionsForClassroom(classroomId);
     }
     return sectionsByClassroom[classroomId] ?? [];
@@ -320,8 +413,8 @@ class ClassroomController extends GetxController {
           TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
-              Get.back();
               _generateWithOffset(gradeLevel);
+              Navigator.pop(Get.context!);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: TemarLijeColors.primary,
@@ -346,6 +439,66 @@ class ClassroomController extends GetxController {
         );
       }).toList(),
     );
+  }
+
+  // method to generate all classrooms
+  Future<void> generateAllClassrooms() async {
+    if (schoolId == null || currentAcademicYear == null) {
+      _showError('No school or academic year selected');
+      return;
+    }
+
+    isGeneratingAll.value = true;
+    error.value = '';
+
+    try {
+      // Generate for each grade level
+      final offsetMap = {
+        GradeLevel.kindergarten: 1,
+        GradeLevel.primary: 4,
+        GradeLevel.secondary: 10,
+        GradeLevel.highSchool: 12,
+        GradeLevel.preparatory: 14,
+      };
+
+      int successCount = 0;
+      for (final entry in offsetMap.entries) {
+        try {
+          final request = CreateClassroomRequest(
+            academicYearId: currentAcademicYear!.id,
+            gradeLevel: entry.key,
+            displayOrderOffset: entry.value,
+            capacity: 45,
+            createKgTypes: entry.key == GradeLevel.kindergarten,
+          );
+
+          await _classroomService.generateClassrooms(schoolId!, request);
+          successCount++;
+          debugPrint(successCount.toString());
+        } catch (e) {
+          debugPrint('Failed to generate ${entry.key}: $e');
+        }
+      }
+
+      await loadClassrooms();
+      _showSuccess(
+        '$successCount/${offsetMap.length} grade levels generated successfully!',
+      );
+    } catch (e) {
+      error.value = e.toString();
+      _showError(error.value);
+    } finally {
+      isGeneratingAll.value = false;
+    }
+  }
+
+  // Add this method to get all grade levels with their classroom count
+  Map<GradeLevel, int> getClassroomCountByLevel() {
+    final Map<GradeLevel, int> counts = {};
+    for (final level in GradeLevel.values) {
+      counts[level] = groupedClassrooms[level]?.length ?? 0;
+    }
+    return counts;
   }
 
   List<String> _getGradeLevels(GradeLevel level) {

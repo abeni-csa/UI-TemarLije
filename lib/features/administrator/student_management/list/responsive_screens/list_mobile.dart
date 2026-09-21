@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:ui_temarlije/common/widgets/breadcrumbs/breadcrumbs_with_heading.dart';
 import 'package:ui_temarlije/features/administrator/student_management/enrollments/enrollments_controller.dart';
 import 'package:ui_temarlije/features/administrator/student_management/list/widgets/enrollment_card.dart';
-import 'package:ui_temarlije/features/administrator/student_management/list/widgets/enrollment_filters.dart';
 import 'package:ui_temarlije/features/administrator/student_management/list/widgets/enrollment_stats.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
@@ -33,7 +32,6 @@ class EnrollmentsMobileScreen extends StatelessWidget {
             () => EnrollmentStats(
               stats: controller.getStatistics(),
               isLoading: controller.isLoading.value,
-              isMobile: true,
             ),
           ),
           const SizedBox(height: TemarLijeSizes.spaceBtwSections),

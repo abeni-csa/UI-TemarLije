@@ -50,6 +50,35 @@ Json? _$JsonConverterToJson<Json, Value>(
   Json? Function(Value value) toJson,
 ) => value == null ? null : toJson(value);
 
+SectionRequest _$SectionRequestFromJson(Map<String, dynamic> json) =>
+    SectionRequest(
+      classroomId: const UuidJsonConverter().fromJson(
+        json['classroom_id'] as String,
+      ),
+      sectionName: json['section_name'] as String,
+      capacity: (json['capacity'] as num).toInt(),
+      roomTeacherId: _$JsonConverterFromJson<String, UuidValue>(
+        json['room_teacher_id'],
+        const UuidJsonConverter().fromJson,
+      ),
+      academicYearId: const UuidJsonConverter().fromJson(
+        json['academic_year_id'] as String,
+      ),
+    );
+
+Map<String, dynamic> _$SectionRequestToJson(
+  SectionRequest instance,
+) => <String, dynamic>{
+  'classroom_id': const UuidJsonConverter().toJson(instance.classroomId),
+  'section_name': instance.sectionName,
+  'capacity': instance.capacity,
+  'room_teacher_id': _$JsonConverterToJson<String, UuidValue>(
+    instance.roomTeacherId,
+    const UuidJsonConverter().toJson,
+  ),
+  'academic_year_id': const UuidJsonConverter().toJson(instance.academicYearId),
+};
+
 BulkSectionRequest _$BulkSectionRequestFromJson(Map<String, dynamic> json) =>
     BulkSectionRequest(
       schoolId: const UuidJsonConverter().fromJson(json['school_id'] as String),

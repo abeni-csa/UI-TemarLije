@@ -8,17 +8,18 @@ class EnrollmentsDataTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tableSource = EnrollmentsTableSource();
+
     return TemarLijePaginatedDataTable(
       columns: const [
-        DataColumn2(label: Text('Student')),
+        DataColumn2(label: Text('Student'), fixedWidth: 200),
         DataColumn2(label: Text('Section')),
-        DataColumn2(label: Text('Classroom')),
         DataColumn2(label: Text('Grade')),
         DataColumn2(label: Text('Status')),
         DataColumn2(label: Text('Date')),
         DataColumn2(label: Text('Actions'), fixedWidth: 120),
       ],
-      source: EnrollmentsTableSource(),
+      source: tableSource,
     );
   }
 }

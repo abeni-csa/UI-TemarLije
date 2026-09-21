@@ -11,7 +11,16 @@ class AcademicYearDesktopTabletScreen extends StatelessWidget {
       padding: EdgeInsetsGeometry.all(TemarLijeSizes.defaultSpace),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [AcademicYearView()],
+        children: [
+          AcademicYearView(),
+
+          ChoiceChip(
+            label: Text("TEsting"),
+            selected: true,
+            selectedColor: Colors.blueGrey,
+            backgroundColor: Colors.grey,
+          ),
+        ],
       ),
     );
   }

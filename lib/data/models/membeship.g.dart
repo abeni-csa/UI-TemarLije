@@ -104,9 +104,14 @@ Value? _$JsonConverterFromJson<Json, Value>(
 ) => json == null ? null : fromJson(json as Json);
 
 const _$UserTypeEnumMap = {
-  UserType.student: 'student',
-  UserType.staff: 'staff',
-  UserType.teacher: 'teacher',
+  UserType.Student: 'Student',
+  UserType.PlaceHolder: 'PlaceHolder',
+  UserType.Parent: 'Parent',
+  UserType.Teacher: 'Teacher',
+  UserType.FinanceAccountant: 'FinanceAccountant',
+  UserType.Librarian: 'Librarian',
+  UserType.SchoolAdmin: 'SchoolAdmin',
+  UserType.Root: 'Root',
 };
 
 const _$MembershipStatusEnumMap = {

@@ -1,4 +1,3 @@
-// lib/features/administrator/classroom/screens/classroom_screens.dart
 import 'package:flutter/material.dart';
 import 'package:ui_temarlije/common/widgets/layouts/template/site_layout.dart';
 import 'package:ui_temarlije/features/administrator/classroom/responsive_screens/classroom_desktop_tablet.dart';

@@ -119,8 +119,6 @@ class StudentEnrollmentService extends GetxService {
         url = '$url?$queryString';
       }
 
-      print('GET $url');
-
       final response = await _dioClient.get(url);
 
       if (response.statusCode == 200) {
@@ -138,11 +136,11 @@ class StudentEnrollmentService extends GetxService {
         }
 
         print('Found ${data.length} enrollments');
-        print('Found ${data} enrollments');
+        print('Found $data enrollments');
 
         return data.map((json) {
           try {
-            return StudentEnrollmentWithDetails.fromJson(_safeJson(json));
+            return StudentEnrollmentWithDetails.fromJson(json);
           } catch (e) {
             print('Error parsing enrollment: $e');
             print('JSON data: $json');
@@ -157,14 +155,6 @@ class StudentEnrollmentService extends GetxService {
       print('Error getting enrollments: $e');
       throw Exception('Error getting enrollments: $e');
     }
-  }
-
-  // Safe JSON parsing helper
-  Map<String, dynamic> _safeJson(dynamic json) {
-    if (json is Map<String, dynamic>) {
-      return json;
-    }
-    return {};
   }
 
   // Get student's current enrollment

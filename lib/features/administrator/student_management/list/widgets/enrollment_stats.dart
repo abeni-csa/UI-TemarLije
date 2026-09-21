@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:ui_temarlije/common/widgets/containers/rounded_container.dart';
+import 'package:ui_temarlije/utils/device/device_utility.dart';
 
 class EnrollmentStats extends StatelessWidget {
   final Map<String, dynamic> stats;
   final bool isLoading;
-  final bool isMobile;
 
   const EnrollmentStats({
     super.key,
     required this.stats,
     this.isLoading = false,
-    this.isMobile = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final crossAxisCount = isMobile ? 2 : 4;
+    final crossAxisCount = TemarLijeDeviceUtils.isMobileScreen(context) ? 2 : 4;
 
+    final isMobile = TemarLijeDeviceUtils.isMobileScreen(context);
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: crossAxisCount,
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
-      childAspectRatio: isMobile ? 1.8 : 3.5,
+      childAspectRatio: isMobile ? 2.8 : 4.5,
       children: [
         _buildStatCard(
           'Total',
@@ -67,15 +67,17 @@ class EnrollmentStats extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+              color: color.withAlpha(120),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: color.withAlpha(30)),
             ),
-            child: Icon(icon, color: color, size: 20),
+            child: Icon(icon, color: color, size: 16),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              verticalDirection: VerticalDirection.down,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -95,7 +97,7 @@ class EnrollmentStats extends StatelessWidget {
                     : Text(
                         value,
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

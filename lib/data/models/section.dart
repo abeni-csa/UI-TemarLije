@@ -44,6 +44,30 @@ class Section {
   double get occupancyRate => capacity > 0 ? currentEnrollment / capacity : 0;
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, createFactory: true)
+class SectionRequest {
+  @UuidJsonConverter()
+  final UuidValue classroomId;
+  final String sectionName;
+  final int capacity;
+  @UuidJsonConverter()
+  final UuidValue? roomTeacherId;
+  @UuidJsonConverter()
+  final UuidValue academicYearId;
+  SectionRequest({
+    required this.classroomId,
+    required this.sectionName,
+    required this.capacity,
+    this.roomTeacherId,
+    required this.academicYearId,
+  });
+
+  factory SectionRequest.fromJson(Map<String, dynamic> json) =>
+      _$SectionRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SectionRequestToJson(this);
+}
+
 @JsonSerializable(fieldRename: FieldRename.snake)
 class BulkSectionRequest {
   @UuidJsonConverter()

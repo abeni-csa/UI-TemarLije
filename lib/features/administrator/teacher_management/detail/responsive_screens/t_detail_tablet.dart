@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ui_temarlije/common/widgets/breadcrumbs/breadcrumbs_with_heading.dart';
 import 'package:ui_temarlije/data/models/teacher.dart';
 import 'package:ui_temarlije/features/administrator/teacher_management/detail/widgets/basic_info.dart';

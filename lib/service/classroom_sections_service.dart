@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:ui_temarlije/data/models/classroom.dart';
 import 'package:ui_temarlije/data/models/section.dart';
 import 'package:ui_temarlije/service/network/dio_client.dart';
@@ -24,12 +25,12 @@ class ClassroomService extends GetxService {
         final List<dynamic> data = response.data is List
             ? response.data
             : (response.data['classrooms'] ?? response.data['data'] ?? []);
-        print('Going To URL [+] ${(response.realUri.toString())} ');
+        debugPrint('Going To URL [+] ${(response.realUri.toString())} ');
         return data.map((json) => Classroom.fromJson(json)).toList();
       }
       return [];
     } on DioException catch (e) {
-      print('Error getting classrooms: ${e.message}');
+      debugPrint('Error getting classrooms: ${e.message}');
       return [];
     }
   }
@@ -75,7 +76,9 @@ class ClassroomService extends GetxService {
         if (classrooms is List) {
           return classrooms.map((json) => Classroom.fromJson(json)).toList();
         }
-        print('Going To URL [+] ${(response.realUri.toString())} ');
+        debugPrint(
+          'Going To URL [+] ${(response.realUri.toString(), response.headers)} ',
+        );
         return [];
       }
       throw Exception('Failed to generate classrooms');
@@ -87,7 +90,7 @@ class ClassroomService extends GetxService {
   /// Delete a classroom
   Future<void> deleteClassroom(
     UuidValue schoolId,
-    String classroomId,
+    UuidValue classroomId,
     UuidValue academicYearId,
   ) async {
     try {
@@ -102,7 +105,7 @@ class ClassroomService extends GetxService {
   /// Get sections for a classroom
   Future<List<Section>> getSectionsByClassroom(
     UuidValue schoolId,
-    String classroomId,
+    UuidValue classroomId,
   ) async {
     try {
       final response = await _dioClient.get(
@@ -113,12 +116,12 @@ class ClassroomService extends GetxService {
         final List<dynamic> data = response.data is List
             ? response.data
             : (response.data['sections'] ?? response.data['data'] ?? []);
-        print('Going To URL [+] ${(response.realUri.toString())} ');
+        debugPrint('Going To URL [+] ${(response.realUri.toString())} ');
         return data.map((json) => Section.fromJson(json)).toList();
       }
       return [];
     } on DioException catch (e) {
-      print('Error getting sections: ${e.message}');
+      debugPrint('Error getting sections: ${e.message}');
       return [];
     }
   }
@@ -126,6 +129,24 @@ class ClassroomService extends GetxService {
   Future<void> createBulkSections(
     UuidValue schoolId,
     BulkSectionRequest request,
+  ) async {
+    try {
+      final response = await _dioClient.post(
+        '/org/school/$schoolId/sections/bulk',
+        data: request.toJson(),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to create sections: ${response.data}');
+      }
+    } catch (e) {
+      throw Exception('Failed to create sections: $e');
+    }
+  }
+
+  Future<void> createSectionsSingleForClassroom(
+    UuidValue schoolId,
+    SectionRequest request,
   ) async {
     try {
       final response = await _dioClient.post(
@@ -170,13 +191,16 @@ class ClassroomService extends GetxService {
   Future<Section> createSection(
     UuidValue schoolId,
     UuidValue academicYearId,
-    Map<String, dynamic> request,
+    SectionRequest request,
   ) async {
     try {
       final response = await _dioClient.post(
-        '/org/school/$schoolId/sections/single-section',
-        data: {...request, 'academic_year_id': academicYearId},
+        '/org/school/$schoolId/sections/$academicYearId',
+        data: request.toJson(),
       );
+      debugPrint(request.toString());
+      debugPrint('$response.realUri');
+      debugPrint('$request.toJson()');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return Section.fromJson(response.data);

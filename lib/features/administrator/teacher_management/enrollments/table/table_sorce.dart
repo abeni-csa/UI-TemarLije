@@ -16,37 +16,37 @@ class TeachersEnrollmentDataTableSource extends DataTableSource {
     return DataRow2(
       selected: isSelected,
       onSelectChanged: (selected) {
-        controller.toggleSelection(request.id);
+        controller.toggleSelection(request.id.toString());
       },
       cells: [
-        // // 1. ID
-        // DataCell(
-        //   Text(
-        //     '${request.id}',
-        //     style: const TextStyle(fontWeight: FontWeight.w500),
-        //   ),
-        // ),
-
-        // // 2. School ID
-        // DataCell(
-        //   Text(
-        //     request.schoolId.toString().substring(0, 8),
-        //     style: const TextStyle(fontWeight: FontWeight.w500),
-        //   ),
-        // ),
-
-        // 3. Base User ID
+        // 1. ID
         DataCell(
           Text(
-            request.userId.toString().substring(0, 8),
+            request.fullName,
             style: const TextStyle(fontWeight: FontWeight.w500),
           ),
         ),
 
-        // 4. Academic Year ID
+        // 2. School ID
+        DataCell(
+          Text(
+            request.membershipStatus.toString().substring(0, 8),
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ),
+
+        // 3. Base User ID
+        DataCell(
+          Text(
+            request.baseUserId.toString().substring(0, 8),
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ),
+
+        // // 4. Academic Year ID
         // DataCell(
         //   Text(
-        //     request.joinedAcademicYearId?.toString().substring(0, 8) ?? 'N/A',
+        //     request.joinedAcadmicYearId?.toString().substring(0, 8) ?? 'N/A',
         //     style: const TextStyle(fontWeight: FontWeight.w500),
         //   ),
         // ),
@@ -74,11 +74,11 @@ class TeachersEnrollmentDataTableSource extends DataTableSource {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: request.status.color,
+              color: request.membershipStatus.color,
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
-              request.status.displayName,
+              request.membershipStatus.displayName,
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
@@ -124,12 +124,22 @@ class TeachersEnrollmentDataTableSource extends DataTableSource {
   // Helper methods
   Color _getMembershipTypeColor(UserType type) {
     switch (type) {
-      case UserType.student:
+      case UserType.Student:
         return Colors.blue;
-      case UserType.teacher:
+      case UserType.Teacher:
         return Colors.orange;
-      case UserType.staff:
+      case UserType.PlaceHolder:
+        return Colors.black;
+      case UserType.Root:
+        return Colors.red;
+      case UserType.Parent:
+        return Colors.green;
+      case UserType.FinanceAccountant:
+        return Colors.transparent;
+      case UserType.Librarian:
         return Colors.purple;
+      case UserType.SchoolAdmin:
+        return Colors.yellowAccent;
     }
   }
 }

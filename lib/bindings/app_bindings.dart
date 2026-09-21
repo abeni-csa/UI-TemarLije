@@ -67,7 +67,7 @@ class TemarLijeAppBindings extends Bindings {
     }
 
     // Register AcademicYearController
-    Get.put(AcademicYearController(), permanent: true);
+    Get.put<AcademicYearController>(AcademicYearController(), permanent: true);
     Get.lazyPut<MembershipControllers>(
       () => MembershipControllers(),
       fenix: true,
@@ -79,6 +79,7 @@ class TemarLijeAppBindings extends Bindings {
     );
     Get.lazyPut<StudentEnrollmentsController>(
       () => StudentEnrollmentsController(),
+      fenix: true,
     );
     Get.lazyPut<SchoolOrganizationService>(
       () => SchoolOrganizationService(),

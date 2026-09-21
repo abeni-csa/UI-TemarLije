@@ -1,74 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:ui_temarlije/common/widgets/containers/rounded_container.dart';
-// import 'package:ui_temarlije/data/models/teacher.dart';
-// import 'package:ui_temarlije/utils/constants/sizes.dart';
-
-// class TeacherCertificateEducationBackgroundInfo extends StatelessWidget {
-//   const TeacherCertificateEducationBackgroundInfo({
-//     super.key,
-//     required this.teacher,
-//   });
-//   final Teacher teacher;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // final totalSpecilaizationAndCert = teacher.specialization.fold(
-//     //   0,
-//     //   (previousValue, elemet) => previousValue + elemet.length,
-//     // );
-//     return TemarLijeRoundedContainer(
-//       padding: const EdgeInsets.all(TemarLijeSizes.defaultSpace),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text(
-//             "Certificate And Specilaziation",
-//             style: Theme.of(context).textTheme.headlineMedium,
-//           ),
-//           const SizedBox(height: TemarLijeSizes.spaceBtwSections),
-
-//           ListView.separated(
-//             shrinkWrap: true,
-//             physics: const NeverScrollableScrollPhysics(),
-//             separatorBuilder: (_, _) =>
-//                 const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-//             itemCount: teacher.specialization.length,
-
-//             itemBuilder: (BuildContext context, int index) {
-//               // final sp = teacher.specialization[index];
-//               return Row(
-//                 children: [
-//                   Expanded(
-//                     child: Row(
-//                       children: [
-//                         //  TemarLijeRoundedImage(imageType: imageType, backgroundColor: TemarLijeColors.primaryBackground,)
-//                         const SizedBox(height: TemarLijeSizes.spaceBtwItems),
-//                         Expanded(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Text(
-//                                 teacher.specialization[index],
-//                                 style: Theme.of(context).textTheme.bodyMedium,
-//                                 overflow: TextOverflow.ellipsis,
-//                                 maxLines: 1,
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-// features/administrator/teacher_management/detail/widgets/certificate_education_background_info.dart
 import 'package:flutter/material.dart';
 import 'package:ui_temarlije/common/widgets/containers/rounded_container.dart';
 import 'package:ui_temarlije/data/models/teacher.dart';
@@ -84,8 +13,8 @@ class TeacherCertificateEducationBackgroundInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final specializations = teacher.specialization ?? [];
-    final certificates = teacher.specialization ?? [];
+    final specializations = teacher.specialization;
+    final certificates = teacher.specialization;
     final hasData = specializations.isNotEmpty || certificates.isNotEmpty;
 
     return TemarLijeRoundedContainer(
@@ -145,14 +74,18 @@ class TeacherCertificateEducationBackgroundInfo extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: TemarLijeColors.primary.withOpacity(0.1),
+        color: TemarLijeColors.primary.withAlpha(50),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: TemarLijeColors.primary.withOpacity(0.3)),
+        border: Border.all(color: TemarLijeColors.primary.withAlpha(30)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.star, size: 16, color: TemarLijeColors.primary),
+          Icon(
+            Icons.star,
+            size: 16,
+            color: TemarLijeColors.primary.withAlpha(244),
+          ),
           const SizedBox(width: 8),
           Text(
             text,
@@ -170,9 +103,9 @@ class TeacherCertificateEducationBackgroundInfo extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: TemarLijeColors.primaryBackground.withOpacity(0.2),
+        color: TemarLijeColors.primaryBackground.withAlpha(20),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: TemarLijeColors.primary.withOpacity(0.2)),
+        border: Border.all(color: TemarLijeColors.primary.withAlpha(20)),
       ),
       child: Row(
         children: [
@@ -188,14 +121,14 @@ class TeacherCertificateEducationBackgroundInfo extends StatelessWidget {
                     context,
                   ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
                 ),
-                if (certificate.issuer != null)
+                if (certificate != null)
                   Text(
-                    'Issued by: ${certificate.issuer}',
+                    'Issued by: $certificate',
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
-                if (certificate.year != null)
+                if (certificate != null)
                   Text(
-                    'Year: ${certificate.year}',
+                    'Year: $certificate',
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
               ],

@@ -37,11 +37,12 @@ class TeacherDesktopScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     TemarLijeDataTableHeader(
-                      showLeftWidget: false,
+                      showLeftWidget: true,
                       buttonText: 'Add Teacher',
                       onPress: () {
+                        print("FuckOFF");
                         // Navigate to create teacher screen
-                        Get.toNamed(TemarLijeRoutes.teacherDetails);
+                        // Get.toNamed(TemarLijeRoutes.teacherDetails);
                       },
                     ),
                     const SizedBox(height: TemarLijeSizes.sm),

@@ -5,7 +5,6 @@ import 'package:ui_temarlije/common/widgets/breadcrumbs/breadcrumbs_with_heading
 import 'package:ui_temarlije/common/widgets/containers/rounded_container.dart';
 import 'package:ui_temarlije/features/administrator/student_management/enrollments/enrollments_controller.dart';
 import 'package:ui_temarlije/features/administrator/student_management/list/widgets/enrollment_card.dart';
-import 'package:ui_temarlije/features/administrator/student_management/list/widgets/enrollment_filters.dart';
 import 'package:ui_temarlije/features/administrator/student_management/list/widgets/enrollment_stats.dart';
 import 'package:ui_temarlije/routes/routes.dart';
 import 'package:ui_temarlije/utils/constants/sizes.dart';
@@ -75,7 +74,7 @@ class EnrollmentsDesktopScreen extends StatelessWidget {
 
                 Obx(() {
                   if (controller.isLoading.value &&
-                      controller.filteredEnrollments.isEmpty) {
+                      controller.enrollments.isEmpty) {
                     return const Padding(
                       padding: EdgeInsets.all(32),
                       child: Center(child: CircularProgressIndicator()),
@@ -94,7 +93,7 @@ class EnrollmentsDesktopScreen extends StatelessWidget {
                     );
                   }
 
-                  if (controller.filteredEnrollments.isEmpty) {
+                  if (controller.enrollments.isEmpty) {
                     return const Padding(
                       padding: EdgeInsets.all(32),
                       child: Center(
@@ -129,9 +128,9 @@ class EnrollmentsDesktopScreen extends StatelessWidget {
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
                         ),
-                    itemCount: controller.filteredEnrollments.length,
+                    itemCount: controller.enrollments.length,
                     itemBuilder: (context, index) {
-                      final enrollment = controller.filteredEnrollments[index];
+                      final enrollment = controller.enrollments[index];
                       return EnrollmentCard(
                         enrollment: enrollment,
                         onTap: () {

@@ -287,32 +287,66 @@ class EnrollmentIntent {
 }
 
 enum UserType {
-  student,
-  staff,
-  teacher;
+  // ignore: constant_identifier_names
+  Student,
+  // ignore: constant_identifier_names
+  PlaceHolder,
+  // ignore: constant_identifier_names
+  Parent,
+  // ignore: constant_identifier_names
+  Teacher,
+  // ignore: constant_identifier_names
+  FinanceAccountant,
+  // ignore: constant_identifier_names
+  Librarian,
+  // ignore: constant_identifier_names
+  SchoolAdmin,
+  // ignore: constant_identifier_names
+  Root;
 
   String get displayName {
     switch (this) {
-      case UserType.student:
+      case UserType.Student:
         return 'Student';
-      case UserType.staff:
-        return 'Staff';
-      case UserType.teacher:
+      case UserType.PlaceHolder:
+        return 'Place Holder';
+      case UserType.Parent:
+        return 'Parent';
+      case UserType.Teacher:
         return 'Teacher';
+      case UserType.FinanceAccountant:
+        return 'Finance Accountant';
+      case UserType.Librarian:
+        return 'Librarian';
+      case UserType.SchoolAdmin:
+        return 'School Admin';
+      case UserType.Root:
+        return 'Root';
     }
   }
 
   static UserType fromString(String value) {
     switch (value.toLowerCase()) {
       case 'student':
-        return UserType.student;
-      case 'staff':
-        return UserType.staff;
+        return UserType.Student;
+      case 'placeholder':
+        return UserType.PlaceHolder;
+      case 'parent':
+        return UserType.Parent;
       case 'teacher':
-        return UserType.teacher;
-
+        return UserType.Teacher;
+      case 'financeaccountant':
+      case 'finance accountant':
+        return UserType.FinanceAccountant;
+      case 'librarian':
+        return UserType.Librarian;
+      case 'schooladmin':
+      case 'school admin':
+        return UserType.SchoolAdmin;
+      case 'root':
+        return UserType.Root;
       default:
-        return UserType.student;
+        return UserType.Student; // Default fallback
     }
   }
 }
